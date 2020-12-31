@@ -1,0 +1,16 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/eralp/ClionProjects/ipp/main.cpp
+iostream
+-
+vector
+/Users/eralp/ClionProjects/ipp/vector
+unordered_map
+/Users/eralp/ClionProjects/ipp/unordered_map
+
