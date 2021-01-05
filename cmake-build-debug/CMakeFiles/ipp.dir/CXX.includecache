@@ -9,8 +9,18 @@
 /Users/eralp/ClionProjects/ipp/main.cpp
 iostream
 -
+unordered_map
+-
 vector
 /Users/eralp/ClionProjects/ipp/vector
-unordered_map
-/Users/eralp/ClionProjects/ipp/unordered_map
+math.h
+-
+chrono
+-
+cstdio
+-
+list
+-
+vector
+-
 

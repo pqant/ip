@@ -1,4 +1,5 @@
 #include <iostream>
+#include <unordered_map>
 
 void TestOneArray() {
     int students_score[5] = {15, 33, 44, 22, 66};
@@ -24,11 +25,20 @@ int* TestOneArrayAppend(const int& score, const int arrLength) {
     return newScores;
 }
 
+struct r {
+public:
+    void x() {
+        std::cout << "x called" << std::endl;
+    }
+};
+
+
 #include "vector"
 
 void TakeUnlimitedValuesFromTheUser() {
     std::vector<int> vec;
-
+    r _r{};
+    _r.x();
     // read integers 1 at a time from the user,
     // will stop when non-integer input is entered
     std::copy(std::istream_iterator<int>(std::cin),
@@ -350,7 +360,6 @@ std::string FindSumArrayTarget(int elements[], const size_t arrLength, const int
     return result;
 }
 
-#include "unordered_map";
 
 std::string sumSubArrayToZero(int elements[], size_t arrLength) {
     std::string result = "";
@@ -427,6 +436,7 @@ int FindClosestFinder(int elements[], size_t arrLength, const int target) {
     return min;
 }
 
+#include <math.h>
 
 void Sort(int elements[], size_t arrLength) {
     for (int i = 0; i < arrLength - 1; ++i) {
@@ -440,8 +450,259 @@ void Sort(int elements[], size_t arrLength) {
     }
 }
 
+class T {
+public :
+    void func(int) {
+
+    }
+
+    void func(uint);
+
+    void func(double) {
+
+    }
+};
+
+void T::func(uint number) {
+    std::cout << number << std::endl;
+}
+
+std::unordered_map<int, int> values;
+
+int tailFact(int t) {
+    if (t == 0) return 1;
+    if (::values.contains(t - 1)) {
+        return ::values[t - 1] * tailFact(--t);
+    }
+    ::values[t] = t * tailFact(--t);
+    return ::values[t];
+}
+
+#include <chrono>
+
+unsigned long long FactTR(unsigned int a, unsigned long long val) {
+    if (a == 0) return val;
+    return FactTR(a - 1, a * val);
+}
+
+unsigned long long FastFactCalculator(unsigned int val) {
+    auto start = std::chrono::high_resolution_clock::now();
+    auto res = FactTR(val, 1);
+    auto end = std::chrono::high_resolution_clock::now();
+    std::cout << "\nTotal Execution Time (FastFactCalculator) : " << duration_cast<std::chrono::nanoseconds>(end - start).count() << " ns Result " << res << std::endl;
+    return res;
+}
+
+unsigned long long int SlowFactCalcLinear(const unsigned int val) {
+    auto start = std::chrono::high_resolution_clock::now();
+    std::unordered_map<int, unsigned long long> mapCalc;
+    mapCalc[0] = 1;
+    for (int j = 1; j <= val; ++j) {
+        unsigned long long int calcResult = mapCalc[j - 1] * j;
+        mapCalc[j] = calcResult;
+    }
+    auto end = std::chrono::high_resolution_clock::now();
+    std::cout << "\nTotal Execution Time (SlowFactCalcLinear) : " << duration_cast<std::chrono::microseconds>(end - start).count() << " ms, Result " << mapCalc[val] << std::endl;
+    return mapCalc[val];
+}
+
+#include <cstdio>
+
+int arr[100];
+
+void enumerate(int element, int n) {
+    if (element > n) { // Base case
+        for (int i = 1; i <= n; i++)
+            std::cout << arr[i];
+        std::cout << std::endl;
+        return;
+    }
+    for (int i = 1; i <= 3; i++) {
+        arr[element] = i;
+        enumerate(element + 1, n);
+    }
+}
+
+void callAsArr(int elements[], size_t arrLength) {
+    for (int i = 0; i < arrLength; ++i) {
+        std::cout << elements[i] << std::endl;
+    }
+}
+
+void Permutation(int* elements, size_t arrLength) {
+    std::sort(elements, elements + arrLength);
+    do {
+        std::cout << elements[0] << elements[1] << elements[2] << std::endl;
+    } while (std::next_permutation(elements, elements + arrLength));
+}
+
+#include <list>
+
+void deleteAndInsert() {
+    std::list<int> iList{2, 5, 4, 3, 7, 8, 1, 6, 12, 21, 87, 10};
+    // if it's even delete else duplicate
+    int index = 0;
+    for (auto it = iList.cbegin(); it != iList.cend();) {
+        if (*it % 2 == 0) {
+            it = iList.erase(it);
+        } else {
+            it = iList.insert(it, *it);
+            advance(it, 2);
+        }
+    }
+    for (const auto& item : iList) {
+        std::cout << item << std::endl;
+    }
+}
+
+
+struct tr {
+public:
+    int my;
+    int mx;
+};
+
+#include <vector>
+
+
+struct S {
+
+private:
+    std::string _testValue;
+public:
+    S(const std::string& testValue) : _testValue(testValue) {
+        puts("S()");
+    }
+
+    S(const S&) {
+        puts("S(const S &)");
+    }
+
+    S(S&&) {
+        puts("S(S &&)");
+    }
+
+    S& operator=(const S&) {
+        puts("operator=(const S &)");
+        return *this;
+    }
+
+    S& operator=(S&&) {
+        puts("operator=(S &&)");
+        return *this;
+    }
+
+    ~S() {
+        puts("~S()");
+    }
+
+    const std::string& getTestValue() const {
+        return _testValue;
+    }
+
+    void setTestValue(const std::string& testValue) {
+        _testValue = testValue;
+    }
+
+    bool operator==(const S& rhs) const {
+        return _testValue == rhs._testValue;
+    }
+
+    bool operator!=(const S& rhs) const {
+        return !(rhs == *this);
+    }
+};
+
+class gg {
+public:
+    gg(const std::string& name) : _name(name) {
+
+    }
+
+    virtual ~gg() {
+        std::cout << "deleted" << std::endl;
+    }
+
+    const std::string& getName() const {
+        return _name;
+    }
+
+    void setName(const std::string& name) {
+        _name = name;
+    }
+
+    bool operator==(const gg& rhs) const {
+        return _name == rhs._name;
+    }
+
+    bool operator!=(const gg& rhs) const {
+        return !(rhs == *this);
+    }
+
+    friend std::ostream& operator<<(std::ostream& os, const gg& gg) {
+        return os << "_name: " << gg._name;
+    }
+
+private:
+    std::string _name;
+
+};
+
+struct M {
+private:
+    int _mValue;
+public:
+    M() : _mValue(0) {}
+
+    M(const int mValue) : _mValue(mValue) {
+
+    }
+};
+
 
 int main() {
+
+    M m;
+    S s1("ee");
+    S s2("ee");
+
+    if (s1 == s2) {
+        std::cout << "equal" << std::endl;
+    } else {
+        std::cout << "not equal" << std::endl;
+    }
+    return 0;
+
+    tr _t;
+    std::cout << "tr.mx : " << _t.mx << ", " << "tr.my : " << _t.my << std::endl;
+
+    return 0;
+    deleteAndInsert();
+    return 0;
+    int myNumbers[] = {1, 2, 3};
+    Permutation(myNumbers, sizeof(myNumbers) / sizeof(myNumbers[0]));
+    return 0;
+
+    std::list<int> myList = {1, 3, 4, 5, 6, 6};
+    for (int i = 0; i < myList.size(); ++i) {
+        /// ?? std::cout << myList[i] << std::endl;
+    }
+
+    return 0;
+    std::vector<int> elements = {1, 3, 4, 5, 4};
+    callAsArr(&elements[0], elements.size());
+    return 0;
+
+    enumerate(1, 5);
+    return 0;
+    SlowFactCalcLinear(60);
+    FastFactCalculator(60);
+    return 0;
+    T t;
+    t.func(12);
+    t.func(12u);
+    t.func(12.);
+
     int elementsToSortV1[] = {10, 30, 20, 40, 50, 60, 70};
     int searchV1 = 23;
     int arrLenV1 = sizeof(elementsToSortV1) / sizeof(elementsToSortV1[0]);
@@ -455,6 +716,7 @@ int main() {
     }
     return 0;
 
+    /*
     int elementsToSort[] = {1, 45, 4, 3, 3, 2, 234, 5};
     int search = 3;
     int arrLen = sizeof(elementsToSort) / sizeof(elementsToSort[0]);
@@ -556,14 +818,16 @@ int main() {
     PrintAllLinkedList(_head);
 
     FreeAllLinkedList();
+        */
     /*
-    Node* p = head;
-    while (p != nullptr) {
-        std::cout << "DATA : " << p->data << ((p->next == nullptr) ? " [TAIL]" : "") << std::endl;
-        p = p->next;
-    }
-    std::cout << "end" << std::endl;
-    */
+        Node* p = head;
+        while (p != nullptr) {
+            std::cout << "DATA : " << p->data << ((p->next == nullptr) ? " [TAIL]" : "") << std::endl;
+            p = p->next;
+        }
+        std::cout << "end" << std::endl;
+        */    /*
+
 
     return 0;
     int arr1[] = {1, 3, 4, 32, 4, 2, 23};
@@ -598,5 +862,6 @@ int main() {
         delete[] allScores;
     }
     return 0;
+    */
 }
 
