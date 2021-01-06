@@ -659,8 +659,115 @@ public:
     }
 };
 
+#include <cstdlib>
+#include <cstring>
+
+class Person {
+private:
+    int _id{0};
+    char* _p{nullptr};
+public:
+    Person(const Person& other);
+
+    Person(const char* p, int id);
+
+    ~Person();
+
+    int getId() const {
+        return _id;
+    }
+
+    void setId(int id) {
+        _id = id;
+    }
+
+    char* getP() const {
+        return _p;
+    }
+
+    void setP(char* p) {
+        _p = p;
+    }
+
+    bool operator==(const Person& rhs) const;
+
+    bool operator!=(const Person& rhs) const;
+
+    void Print() const;
+};
+
+
+Person::Person(const Person& other) : _id{other._id} {
+    std::cout << "copy constructor devrede.. " << std::endl;
+    _p = static_cast<char*>(std::malloc(std::strlen(other.getP()) + 1));
+    if (!_p) {
+        std::cerr << " not enough memory " << std::endl;
+        std::exit(EXIT_FAILURE);
+    }
+    std::cout << "Record storage has been allocated successfully! The memory address : " << static_cast<void*>(_p) << std::endl;
+    strcpy(_p, other.getP());
+}
+
+Person::~Person() {
+    if (_p) {
+        std::cout << "The memory address of destructing object is " << static_cast<void*>(_p) << std::endl;
+        std::free(_p);
+    }
+}
+
+Person::Person(const char* p, int id) : _id{id} {
+    _p = static_cast<char*>(std::malloc(std::strlen(p) + 1));
+    if (!_p) {
+        std::cerr << " not enough memory " << std::endl;
+        std::exit(EXIT_FAILURE);
+    }
+    std::cout << "Record storage has been allocated successfully! The memory address : " << static_cast<void*>(_p) << std::endl;
+    strcpy(_p, p);
+}
+
+void Person::Print() const {
+    std::cout << "name : " << _p << " , id : " << _id << std::endl;
+}
+
+bool Person::operator==(const Person& rhs) const {
+    return _id == rhs._id &&
+           _p == rhs._p;
+}
+
+bool Person::operator!=(const Person& rhs) const {
+    return !(rhs == *this);
+}
+
+void PrintP_Wrong(Person p) {
+    std::cout << "person is printing.. " << std::endl;
+    p.Print();
+    getchar(); // p will be destruct!!!
+}
+
+void PrintP(const Person& p) {
+    std::cout << "person is printing.. " << std::endl;
+    p.Print();
+    getchar();
+}
 
 int main() {
+    std::cout << "hello" << std::endl;
+    Person px{"test", 1};
+    Person px2 = px;
+    PrintP(px2);
+
+    px.Print();
+    return 0;
+    {
+        const char* myText = "eralp";
+        //std::cout << "1. The memory address of myText object is " << &myText << std::endl;
+        //std::cout << "2. The memory address of myText object is " << static_cast<const void*>(myText) << std::endl;
+    }
+    return 0;
+    const auto dataForMe = []() {
+        std::vector<int> _values;
+        return _values;
+    }();
 
     M m;
     S s1("ee");
