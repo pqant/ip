@@ -669,6 +669,10 @@ private:
     int _id{0};
     char* _p{nullptr};
 public:
+    friend std::ostream& operator<<(std::ostream& os, const Person& person);
+
+    operator std::string() const;
+
     Person(const Person& other);
 
     Person(Person&& other);
@@ -698,6 +702,9 @@ public:
     Person& operator=(Person&& other);
 
     void Print() const;
+
+    Person operator+(const Person& other) const;
+
 };
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=  //
@@ -732,6 +739,7 @@ Person::Person(const char* p, int id) : _id{id} {
 void Person::Print() const {
     std::cout << "name : " << _p << " , id : " << _id << std::endl;
 }
+
 //copy assignment
 Person& Person::operator=(const Person& other) {
     if (this == &other) // to prevent self assigment!
@@ -739,7 +747,7 @@ Person& Person::operator=(const Person& other) {
 
     _id = other.getId();
     std::free(_p);
-    _p = static_cast<char *>(std::malloc(std::strlen(other.getP())+1));
+    _p = static_cast<char*>(std::malloc(std::strlen(other.getP()) + 1));
     if (!_p) {
         std::cerr << " not enough memory " << std::endl;
         std::exit(EXIT_FAILURE);
@@ -755,6 +763,8 @@ Person& Person::operator=(Person&& other) {
     std::free(_p);
     _p = other.getP();
     _id = other.getId();
+    //reset
+    other.setId(0);
     other.setP(nullptr);
     return *this;
 }
@@ -766,6 +776,22 @@ Person::~Person() {
         std::free(_p);
     }
 }
+
+Person::operator std::string() const {
+    return std::string(_p);
+}
+
+std::ostream& operator<<(std::ostream& os, const Person& person) {
+    return os << "Person Data : " << std::string(person) << std::endl;
+}
+
+Person Person::operator+(const Person& other) const {
+    if (this == &other) {
+        return *this;
+    }
+    return Person((std::string(*this) + "_" + std::string(other.getP())).c_str(), 1);
+}
+
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=  //
 
 // ******************************************************************************************** //
@@ -785,8 +811,16 @@ void PrintP(const Person& p) {
 int main() {
     std::cout << "hello" << std::endl;
     Person px{"test", 1};
+
+
     Person px2 = px;
+
+    std::cout << "My Concat Person : " << px + px2 << std::endl;
+    return 0;
+
+
     PrintP(px2);
+
 
     px.Print();
     return 0;
