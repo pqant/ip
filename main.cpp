@@ -808,7 +808,128 @@ void PrintP(const Person& p) {
     getchar();
 }
 
+int Simple_B1(const int& val) {
+    if (val == 0) return 1;
+    return 2;
+}
+
+int& Simple_B2(const int& val) {
+    int a = val;
+    if (val % 2 == 0) return a;
+    return ++a;
+}
+
+
+int&& Simple_B3(const int& val) {
+    int a = val;
+    if (val % 2 == 0) return std::move(a);
+    return std::move(++a);
+}
+
+int&& Simple_B4(const int& val) {
+    int a = val;
+    if (val % 2 == 0) return int(a);
+    return int(++a);
+}
+
+int sm(const int&& val) {
+    if (val % 2 == 0) return 1;
+    else return 3;
+}
+
+
+// *********************************************************************************************** */
+class num {
+private:
+    int _value{0};
+public:
+
+    num(const int& val);
+
+    num& operator++();
+
+    num operator++(int);
+
+    num& operator--();
+
+    num operator--(int);
+
+    friend std::ostream& operator<<(std::ostream& os, const num& num);
+
+    operator std::string() const;
+};
+
+num& num::operator++() {
+    ++_value;
+    return *this;
+}
+
+num num::operator++(int) {
+    num temp = *this;
+    _value++;
+    return temp;
+}
+
+num& num::operator--() {
+    --_value;
+    return *this;
+}
+
+num num::operator--(int) {
+    num temp = *this;
+    temp._value++;
+    return temp;
+}
+
+num::operator std::string() const {
+    return std::to_string(this->_value);
+}
+
+num::num(const int& value) {
+    _value = value;
+}
+
+std::ostream& operator<<(std::ostream& os, const num& num) {
+    return os << std::string(num);
+}
+// *********************************************************************************************** */
+
+
+
+
 int main() {
+    auto printMe = [](num& xx) -> void {
+        std::cout << "xx : " << xx << std::endl;
+        std::cout << "xx++ : " << xx++ << std::endl;
+        std::cout << "++xx : " << ++xx << std::endl;
+        std::cout << "xx : " << xx << std::endl;
+    };
+
+
+    num* num2 = new(std::nothrow) num(100);
+    if (num2 == nullptr) {
+        std::cerr << "Allocation error : " << std::endl;
+        return 1;
+    }
+    printMe(*num2);
+    delete num2;
+
+
+    try {
+        num xx{33};
+        printMe(xx);
+        return 0;
+    } catch (std::bad_alloc& err) {
+        std::cerr << "ERR : " << err.what() << std::endl;
+    }
+
+
+    int a = Simple_B4(35);
+    int ff = sm(int{a});
+    std::cout << a << std::endl;
+    return 0;
+
+
     std::cout << "hello" << std::endl;
     Person px{"test", 1};
 
