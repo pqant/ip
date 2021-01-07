@@ -662,12 +662,16 @@ public:
 #include <cstdlib>
 #include <cstring>
 
+// ******************************************************************************************** //
+
 class Person {
 private:
     int _id{0};
     char* _p{nullptr};
 public:
     Person(const Person& other);
+
+    Person(Person&& other);
 
     Person(const char* p, int id);
 
@@ -689,14 +693,15 @@ public:
         _p = p;
     }
 
-    bool operator==(const Person& rhs) const;
+    Person& operator=(const Person& other);
 
-    bool operator!=(const Person& rhs) const;
+    Person& operator=(Person&& other);
 
     void Print() const;
 };
 
-
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=  //
+//copy ctor
 Person::Person(const Person& other) : _id{other._id} {
     std::cout << "copy constructor devrede.. " << std::endl;
     _p = static_cast<char*>(std::malloc(std::strlen(other.getP()) + 1));
@@ -708,13 +713,12 @@ Person::Person(const Person& other) : _id{other._id} {
     strcpy(_p, other.getP());
 }
 
-Person::~Person() {
-    if (_p) {
-        std::cout << "The memory address of destructing object is " << static_cast<void*>(_p) << std::endl;
-        std::free(_p);
-    }
+//move ctor
+Person::Person(Person&& other) : _p(other.getP()), _id(other.getId()) {
+    other.setP(nullptr);
 }
 
+//custom ctor
 Person::Person(const char* p, int id) : _id{id} {
     _p = static_cast<char*>(std::malloc(std::strlen(p) + 1));
     if (!_p) {
@@ -728,15 +732,43 @@ Person::Person(const char* p, int id) : _id{id} {
 void Person::Print() const {
     std::cout << "name : " << _p << " , id : " << _id << std::endl;
 }
+//copy assignment
+Person& Person::operator=(const Person& other) {
+    if (this == &other) // to prevent self assigment!
+        return *this;
 
-bool Person::operator==(const Person& rhs) const {
-    return _id == rhs._id &&
-           _p == rhs._p;
+    _id = other.getId();
+    std::free(_p);
+    _p = static_cast<char *>(std::malloc(std::strlen(other.getP())+1));
+    if (!_p) {
+        std::cerr << " not enough memory " << std::endl;
+        std::exit(EXIT_FAILURE);
+    }
+    strcpy(_p, other.getP());
+    return *this;
 }
 
-bool Person::operator!=(const Person& rhs) const {
-    return !(rhs == *this);
+//move assignment
+Person& Person::operator=(Person&& other) {
+    if (this == &other) // to prevent self assigment!
+        return *this;
+    std::free(_p);
+    _p = other.getP();
+    _id = other.getId();
+    other.setP(nullptr);
+    return *this;
 }
+
+//destructor
+Person::~Person() {
+    if (_p) {
+        std::cout << "The memory address of destructing object is " << static_cast<void*>(_p) << std::endl;
+        std::free(_p);
+    }
+}
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=  //
+
+// ******************************************************************************************** //
 
 void PrintP_Wrong(Person p) {
     std::cout << "person is printing.. " << std::endl;
