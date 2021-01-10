@@ -1,6 +1,9 @@
 #include <iostream>
 #include <unordered_map>
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wwritable-strings"
+
 void TestOneArray() {
     int students_score[5] = {15, 33, 44, 22, 66};
     for (int i = 0; i < sizeof(students_score) / sizeof(students_score[0]); ++i) {
@@ -562,9 +565,6 @@ public:
     int mx;
 };
 
-#include <vector>
-
-
 struct S {
 
 private:
@@ -578,7 +578,7 @@ public:
         puts("S(const S &)");
     }
 
-    S(S&&) {
+    S(S&&) noexcept {
         puts("S(S &&)");
     }
 
@@ -659,9 +659,15 @@ public:
     }
 };
 
-#include <cstdlib>
 #include <cstring>
 
+class xx {
+    xx(const int& x) = delete;
+
+    xx() {
+
+    }
+};
 // ******************************************************************************************** //
 
 class Person {
@@ -669,13 +675,20 @@ private:
     int _id{0};
     char* _p{nullptr};
 public:
-    friend std::ostream& operator<<(std::ostream& os, const Person& person);
-
-    operator std::string() const;
-
+    //copy ctor
     Person(const Person& other);
 
-    Person(Person&& other);
+    //move ctor
+    Person(Person&& other) noexcept;
+
+    //copy assignment
+    //////////////////////////////////////////////////////////////////Person& operator=(const Person& other);
+    Person& operator=(Person other);
+
+    //move assigment
+    //////////////////////////////////////////////////////////////////Person& operator=(Person&& other) noexcept;
+
+    void swap(Person& other);
 
     Person(const char* p, int id);
 
@@ -697,9 +710,9 @@ public:
         _p = p;
     }
 
-    Person& operator=(const Person& other);
+    friend std::ostream& operator<<(std::ostream& os, const Person& person);
 
-    Person& operator=(Person&& other);
+    operator std::string() const;
 
     void Print() const;
 
@@ -710,29 +723,32 @@ public:
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=  //
 //copy ctor
 Person::Person(const Person& other) : _id{other._id} {
-    std::cout << "copy constructor devrede.. " << std::endl;
+    std::cout << "copy ctor" << std::endl;
     _p = static_cast<char*>(std::malloc(std::strlen(other.getP()) + 1));
     if (!_p) {
         std::cerr << " not enough memory " << std::endl;
         std::exit(EXIT_FAILURE);
     }
-    std::cout << "Record storage has been allocated successfully! The memory address : " << static_cast<void*>(_p) << std::endl;
+    ////////////////std::cout << "Record storage has been allocated successfully! The memory address : " << static_cast<void*>(_p) << std::endl;
     strcpy(_p, other.getP());
 }
 
 //move ctor
-Person::Person(Person&& other) : _p(other.getP()), _id(other.getId()) {
+Person::Person(Person&& other) noexcept: _p(other.getP()), _id(other.getId()) {
+    std::cout << "move ctor" << std::endl;
     other.setP(nullptr);
 }
 
+
 //custom ctor
 Person::Person(const char* p, int id) : _id{id} {
+    std::cout << "custom ctor" << std::endl;
     _p = static_cast<char*>(std::malloc(std::strlen(p) + 1));
     if (!_p) {
         std::cerr << " not enough memory " << std::endl;
         std::exit(EXIT_FAILURE);
     }
-    std::cout << "Record storage has been allocated successfully! The memory address : " << static_cast<void*>(_p) << std::endl;
+    /////////////std::cout << "Record storage has been allocated successfully! The memory address : " << static_cast<void*>(_p) << std::endl;
     strcpy(_p, p);
 }
 
@@ -741,38 +757,61 @@ void Person::Print() const {
 }
 
 //copy assignment
-Person& Person::operator=(const Person& other) {
-    if (this == &other) // to prevent self assigment!
-        return *this;
 
-    _id = other.getId();
-    std::free(_p);
-    _p = static_cast<char*>(std::malloc(std::strlen(other.getP()) + 1));
-    if (!_p) {
-        std::cerr << " not enough memory " << std::endl;
-        std::exit(EXIT_FAILURE);
+/*
+Person& Person::operator=(const Person& other) {
+    std::cout << "copy assignment" << std::endl;
+    if (this != &other) {
+        // to prevent self assigment!
+        _id = other.getId();
+        std::free(_p);
+        _p = static_cast<char*>(std::malloc(std::strlen(other.getP()) + 1));
+        if (!_p) {
+            std::cerr << " not enough memory " << std::endl;
+            std::exit(EXIT_FAILURE);
+        }
+        strcpy(_p, other.getP());
     }
-    strcpy(_p, other.getP());
     return *this;
 }
+*/
+
+Person& Person::operator=(Person other) {
+    std::cout << "copy & swap " << std::endl;
+    swap(other);
+    return *this;
+}
+
+//swap
+void Person::swap(Person& other) {
+    std::swap(_id, other._id);
+    std::swap(_p, other._p);
+}
+
 
 //move assignment
-Person& Person::operator=(Person&& other) {
-    if (this == &other) // to prevent self assigment!
-        return *this;
-    std::free(_p);
-    _p = other.getP();
-    _id = other.getId();
-    //reset
-    other.setId(0);
-    other.setP(nullptr);
+/*
+Person& Person::operator=(Person&& other) noexcept {
+    std::cout << "move assignment" << std::endl;
+    if (this != &other) {
+        // to prevent self assigment!
+        std::free(_p);
+        _p = other.getP();
+        _id = other.getId();
+        //reset
+        other.setId(0);
+        other.setP(nullptr);
+    }
     return *this;
 }
+*/
+
 
 //destructor
 Person::~Person() {
+    std::cout << "destructor" << std::endl;
     if (_p) {
-        std::cout << "The memory address of destructing object is " << static_cast<void*>(_p) << std::endl;
+        //std::cout << "The memory address of destructing object is " << static_cast<void*>(_p) << std::endl;
         std::free(_p);
     }
 }
@@ -791,6 +830,7 @@ Person Person::operator+(const Person& other) const {
     }
     return Person((std::string(*this) + "_" + std::string(other.getP())).c_str(), 1);
 }
+
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=  //
 
@@ -895,9 +935,333 @@ std::ostream& operator<<(std::ostream& os, const num& num) {
 // *********************************************************************************************** */
 
 
+int&& simpleMath(int& value) {
+    int temp = value;
+    std::cout << "address of temp             " << &temp << std::endl;
+    return std::move(++temp);
+}
 
+class xf {
+private:
+    std::string _name;
+public:
+    explicit xf(const std::string&);
+
+    explicit xf(const char*&);
+
+    explicit xf(char*&&) noexcept;
+
+    void print() const;
+};
+
+xf::xf(const std::string& value) {
+    std::cout << "xf::xf(const std::string&)" << std::endl;
+    _name = value;
+}
+
+void xf::print() const {
+    std::cout << _name << std::endl;
+}
+
+xf::xf(const char*& value) {
+    std::cout << "xf::xf(const char*&)" << std::endl;
+    _name = std::string(value);
+}
+
+xf::xf(char*&& value) noexcept {
+    std::cout << "xf::xf(const char*&&)" << std::endl;
+    _name = std::string(std::move(value));
+}
+
+int generateError(const int&& numerator, int&& denominator) {
+    if (denominator == 0)
+        throw std::overflow_error("Divide by Zero exception { manual! }");
+    return numerator / denominator;
+}
+
+#include <stdexcept>
+
+class MF {
+private:
+    int _value = {0};
+public:
+    MF() = default;
+
+    MF(const int&);
+
+    MF(const MF& cOther);
+
+    MF(MF&& mOther) noexcept;
+
+    MF& operator=(const MF& cOther);
+
+    MF& operator=(MF&& mOther) noexcept;
+
+    virtual ~MF();
+
+    int getValue() const;
+
+    void setValue(int value);
+};
+
+MF::MF(const int& val) {
+    _value = val;
+}
+
+int MF::getValue() const {
+    return _value;
+}
+
+void MF::setValue(int value) {
+    _value = value;
+}
+
+MF::~MF() {
+    std::cout << "MF::~MF()" << std::endl;
+};
+
+MF::MF(const MF& cOther) {
+    std::cout << "MF::MF(const MF& cOther)" << std::endl;
+    _value = cOther.getValue();
+}
+
+MF::MF(MF&& mOther) noexcept {
+    std::cout << "MF::MF(MF&& mOther)" << std::endl;
+    *this = std::move(mOther);
+}
+
+void PrintMF(MF mf) {
+    std::cout << "My value : " << mf.getValue() << std::endl;
+}
+
+MF& MF::operator=(const MF& cOther) {
+    if (this != &cOther) {
+        _value = cOther.getValue();
+    }
+    return *this;
+}
+
+MF& MF::operator=(MF&& mOther) noexcept {
+    if (this != &mOther) {
+        _value = mOther.getValue();
+    }
+    return *this;
+}
+
+typedef MF* MFPointer;
+typedef MF& MFRef;
+
+
+class QQ {
+public:
+    static QQ __q;
+};
+
+class Multiply {
+private :
+    int _value{1};
+    std::string _tempValue;
+public :
+    Multiply(const int& value) : _value(value) {
+
+    }
+
+    virtual const std::string& speak() {
+        return _tempValue;
+    }
+
+    virtual ~Multiply() {
+
+    }
+
+    const std::string& getTempValue() const {
+        return _tempValue;
+    }
+
+    void setTempValue(const std::string& tempValue) {
+        _tempValue = tempValue;
+    }
+
+    int operator()(const int& value) const {
+        return _value * value;
+    }
+
+    friend std::ostream& operator<<(std::ostream& os, const Multiply& multiply) {
+        os << "_value: " << multiply._value << " _tempValue: " << multiply._tempValue;
+        return os;
+    }
+};
+
+class Ml : public Multiply {
+private:
+    std::string _n;
+public:
+    Ml(const std::string& name) : Multiply(1), _n(name) {};
+
+    const std::string& speak() override {
+        return Multiply::speak();
+    }
+
+
+};
+
+
+template<typename T>
+void swap(T& l, T& r) {
+    T temp = std::move(l);
+    l = std::move(r);
+    //l = (T&&)r;
+    //l = static_cast<T&&>(r);
+    r = std::move(temp);
+}
+
+
+template<typename T, typename B>
+void swap(T&& l, T&& r, B&& pb, const std::function<void(const bool&, const T&, const T&)>& printFunc) {
+    printFunc(pb, const_cast<T&>(l), const_cast<T&>(r));
+    T temp = l;
+    l = r;
+    r = temp;
+    printFunc(pb, const_cast<T&>(l), const_cast<T&>(r));
+}
 
 int main() {
+
+    Person _p10x("era", 1);
+    Person _p20x("mam", 2);
+    //_p10x = _p20x; // non swap & copy ( = op)
+    _p10x = std::move(_p20x);
+
+
+    /*
+     * Whe the copy constructor method is active
+        custom ctor
+        custom ctor
+        copy assignment
+        destructor
+        destructor
+     */
+
+
+    return 0;
+
+    std::function<void(const bool&, const Person&, const Person&)> printMeLong = [&](const bool& print, const Person& p1, const Person& p2) {
+        if (print) return;
+        p1.Print();
+        p2.Print();
+    };
+    auto printMeAuto = [&](const Person& p1, const Person& p2) {
+        p1.Print();
+        p2.Print();
+    };
+
+
+    enum type {
+        copy, move
+    };
+
+    type opType = type::copy;
+    if (opType == type::copy) {
+        Person _p10("era", 1);
+        Person _p11("fatih", 2);
+        std::cout << "before swaping.." << std::endl;
+        printMeLong(false, _p10, _p11);
+        swap(_p10, _p11);
+        std::cout << "after swaping.." << std::endl;
+        printMeLong(false, _p10, _p11);
+        // ok but full of cost!
+    }
+    if (opType == type::move) {
+        swap(Person{"era", 1}, Person{"Fatih", 2}, false, printMeLong);
+    }
+
+
+    return 0;
+    Person _p1("era", 1);
+    Person _p2 = _p1; // call copy constructor!!!
+    //_p1.operator=(_p2); // copy assigment ok!
+    _p1 = _p2; // call copy assigment!!!
+    _p1.setId(500);
+    _p2.setId(700);
+    _p1.Print();
+    _p2.Print();
+    return 0;
+
+    std::cout << "sizeof(char) : " << sizeof(char) << ", sizeof(int) : " << sizeof(int) << std::endl;
+    return 0;
+
+
+    Person pa1("eralp", 0);
+    Person pa2("era", 1);
+
+    Person pa3 = static_cast<const Person>(pa1);
+
+    return 0;
+
+    Multiply mp4(4);
+    std::cout << mp4(5) << std::endl;
+    return 0;
+    /*
+    PrintMF(54);
+    PrintMF(MF(44));
+    */
+    MF vf(44);
+    MF xfx;
+    xfx = vf;
+
+    MF xfx2;
+    xfx2 = std::move(vf);
+    PrintMF(vf);
+    getchar();
+
+    std::cout << "Application is terminating..." << std::endl;
+
+    return 0;
+    try {
+        //std::string fm = static_cast<std::string>(p);
+        std::string val = std::to_string(generateError(1, 0));
+        return 0;
+    } catch (std::overflow_error& ex) {
+        std::cerr << "catched -> " << ex.what() << std::endl;
+        std::exit(EXIT_FAILURE);
+    }
+    return 0;
+
+
+    char* p = nullptr;
+    try {
+        //std::string fm = static_cast<std::string>(p);
+        std::string fm = p;
+        return 0;
+    } catch (std::exception& ex) {
+        std::cerr << ex.what() << std::endl;
+        std::exit(EXIT_FAILURE);
+    }
+
+    return 0;
+
+    xf _xf1 = static_cast<xf>(std::string("eee"));
+    _xf1.print();
+    const char* xc = "eralppp";
+    xf _xf2 = static_cast<xf>(xc);
+    _xf2.print();
+    xf _xf3 = static_cast<xf>("sav");
+
+
+    _xf3.print();
+
+    return 0;
+
+
+    return 0;
+
+
+    int a1 = 200;
+    std::cout << "address of a1 (before call)" << &a1 << std::endl;
+    a1 = simpleMath(a1);
+    std::cout << "address of a1  (after call)" << &a1 << std::endl;
+
+    return 0;
     auto printMe = [](num& xx) -> void {
         std::cout << "xx : " << xx << std::endl;
         std::cout << "xx++ : " << xx++ << std::endl;
@@ -1159,3 +1523,5 @@ int main() {
     */
 }
 
+
+#pragma clang diagnostic pop
