@@ -682,13 +682,13 @@ public:
     Person(Person&& other) noexcept;
 
     //copy assignment
-    //////////////////////////////////////////////////////////////////Person& operator=(const Person& other);
-    Person& operator=(Person other);
+    Person& operator=(const Person& other);
+    ////////////////////////////////////////////////////////////////// merge for copy + move assigment   Person& operator=(Person other);
+    ////////////////////////////////////////////////////////////////// for swap -> void swap(Person& other);
 
     //move assigment
-    //////////////////////////////////////////////////////////////////Person& operator=(Person&& other) noexcept;
+    Person& operator=(Person&& other) noexcept;
 
-    void swap(Person& other);
 
     Person(const char* p, int id);
 
@@ -758,7 +758,6 @@ void Person::Print() const {
 
 //copy assignment
 
-/*
 Person& Person::operator=(const Person& other) {
     std::cout << "copy assignment" << std::endl;
     if (this != &other) {
@@ -774,23 +773,21 @@ Person& Person::operator=(const Person& other) {
     }
     return *this;
 }
-*/
-
-Person& Person::operator=(Person other) {
-    std::cout << "copy & swap " << std::endl;
-    swap(other);
-    return *this;
-}
 
 //swap
-void Person::swap(Person& other) {
-    std::swap(_id, other._id);
-    std::swap(_p, other._p);
-}
+//Person& Person::operator=(Person other) {
+//    std::cout << "copy & swap " << std::endl;
+//    swap(other);
+//    return *this;
+//}
+/***************************************** */
+//void Person::swap(Person& other) {
+//    std::swap(_id, other._id);
+//    std::swap(_p, other._p);
+//}
+/***************************************** */
 
 
-//move assignment
-/*
 Person& Person::operator=(Person&& other) noexcept {
     std::cout << "move assignment" << std::endl;
     if (this != &other) {
@@ -804,7 +801,6 @@ Person& Person::operator=(Person&& other) noexcept {
     }
     return *this;
 }
-*/
 
 
 //destructor
@@ -1126,6 +1122,18 @@ void swap(T&& l, T&& r, B&& pb, const std::function<void(const bool&, const T&, 
 }
 
 int main() {
+
+    std::vector<int> iVec = {10}; // 10
+    std::vector<int> iVec2(5); // 0,0,0,0,0
+    std::vector<int> iVec3(10,3); // 3,3,3,3,3,3,3,3,3,3
+    std::vector<int> iVec4 {4,5,3}; //4,5,3
+
+    std::cout << "size of ivec4 : " << iVec4.size() << std::endl;
+    for (const auto& item : iVec4) {
+        std::cout << item << std::endl;
+    }
+    return 0 ;
+
 
     Person _p10x("era", 1);
     Person _p20x("mam", 2);
