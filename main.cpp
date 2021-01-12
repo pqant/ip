@@ -1121,18 +1121,110 @@ void swap(T&& l, T&& r, B&& pb, const std::function<void(const bool&, const T&, 
     printFunc(pb, const_cast<T&>(l), const_cast<T&>(r));
 }
 
+class test {
+public:
+    void speak() {
+        std::cout << "speak!" << std::endl;
+    }
+};
+
+int* spliceArr(const int splitArr[], size_t arrLen) {
+    if (arrLen == 0) return nullptr;
+    int* returnVal = new int[arrLen - 1];
+    for (int i = 1; i < arrLen; ++i) {
+        returnVal[i - 1] = splitArr[i];
+    }
+    return returnVal;
+}
+
+int recSum(int arrForSum[], size_t arrLen) {
+    if (arrLen == 0) return 0;
+    if (arrLen == 1) {
+        return arrForSum[0];
+    }
+    int* newArr = spliceArr(arrForSum, arrLen);
+    for (int i = 0; i < arrLen - 1; ++i) {
+        std::cout << "newArr[" << i << "]:" << newArr[i] << std::endl;
+    }
+    //delete newArr;
+    return arrForSum[0] + recSum(newArr, arrLen - 1);
+}
+
+int* quickSort(int arrQ[], size_t arrLen) {
+    if (arrLen < 2) {
+        return arrQ;
+    }
+    int arrLeftCnt = 0;
+    int arrRightCnt = 0;
+
+    int pivot = arrLen / 2;
+    for (int i = 0; i < arrLen; ++i) {
+        if (arrQ[i] < arrQ[pivot]) {
+            ++arrLeftCnt;
+        } else if (arrQ[i] > arrQ[pivot]) {
+            ++arrRightCnt;
+        }
+    }
+    int* arrLeft = new int[arrLeftCnt + 1];
+    int* arrRight = new int[arrRightCnt];
+    arrLeftCnt = 0;
+    arrRightCnt = 0;
+    for (int i = 0; i < arrLen; ++i) {
+        if (arrQ[i] < arrQ[pivot]) {
+            arrLeft[arrLeftCnt++] = arrQ[i];
+        } else if (arrQ[i] > arrQ[pivot]) {
+            arrRight[arrRightCnt++] = arrQ[i];
+        }
+    }
+    arrLeft[arrLeftCnt] = arrQ[pivot];
+    arrRightCnt = (arrRightCnt != 0) ? arrRightCnt-- : 0;
+    int* left = quickSort(arrLeft, arrLeftCnt);
+    int* right = quickSort(arrRight, arrRightCnt);
+    int* all = new int[arrLeftCnt + arrRightCnt];
+    for (int i = 0; i < arrLeftCnt; ++i) {
+        all[i] = left[i];
+    }
+    for (int i = arrLeftCnt; i < arrLeftCnt + arrRightCnt; ++i) {
+        all[i] = right[i];
+    }
+    return quickSort(all, arrLeftCnt + arrRightCnt);
+}
+
+
 int main() {
+
+    char *testM;
+
+    testM = static_cast<char*>(std::malloc(3));
+    testM = static_cast<char*>(std::malloc(5));
+    return 0;
+
+    return 0;
+    int myArr[5] = {1, 3, 43, 4, 3};
+    /*
+    int* resultQS = quickSort(myArr, sizeof(myArr) / sizeof(myArr[0]));
+    for (int i = 0; i < 5; ++i) {
+        std::cout << "number : " << resultQS[i] << std::endl;
+    }
+    delete resultQS;
+    */
+    int resultx = recSum(myArr, sizeof(myArr) / sizeof(myArr[0]));
+    std::cout << "Sum of myArr is : " << resultx << std::endl;
+    return 0;
+
+    test{}.speak();
+    return 0;
 
     std::vector<int> iVec = {10}; // 10
     std::vector<int> iVec2(5); // 0,0,0,0,0
-    std::vector<int> iVec3(10,3); // 3,3,3,3,3,3,3,3,3,3
-    std::vector<int> iVec4 {4,5,3}; //4,5,3
+    std::vector<int> iVec3(10, 3); // 3,3,3,3,3,3,3,3,3,3
+    std::vector<int> iVec4{4, 5, 3}; //4,5,3
 
     std::cout << "size of ivec4 : " << iVec4.size() << std::endl;
     for (const auto& item : iVec4) {
         std::cout << item << std::endl;
     }
-    return 0 ;
+    return 0;
 
 
     Person _p10x("era", 1);
