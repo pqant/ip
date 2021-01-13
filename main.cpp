@@ -1192,8 +1192,16 @@ int* quickSort(int arrQ[], size_t arrLen) {
 
 
 int main() {
+    int _x, _y;
+    std::cout << "Enter X : " << std::endl;
+    std::cin >> _x;
+    std::cout << "Enter Y : " << std::endl;
+    std::cin >> _y;
+    std::cout << "Result of (X+Y) : " << _x + _y << std::endl;
+    std::clog << "test log" << std::endl;
 
-    char *testM;
+    return 0;
+    char* testM;
 
     testM = static_cast<char*>(std::malloc(3));
     testM = static_cast<char*>(std::malloc(5));
