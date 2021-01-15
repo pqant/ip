@@ -1190,8 +1190,220 @@ int* quickSort(int arrQ[], size_t arrLen) {
     return quickSort(all, arrLeftCnt + arrRightCnt);
 }
 
+void fx() {
+    int vc, vd, xa;
+    std::cout << "a:" << xa << std::endl;
+
+}
+
+int strlen(char arrStr[]) {
+    int i = 0;
+    int result = 0;
+    while (arrStr[i++] != '\0') {
+        ++result;
+    }
+    return result;
+}
+
+struct baseSame {
+    int _x;
+};
+
+
+struct Same : private baseSame {
+    int x{0};
+    int y{0};
+    char t1{'A'};
+    char t2{'B'};
+
+    void print() const {
+        std::cout << "x: " << x << "\n,y: " << y << "\n";
+    }
+
+    void reset() {
+        x = {0};
+        y = {0};
+    }
+
+    Same(int x, int y) : x(x), y(y) {
+        std::cout << "custom ctor" << std::endl;
+    }
+
+    Same() = default;
+
+    Same(const Same& other) : x(other.x), y(other.y) {
+        std::cout << "copy ctor" << std::endl;
+    }
+
+    Same(Same&& other) noexcept: x(std::move(other.x)), y(std::move(other.y)) {
+        std::cout << "move ctor" << std::endl;
+    }
+
+    Same& operator=(Same& other) {
+        std::cout << "copy assigment operator" << std::endl;
+        if (this != &other) {
+            x = other.x;
+            y = other.y;
+        }
+        return *this;
+    }
+
+    Same& operator=(Same&& other) {
+        std::cout << "move assigment operator" << std::endl;
+        if (this != &other) {
+            x = std::move(other.x);
+            y = std::move(other.y);
+            other.reset();
+        }
+        return *this;
+    }
+
+    operator std::string() {
+        return "--->> X:" + std::to_string(x) + ", Y: " + std::to_string(y);
+    }
+};
+//__attribute__((packed));
+
 
 int main() {
+
+    Same s = {1, 3};
+    std::cout << "sizeof(s)" << sizeof(s) << std::endl;
+
+    return 0;
+
+    s.print();
+    Same y;
+    y.print();
+    y = s;
+    y.print();
+
+    Same z = std::move(y);
+    Same g;
+    g = std::move(z);
+
+    z.print();
+    std::cout << "g: " << std::string(g) << std::endl;
+
+    return 0;
+
+    int ddda = (1, 3, 4, 4, 55);
+    std::cout << "ddda : " << ddda << std::endl;
+    Same* sPtr = &s;
+    std::cout << "-----------by variables" << std::endl;
+    std::cout << "s.x:" << s.x << std::endl;
+    std::cout << "s.y:" << s.y << std::endl;
+    std::cout << "-----------by pointer" << std::endl;
+    std::cout << "sPtr->x:" << sPtr->x << std::endl;
+    std::cout << "sPtr->y:" << sPtr->y << std::endl;
+    std::cout << "(*sPtr).x:" << (*sPtr).x << std::endl;
+    std::cout << "(*sPtr).y:" << (*sPtr).y << std::endl;
+
+    return 0;
+
+
+    int arrx[] = {10, 20};
+    int* p2 = arrx;
+    std::cout << (*p2++) << std::endl;
+    return 0;
+
+    int qValue = 100;
+    int mValue = 200;
+    int fValue = 400;
+
+    const int* _qq1 = &qValue;
+    _qq1 = &mValue; // OK
+    //*_qq1 = 5000; ERROR!!
+
+    int* const cc = &qValue;
+    //cc = &fValue; // ERROR !!
+
+    const int* const dd = &fValue;
+    //dd = &mValue; // ERROR !!
+    //*dd = 5000; //ERROR!!
+
+
+    std::cout << *_qq1 << std::endl;
+
+    return 0;
+
+    int* _temp;
+
+    try {
+        std::cout << _temp << std::endl;
+        std::cout << *_temp << std::endl;
+    } catch (const std::exception& ex) {
+        std::cerr << "errx: " << ex.what() << std::endl;
+    }
+    return 0;
+
+    int _ddd = 4444;
+    std::cout << *(&_ddd) << std::endl;
+
+    char myText[] = {'a', 'b', 'c', 'd', '\0'};
+    std::cout << strlen(myText) << std::endl;
+
+    return 0;
+
+    char strx[] = "eralp";
+    char* _a1 = &strx[0];
+    char* _a2 = &strx[1];
+    char* stry[] = {_a1, _a2};
+    *_a2 = 'B';
+
+
+    std::cout << "..first\n";
+    for (const auto& item : strx) {
+        std::cout << item << std::endl;
+    }
+    std::cout << "..second\n";
+    for (const auto& item : stry) {
+        std::cout << *item << std::endl;
+    }
+
+    char __a = 'a';
+    char* __b = &__a;
+
+
+    char strz[] = {'a', 'v', 'c'};
+    std::cout << strz << std::endl;
+
+
+    char strz_valid[] = {'a', 'v', 'c', '\0'};
+    std::cout << strz_valid << std::endl;
+
+
+    return 0;
+
+    std::vector<int> _all = {1, 2, 3, 4};
+    for (const auto& _item : _all) {
+        std::cout << _item << std::endl;
+    }
+
+
+    for (std::vector<int>::iterator it = _all.begin(); it != _all.end(); ++it) {
+        std::cout << "iteration value : " << *it << " , adress of it: " << &(*it) << std::endl;
+    }
+    return 0;
+    fx();
+    return 0;
+
+    int _a = 10, _b = 20;
+
+    std::cout << (double) _a / _b << std::endl;
+    std::cout << static_cast<double>(_a / _b) << std::endl;
+    std::cout << static_cast<double>(_a) / static_cast<double>(_b) << std::endl;
+
+    return 0;
+
+    int _f = 1;
+    {
+        int _f = 2;
+        std::cout << "_f : " << _f;
+    }
+    std::cout << "_f : " << _f;
+
+    return 0;
     int _x, _y;
     std::cout << "Enter X : " << std::endl;
     std::cin >> _x;
