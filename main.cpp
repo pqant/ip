@@ -1264,8 +1264,226 @@ struct Same : private baseSame {
 };
 //__attribute__((packed));
 
+unsigned int SumForMe(int* numbers, size_t lenForNumbers) noexcept(false) {
+    if (lenForNumbers == 0)
+        throw std::string("There is no item to sum up!");
+    unsigned int total = 0;
+    for (int i = 0; i < lenForNumbers - 1; ++i) {
+        total += numbers[i];
+    }
+    if (total < 100) {
+        throw total;
+    }
+    return total;
+}
+
+#include <exception>
+
+class MyException : public std::exception {
+    std::string _value;
+public:
+    MyException(const std::string& value) : _value{value} {
+
+    }
+
+    virtual const char* what() const _NOEXCEPT override {
+        return _value.c_str();
+    }
+};
+
+int tt(const std::string& val) noexcept(false) {
+    auto len = std::strlen(val.c_str());
+    if (len == 0) {
+        throw MyException("val length is 0!");
+    }
+    return len;
+}
+
+void tex() {
+    int f;
+
+    std::cout << f << "\n";
+}
+
+void fxx(int&& par);
+
+void g(int&& x) {
+    //fxx(x); // ERROR..
+    //fxx(static_cast<int&&>(x));
+    //fxx(std::move(x));
+}
+
+class ZZ {
+private:
+    int _a;
+public:
+    ZZ() = default;
+
+    void printA(const std::string& addComment) {
+        std::cout << addComment << ": " << _a << std::endl;
+    }
+};
+
+template<typename T>
+void PrintX(T* arrAll, const size_t& len) {
+    for (int i = 0; i < len; ++i) {
+        std::cout << arrAll[i] << std::endl;
+    }
+}
+
+#include "assert.h"
+
+template<typename T>
+T* copyme(T* s, T* d, size_t len) {
+    if (len <= 0) return nullptr;
+    T* pret = d;
+    while (len--) {
+        *d++ = *s++;
+    }
+    return pret;
+}
+
 
 int main() {
+    int ffa = 300;
+    int gga = 400;
+    int* const ptr = &ffa;
+    //ptr = &gg; ERROR ! top level const ( pointer const )
+    std::cout << "*ptr : " << (*ptr) << std::endl;
+
+    const int* ptr2 = &ffa;
+    ptr2 = &gga; // Low level const!
+    std::cout << "*ptr2 : " << (*ptr2) << std::endl;
+
+
+    return 0;
+
+    int __len = 7;
+
+    int _arx[7]{1, 2, 4, 5, 3, 2, 4};
+    int _arz1[7] = {1};
+    int _arz2[7]{1};
+
+    print_arr(_arz2, 7);
+    return 0;
+    int _ary[7]{};
+
+    copyme<int>(_arx, _ary, __len);
+    print_arr(_ary, 7);
+    return 0;
+    char* nameF = "eralp"; // hatalı cünkü sağ taraf const char *!
+    int _dde = 200;
+    char _axx = 'A';
+    std::cout << typeid(_dde).name() << std::endl;
+    std::cout << typeid(nameF).name() << std::endl;
+    std::cout << typeid(_axx).name() << std::endl;
+
+    char* cnameF = const_cast<char*>(nameF);
+    //nameF[0] = 'y'; //BAD_ACCESS_ERR
+    //nameF[0] = 'x'; //BAD_ACCESS_ERR
+    return 0;
+    int sd = 100;
+    int hdd = 200;
+    const int* pxd = &sd;
+    pxd = &hdd;
+
+    hdd = 400;
+
+    //*pxd =3300; pointer to cost!!
+
+    std::cout << "pxd : " << *pxd << std::endl;
+
+    return 0;
+
+
+    int const _ac = 10;
+    const int _bc = 10;
+
+    int _fff = 100;
+    int* const agg = &_fff;
+    *agg = 300;
+
+    int* gg = &_fff;
+    gg = const_cast<int*> (&_ac);
+    *gg = 4000;
+
+    const int _fd = 100;
+    int* faa = const_cast<int*>(&_fd);
+    *faa = 440;
+    std::cout << "_fd :" << _fd << std::endl;
+
+    return 0;
+
+
+    int valuesx[2] = {0, 0};
+    int ix = 0;
+    valuesx[ix] = ix++; //0,0
+    valuesx[ix] = ++ix; //0,1
+    PrintX<int>(valuesx, 2);
+    return 0;
+
+
+    int valX = 4;
+
+
+    std::cout << (valX << 3) << std::endl;
+
+    return 0;
+
+    ZZ z1 = ZZ();
+    z1.printA("z1");
+    ZZ z2 = ZZ{};
+    z1.printA("z2");
+    ZZ* z3 = new ZZ;
+    z1.printA("z3");
+    ZZ* z4 = new ZZ();
+    z1.printA("z4");
+    ZZ* z5 = new ZZ{};
+    z1.printA("z5");
+
+    delete z3;
+    delete z4;
+    delete z5;
+
+    return 0;
+    tex();
+
+    return 0;
+
+
+    int _f1 = 100;
+    int _f2 = 200;
+    int _f3 = 300;
+
+    _f1 = _f2 = _f3++;
+
+    std::cout << "_f1 : " << _f1 << ",_f2 : " << _f2 << ",_f3 : " << _f3 << std::endl;
+
+    return 0;
+
+    try {
+        throw MyException("val length is 0!!!");
+        //std::cout << "total length : " << tt("") << std::endl;
+    }
+    catch (std::exception& ex) {
+        std::cerr << "ERR : " << ex.what() << std::endl;
+    }
+    return 0;
+    int myNumbersForSum[4] = {1, 3, 200};
+    auto result = 0;
+    try {
+        result = SumForMe(myNumbersForSum, sizeof(myNumbersForSum) / sizeof(myNumbersForSum[0]));
+    } catch (const unsigned int& errNumber) {
+        std::cerr << "ERR - Sum is less than 100..!! it can't be! Total : " << errNumber << std::endl;
+    }
+    catch (const std::string& errStr) {
+        std::cout << "ERR - Sum error is : " << errStr << std::endl;
+    }
+    catch (...) {
+        std::cout << "ERR - Generic error" << std::endl;
+    }
+    std::clog << "Total : " << result << std::endl;
+    return 0;
 
     Same s = {1, 3};
     std::cout << "sizeof(s)" << sizeof(s) << std::endl;
