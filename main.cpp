@@ -1345,7 +1345,48 @@ T* copyme(T* s, T* d, size_t len) {
 
 
 int main() {
+
+
+    int dg = 100;
+    const int* fzz = &dg;
+
+    return 0 ;
+
+    char str[7] = "Ahmet\0";
+
+    auto cxxx = "emre";
+    auto& chhh = "emre";
+
+
+    return 0;
+    int _eee = 200;
+    auto* fzzzz = &_eee;
+
+
+
+    //////////////////////// DİKKAT ////////////////////////
+    const char* e = "emre";
+    auto ex = e; // ex -> const char *
+    //////////////////////// DİKKAT ////////////////////////
+    const char eggx[5] = "emre";
+    auto& ddx = "emre"; // ddx -> const char(&)[5]
+    const char (& otherx)[5] = eggx;
+
+
+    int agggg[]{1, 2, 4, 5, 5};
+    auto& ffxx = agggg; // array decay YOK!!!!!
+    ffxx[2] = 3000;
+    print_arr(agggg, 5);
+    int(& copppy)[5] = agggg; // array decay YOK!!!!!
+    copppy[0] = 4000;
+    print_arr(copppy, 5);
+    return 0;
+
+    int* const gaa = nullptr;
+
     int ffa = 300;
+    //gaa = &ffa; ERROR.. It's valid as reference semantic rules!
+
     int gga = 400;
     int* const ptr = &ffa;
     //ptr = &gg; ERROR ! top level const ( pointer const )
@@ -1808,7 +1849,8 @@ int main() {
     };
 
 
-    num* num2 = new(std::nothrow) num(100);
+    num* num2 = new(std::nothrow)
+    num(100);
     if (num2 == nullptr) {
         std::cerr << "Allocation error : " << std::endl;
         return 1;
