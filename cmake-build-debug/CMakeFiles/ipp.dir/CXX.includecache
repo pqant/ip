@@ -11,6 +11,8 @@ iostream
 -
 unordered_map
 -
+set
+-
 vector
 /Users/eralp/ClionProjects/ipp/vector
 math.h
@@ -29,4 +31,16 @@ exception
 -
 assert.h
 /Users/eralp/ClionProjects/ipp/assert.h
+initializer_list
+-
+math.h
+-
+stdlib.h
+-
+sstream
+-
+unordered_set
+-
+unordered_map
+-
 

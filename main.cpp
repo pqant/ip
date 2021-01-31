@@ -1,5 +1,6 @@
 #include <iostream>
 #include <unordered_map>
+#include <set>
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wwritable-strings"
@@ -363,7 +364,7 @@ std::string FindSumArrayTarget(int elements[], const size_t arrLength, const int
     return result;
 }
 
-
+/*
 std::string sumSubArrayToZero(int elements[], size_t arrLength) {
     std::string result = "";
     if (arrLength <= 0)return result;
@@ -381,6 +382,7 @@ std::string sumSubArrayToZero(int elements[], size_t arrLength) {
     }
     return result;
 }
+*/
 
 int BinarySearchUpgraded(int elements[], size_t arrLength, const int target) {
     if (arrLength <= 0) return -1;
@@ -396,6 +398,37 @@ int BinarySearchUpgraded(int elements[], size_t arrLength, const int target) {
         }
     }
     return -1;
+}
+
+
+int BinarySearchRecFIMostLeft(int arr[], int low, int high, int search) {
+    if (low > high)
+        return -1;
+    int middle = low + (high - low) / 2;
+    if (arr[middle] == search && (middle == 0 || arr[middle - 1] != search)) {
+        return middle;
+    }
+    if (arr[middle] >= search)
+        return BinarySearchRecFIMostLeft(arr, low, middle - 1, search);
+    return BinarySearchRecFIMostLeft(arr, middle + 1, high, search);
+}
+
+int BinarySearchRecFIMostRight(int arr[], int low, int high, int search, int arrLen) {
+    if (low > high)
+        return -1;
+    int middle = low + (high - low) / 2;
+    if (arr[middle] == search && (middle == arrLen - 1 || arr[middle + 1] != search)) {
+        return middle;
+    }
+    if (arr[middle] > search)
+        return BinarySearchRecFIMostRight(arr, low, middle - 1, search, arrLen);
+    return BinarySearchRecFIMostRight(arr, middle + 1, high, search, arrLen);
+}
+
+int BinarySearchRecFITotal(int arr[], int low, int high, int search, int arrLen, int total = 0) {
+    int sum = (BinarySearchRecFIMostRight(arr, 0, arrLen, search, arrLen) -
+               BinarySearchRecFIMostLeft(arr, 0, arrLen, search));
+    return (sum == 0 ? -1 : sum) + 1;
 }
 
 int FirstOccurenceFinder(int elements[], size_t arrLength, const int target) {
@@ -470,6 +503,7 @@ void T::func(uint number) {
     std::cout << number << std::endl;
 }
 
+/*
 std::unordered_map<int, int> values;
 
 int tailFact(int t) {
@@ -480,7 +514,7 @@ int tailFact(int t) {
     ::values[t] = t * tailFact(--t);
     return ::values[t];
 }
-
+*/
 #include <chrono>
 
 unsigned long long FactTR(unsigned int a, unsigned long long val) {
@@ -1126,6 +1160,8 @@ public:
     void speak() {
         std::cout << "speak!" << std::endl;
     }
+
+    friend std::ostream& operator<<(std::ostream& os, const test& test);
 };
 
 int* spliceArr(const int splitArr[], size_t arrLen) {
@@ -1344,13 +1380,965 @@ T* copyme(T* s, T* d, size_t len) {
 }
 
 
-int main() {
+enum class Test {
+    value1, value2, value3
+};
 
+std::ostream& operator<<(std::ostream& os, const test& test) {
+    os << "_test: " << test;
+    return os;
+}
+
+class xqqq {
+    int _a;
+public:
+    int getA() const {
+        return _a;
+    }
+
+    void setA(int a) {
+        _a = a;
+    }
+
+    friend std::ostream& operator<<(std::ostream& os, const xqqq& xqqq) {
+        os << "_a: " << xqqq._a;
+        return os;
+    }
+};
+
+#include <initializer_list>
+
+template<typename T>
+size_t FindAndDelete(std::multiset<T>& items, const std::initializer_list<T>& deleteItems) {
+    size_t cnt = 0;
+    for (const auto& val : deleteItems)
+        cnt += items.erase(val);
+    return cnt;
+}
+
+auto main4() -> int {
+    using namespace std;
+    cout << "hello world! \n";
+    return 0;
+}
+
+int CountDigit(const long long int& number) {
+    if (number == 0) return 0;
+    return 1 + CountDigit(number / 10);
+}
+
+#include <math.h>
+
+typedef long long int mynum;
+
+int CountDigitByLog(const mynum& number) {
+    return floor(log10(number) + 1);
+}
+
+bool powerofTwo(int x) {
+    return x && !(x & --x);
+}
+
+std::string reverse(std::string& str) {
+    for (int i = 0; i < str.length() / 2; ++i) {
+        char temp = str[i];
+        str[i] = str[str.size() - i - 1];
+        str[str.size() - i - 1] = temp;
+    }
+    return str;
+}
+
+size_t countSetBit(int x) {
+    if (x == 0) return 0;
+    size_t total = 0;
+    while (x != 0) {
+        x = x & (x - 1);
+        total++;
+    }
+    return total;
+}
+
+bool isBitSetAtIndex(int x, size_t index) {
+    return (x & (1 << (index - 1)));
+}
+
+
+std::string filler(std::string&& val, size_t maxLength, char with = '\0') {
+    if (val.length() > maxLength) return val;
+    int currLength = val.length();
+    std::string temp = "";
+    for (int i = 0; i < maxLength - currLength; ++i) {
+        temp += with;
+    }
+    return temp + val;
+}
+
+std::string DecToBinary(int number, std::string outVal) {
+    if (number < 2) return filler("1" + reverse(outVal), 8, '0');
+    if (number % 2 == 0) {
+        return DecToBinary(number >> 1, outVal + "0");
+    }
+    return DecToBinary(number >> 1, outVal + "1");
+}
+
+size_t powerGeneration(const std::string& text) {
+    using namespace std;
+    size_t count = 1 << text.length();
+    for (int i = 0; i < count; ++i) {
+        for (int j = 0; j < text.length(); ++j) {
+            if ((i & (1 << j)) != 0) {
+                cout << text[j];
+            }
+        }
+        cout << "\n";
+    }
+    return count;
+}
+
+size_t powerGeneration(const std::string& text, int len = 0) {
+    using namespace std;
+    size_t count = 1 << text.length();
+    size_t countForReturn = 0;
+    for (int i = 0; i < count; ++i) {
+        int c = 0;
+        string _temp;
+        for (int j = 0; j < text.length(); ++j) {
+            if ((i & (1 << j)) != 0) {
+                _temp += text[j];
+                ++c;
+            }
+        }
+        if (c == len) {
+            countForReturn++;
+            cout << _temp << "\n";
+        } else if (len == 0) {
+            cout << _temp << "\n";
+        }
+    }
+    return (len == 0) ? count : countForReturn;
+}
+
+void mirrorPrint(int x) {
+    using namespace std;
+    if (x < 1) {
+        cout << "\n";
+        return;
+    }
+    cout << x;
+    mirrorPrint(x - 1);
+    cout << x;
+}
+
+
+void printrec(int x) {
+    using namespace std;
+    if (x < 1) return;
+    printrec(x - 1);
+    cout << x;
+}
+
+typedef long long unsigned llu;
+
+llu tailRec(llu x, int temp) {
+    if (temp == 1)
+        return x;
+    return tailRec(x * (temp - 1), --temp);
+}
+
+llu tailRecCaller(llu x) {
+    if (x <= 1) return x;
+    return tailRec(x, x);
+}
+
+bool isPalindrome(const std::string& val, int l, int r) {
+    if (val.length() == 0) return false;
+    if (l >= r) return true;
+    if (val[l] != val[r]) return false;
+    return isPalindrome(val, ++l, --r);
+}
+
+#include <stdlib.h>
+
+int sumRec(int n, int sum) {
+    if (n < 10) return sum + n;
+    return sumRec(n / 10, sum + (n - ((n / 10) * 10)));
+}
+
+int sumRecEasy(int n, int sum) {
+    if (n < 10) return sum + n;
+    return sumRec(n / 10, sum + n % 10);
+}
+
+int sumRecCaller(int n) {
+    return sumRecEasy(n, 0);
+}
+
+void reverseArryRec(int* itemArr, size_t arrLen, int l, int r) {
+    if (arrLen == 0) return;
+    if (l >= r) return;
+    int temp = *(itemArr + r);
+    *(itemArr + r) = *(itemArr + l);
+    *(itemArr + l) = temp;
+    reverseArryRec(itemArr, arrLen, ++l, --r);
+}
+
+void rotateRight(int arrRotate[], int n, int d) {
+    if (d == 0 || n == 0 || d >= n) return;
+    auto swap = [&](const int l, const int r) {
+        int temp = arrRotate[l];
+        arrRotate[l] = arrRotate[r];
+        arrRotate[r] = temp;
+    };
+    swap(0, d - 1);
+    swap(d, n - 1);
+    for (int i = 0; i < n / 2; ++i) {
+        int temp = arrRotate[i];
+        arrRotate[i] = arrRotate[n - i - 1];
+        arrRotate[n - i - 1] = temp;
+    }
+}
+
+std::string getString(const int& t) {
+    if (t == 100) return "100";
+    return {};
+}
+
+int maxSum(std::vector<int> arrSubArray, size_t maxLength, int k = 3) {
+    using namespace std;
+    int sum = 0;
+    if (maxLength < k) return -1;
+    int index = 0;
+    for (auto it = std::begin(arrSubArray); it != std::end(arrSubArray); ++it) {
+        if (index >= maxLength) break;
+        if (index == 0) {
+            int kC = k;
+            while (kC != 0) {
+                sum += arrSubArray[--kC];
+                index++;
+            }
+            continue;
+        }
+        if (sum - *std::prev(it) + arrSubArray[index] > sum) {
+            sum = sum - *std::prev(it) + arrSubArray[index];
+        }
+        index++;
+    }
+    return sum;
+}
+
+int maxSum(int arrSubArray[], size_t maxLength, int k = 3) {
+    using namespace std;
+    int sum = 0;
+    if (maxLength < k) return -1;
+    int index = 0;
+    for (int i = 0; i < maxLength; ++i) {
+        if (index >= maxLength) break;
+        if (index == 0) {
+            int kC = k;
+            while (kC != 0) {
+                sum += arrSubArray[--kC];
+                index++;
+            }
+            continue;
+        }
+        if (sum - arrSubArray[i - 1] + arrSubArray[index] > sum) {
+            sum = sum - arrSubArray[i - 1] + arrSubArray[index];
+        }
+        index++;
+    }
+    return sum;
+}
+
+size_t gitSum(int arrGitSum[], int arrLength, int from, int to) {
+    if (from > to) return -1;
+    if (from > arrLength - 1 || from < 0) return -1;
+    if (to > arrLength - 1 || to < 0) return -1;
+    size_t sum{0};
+    for (int i = from; i <= to; ++i) {
+        sum += arrGitSum[i];
+    }
+    return sum;
+}
+
+void prefixSumSmart(int arrNumbersAll[], int arrLength, int arrSumGit[]) {
+    if (arrLength <= 0) return;
+    arrNumbersAll[0] = *arrSumGit;
+    for (int i = 1; i < arrLength; ++i) {
+        arrNumbersAll[i] = arrNumbersAll[i - 1] + arrSumGit[i];
+    }
+}
+
+size_t gitSumSmart(int arrGitSumForLookup[], int arrLength, int from, int to) {
+    if (from > to) return -1;
+    if (from > arrLength - 1 || from < 0) return -1;
+    if (to > arrLength - 1 || to < 0) return -1;
+    if (from != 0)
+        return arrGitSumForLookup[to] - arrGitSumForLookup[from - 1];
+    return arrGitSumForLookup[to];
+}
+
+int findSubSetXJustForPositiveNumbers(int arrForNums[], int arrLen, int target = 0) {
+    int totalTargetCount = 0;
+    if (arrLen <= 1) return totalTargetCount;
+    int total = 1 << arrLen;
+    total++;
+    using namespace std;
+    for (int i = 0; i < total; ++i) {
+        int temp = 0;
+        for (int j = 0; j < arrLen; ++j) {
+            if ((i & (1 << j)) > 0) {
+                temp += arrForNums[j];
+                cout << arrForNums[j] << " ";
+            }
+        }
+        if (temp != 0)
+            cout << "\n";
+        if (temp != 0 && temp == target)
+            ++totalTargetCount;
+    }
+    if (target == 0)
+        --totalTargetCount;
+    return totalTargetCount;
+}
+
+#include <sstream>
+
+std::vector<std::string> split(const std::string& s, char delimiter) {
+    std::vector<std::string> tokens;
+    std::string token;
+    std::istringstream tokenStream(s);
+    while (std::getline(tokenStream, token, delimiter)) {
+        tokens.push_back(token);
+    }
+    return tokens;
+}
+
+void CombinationForSum(int arrForComb[], int arrLen, int& targetFound, std::string curr = "", int index = 0, const int target = 0, bool showAll = false) {
+    if (index == arrLen) {
+        if (showAll)
+            std::cout << curr;
+        std::vector<std::string> numbers = split(curr, ',');
+        int sum = 0;
+        for (const auto& number : numbers) {
+            sum += std::stoi(number);
+        }
+        if (numbers.size() != 0 && sum == target) {
+            if (!showAll)
+                std::cout << curr;
+            std::cout << " (*)\n";
+            targetFound++;
+        }
+        if (showAll)
+            std::cout << "\n";
+        return;
+    }
+    CombinationForSum(arrForComb, arrLen, targetFound, curr, index + 1, target);
+    CombinationForSum(arrForComb, arrLen, targetFound, curr + (curr == "" ? "" : ",") + std::to_string(arrForComb[index]), index + 1, target);
+}
+
+void subStrRec(const std::string& a, std::string curr = "", int index = 0) {
+    if (index == a.length()) {
+        std::cout << curr << "\n";
+        return;
+    }
+    subStrRec(a, curr, index + 1);
+    subStrRec(a, curr + a[index], index + 1);
+}
+
+void CombinationForSumStr(const std::string& strForComb, int& targetFound, std::string curr = "", int index = 0, const int target = 0) {
+    if (index == strForComb.length()) {
+        std::cout << curr << "\n";
+        std::vector<std::string> numbers = split(curr, ',');
+        int sum = 0;
+        for (const auto& number : numbers) {
+            sum += std::stoi(number);
+        }
+        if (numbers.size() != 0 && sum == target) {
+            targetFound++;
+        }
+        return;
+    }
+    CombinationForSumStr(strForComb, targetFound, curr, index + 1, target);
+    CombinationForSumStr(strForComb, targetFound, curr + (curr == "" ? "" : ",") + strForComb[index], index + 1, target);
+}
+
+int BinarySearchRec(int arrM[], int low, int high, int search) {
+    if (low <= high) {
+        int middle = low + (high - low) / 2;
+        if (arrM[middle] == search)
+            return middle;
+        if (arrM[middle] > search)
+            return BinarySearchRec(arrM, low, --middle, search);
+        return BinarySearchRec(arrM, ++middle, high, search);
+    }
+    return -1;
+}
+
+int FindInArray(int arrInf[], int l, int h, int search) {
+    if (arrInf[0] == search)
+        return 0;
+    int i = 1;
+    while (arrInf[i] < search)
+        i *= 2;
+    if (arrInf[i] == search)
+        return i;
+    return BinarySearchRec(arrInf, i / 2, i, search);
+}
+
+int pop(unsigned x) {
+    x = x - ((x >> 1) & 0x55555555);
+    x = (x & 0x33333333) + ((x >> 2) & 0x33333333);
+    x = (x + (x >> 4)) & 0x0F0F0F0F;
+    x = x + (x >> 8);
+    x = x + (x >> 16);
+    return x & 0x0000003F;
+}
+
+#include <unordered_set>
+
+int findUnique(int arrUn[], int arrLen) {
+    std::unordered_set<int> allItems = {};
+    for (int i = 0; i < arrLen; ++i) {
+        //if (!allItems.contains(arrUn[i])) {
+        allItems.insert(arrUn[i]);
+        //}
+    }
+    return allItems.size();
+}
+
+#include <unordered_map>
+
+std::unordered_map<int, int> getUMap(int arrUn[], int arrLen) {
+    std::unordered_map<int, int> allItems = {};
+    for (int i = 0; i < arrLen; ++i) {
+        allItems[arrUn[i]]++;
+    }
+    return allItems;
+}
+
+using ll = long long;
+using llu = long long unsigned;
+
+template<typename K, typename V>
+V find(std::unordered_map<K, V> allItems, K search) {
+    using namespace std;
+    auto item = allItems.find(search);
+    if (item != allItems.end()) {
+        return item->second;
+    }
+    return V{};
+}
+
+std::string enter_a_value(const std::string& desc = "Please enter a value :") {
+    using namespace std;
+    cout << desc << "\n";
+    std::string s;
+    std::getline(std::cin >> std::ws, s);
+    cout << "\n---------------------------\n";
+    return s;
+}
+
+// check a subarray with 0 sum! O(n)
+bool custom_sum(int arrZs[], int arrLen, int target = 0) {
+    if (arrLen <= 0) return false;
+    std::unordered_set<int> keys;
+    keys.insert(0);
+    int preTemp = arrZs[0];
+    keys.insert(arrZs[0]);
+    for (int i = 1; i < arrLen; ++i) {
+        int prefixSum = preTemp + arrZs[i];
+        if (keys.find(prefixSum - target) != keys.end()) {
+            return true;
+        }
+        keys.insert(prefixSum);
+        preTemp = prefixSum;
+    }
+    return false;
+}
+
+// Time : O(n) , Space : O(n)
+std::pair<int, int> find_2_sum(int arrSum[], int arrLen, const int search) {
+    if (arrLen <= 0) return std::make_pair<int, int>(-1, -1);
+    std::unordered_set<int> _ul;
+    while (arrLen--) {
+        if (_ul.find(search - arrSum[arrLen]) != _ul.end()) {
+            return std::make_pair<int, int>(std::move(arrSum[arrLen]), search - arrSum[arrLen]);
+        }
+        _ul.insert(arrSum[arrLen]);
+    }
+    return std::make_pair<int, int>(-1, -1);
+}
+
+// Time : O(nlogn) ,Space : o(1)
+std::pair<int, int> find_2_sum_2(int arrSum[], int arrLen, const int search) {
+    // it must be sorted!!!
+    [&](const bool active) {
+        if (!active) return;
+        for (int i = 0; i < arrLen - 1; ++i) {
+            for (int j = 0; j < arrLen - 1; ++j) {
+                if (arrSum[j] > arrSum[j + 1]) {
+                    int temp = arrSum[j];
+                    arrSum[j] = arrSum[j + 1];
+                    arrSum[j + 1] = temp;
+                }
+            }
+        }
+    }(false);
+
+    if (arrLen <= 0) return std::make_pair<int, int>(-1, -1);
+    int l = 0;
+    int h = arrLen - 1;
+    while (l < h) {
+        std::cout << "l : " << arrSum[l] << ", h:" << arrSum[h] << "\n";
+        int sum = arrSum[l] + arrSum[h];
+        if (sum == search) {
+            return std::make_pair<int, int>(std::move(arrSum[l]), std::move(arrSum[h]));
+        }
+        if (sum > search) {
+            h--;
+        } else {
+            l++;
+        }
+    }
+    return std::make_pair<int, int>(-1, -1);
+}
+
+char find_repeating_first_char(const std::string& text) {
+    if (text.empty()) return '\0';
+    std::unordered_set<char> _li;
+    for (const auto& item : text) {
+        if (_li.find(item) != _li.end()) {
+            return item;
+        }
+        _li.insert(item);
+    }
+    return '\0';
+}
+
+char find_non_repeating_char(const std::string& text) {
+    if (text.empty()) return '\0';
+    std::unordered_map<char, int> _li;
+    char result = text[0];
+    for (int i = text.length() - 1; i >= 0; --i) {
+        _li[text[i]]++;
+        if (_li[text[i]] == 1) {
+            result = text[i];
+        }
+    }
+    return result;
+}
+
+void find_perm_str(char arrChars[], int arrLen, std::string curr = "", int index = 0) {
+    if (arrLen <= 0) return;
+    if (arrLen == index) {
+        std::cout << curr << "\n";
+        return;
+    }
+    find_perm_str(arrChars, arrLen, curr, index + 1);
+    find_perm_str(arrChars, arrLen, curr + arrChars[index], index + 1);
+}
+
+bool all_char_is_unique(const std::string& text) {
+    int t = 0;
+    for (int i = 0; i < text.length(); ++i) {
+        if ((t & (1 << (text[i] - 'a'))) > 0) {
+            return false;
+        }
+        t |= (1 << (text[i] - 'a'));
+    }
+    return true;
+}
+
+template<typename T>
+void reverse_array(T* arrR, int b, int e) {
+    while (b < e) {
+        std::swap(arrR[b], arrR[e]);
+        b++;
+        e--;
+    }
+}
+
+
+void rotate_right(char* text, int n, int d) {
+    if (d == 0 || n == 0 || d == n) return;
+    if (d > n)
+        d = d % n;
+    reverse_array(text, 0, n - 1); // 0,n-1
+    reverse_array(text, 0, d - 1); // 0,d-1
+    reverse_array(text, d, n - 1); // d,n-1
+}
+
+
+void rotate_left(char* text, int n, int d) {
+    if (d == 0 || n == 0 || d == n) return;
+    if (d > n)
+        d = d % n;
+    reverse_array(text, 0, d - 1); // 0,d-1
+    reverse_array(text, d, n - 1); // d,n-1
+    reverse_array(text, 0, n - 1); // 0,n-1
+}
+
+void permutation_list(std::string& a, int l, int r) {
+    if (l == r) {
+        std::cout << a << "\n";
+        return;
+    }
+    for (int i = l; i < r; ++i) {
+        std::swap(a[l], a[i]);
+        permutation_list(a, l + 1, r);
+        std::swap(a[l], a[i]);
+    }
+}
+
+
+int main() {
+    using namespace std;
+    cout << std::boolalpha;
+    string text_perm =  enter_a_value("Please enter a text");
+    permutation_list(text_perm,0,text_perm.size()-1);
+    return 0;
+
+    char arrCharPerm[] = {'a', 'b', 'c', 'd', 'e'};
+
+    cout << "is sorted ? : " << std::is_sorted(std::begin(arrCharPerm), std::end(arrCharPerm)) << "\n";
+
+    auto arrReset = [&arrCharPerm] {
+        arrCharPerm[0] = 'a';
+        arrCharPerm[1] = 'b';
+        arrCharPerm[2] = 'c';
+        arrCharPerm[3] = 'd';
+        arrCharPerm[4] = 'e';
+    };
+
+    for (int j = 0; j < 5; ++j) {
+        rotate_left(arrCharPerm, sizeof(arrCharPerm) / sizeof(*arrCharPerm), j);
+        for (int i = 0; i < sizeof(arrCharPerm) / sizeof(*arrCharPerm); ++i) {
+            cout << arrCharPerm[i];
+        }
+        cout << " (r:" << j << ")" << "\n";
+        if (j == 0)
+            cout << "-----------------------\n";
+        arrReset();
+    }
+    return 0;
+
+#if 0
+    reverse_array_new_style(arrCharPerm,0,4);
+    for (int i = 0; i < sizeof(arrCharPerm) / sizeof(*arrCharPerm); ++i) {
+        cout << arrCharPerm[i];
+    }
+    cout << "\n";
+    return 0;
+#endif
+    for (int j = 0; j < 5; ++j) {
+        rotate_right(arrCharPerm, sizeof(arrCharPerm) / sizeof(*arrCharPerm), j);
+        for (int i = 0; i < sizeof(arrCharPerm) / sizeof(*arrCharPerm); ++i) {
+            cout << arrCharPerm[i];
+        }
+        cout << " (r:" << j << ")" << "\n";
+        if (j == 0)
+            cout << "-----------------------\n";
+        arrReset();
+    }
+    return 0;
+
+#if 0
+    char arrCharPerm[] = {'a', 'b', 'c'};
+    find_perm_str(arrCharPerm, sizeof(arrCharPerm) / sizeof(*arrCharPerm), "", 0);
+    return 0;
+#endif
+
+#if 0
+    std::string find_non_repeating_char_Value = enter_a_value();
+    cout << "find_non_repeating_char :" << find_non_repeating_char(find_non_repeating_char_Value) << "\n";
+    return 0;
+#endif
+
+#if 0
+    std::string valueAllCharIsUnique = enter_a_value();
+    cout << "all_char_is_unique :"<< all_char_is_unique(valueAllCharIsUnique) << "\n";
+    return 0;
+#endif
+
+    return 0;
+    std::string valueffVal = enter_a_value();
+    cout << find_repeating_first_char(valueffVal) << "\n";
+    return 0;
+
+    char* strxxx = "eralp";
+    //strxxx[0] = 'E';
+    string stryyy = "eralp";
+    stryyy[0] = 'E';
+
+    cout << sizeof(strxxx) << ", " << sizeof(stryyy) << "\n";
+    cout << strxxx << ", " << stryyy << "\n";
+
+    return 0;
+
+
+    int find_2_sum_2Arr[] = {1, 2, 3, 7, 8, 10, 11, 14};
+
+    int find_2_sum_2Number = std::stoi(enter_a_value());
+    auto find_2_sum_2Result = find_2_sum_2(find_2_sum_2Arr, sizeof(find_2_sum_2Arr) / sizeof(*find_2_sum_2Arr), find_2_sum_2Number);
+    cout << "[" << find_2_sum_2Result.first << "," << find_2_sum_2Result.second << "]\n";
+    return 0;
+
+#if 0
+    int find_2_sumNumber = enter_a_value<int>();
+    auto find_2_sumResult = find_2_sum(find_2_sumArr, sizeof(find_2_sumArr) / sizeof(*find_2_sumArr), find_2_sumNumber);
+    cout << "[" << find_2_sumResult.first << "," << find_2_sumResult.second << "]\n";
+    for (int i = 0; i < sizeof(find_2_sumArr) / sizeof(*find_2_sumArr); ++i) {
+        cout <<"--------->> : "<< find_2_sumArr[i] << "\n";
+    }
+    return 0;
+#endif
+
+    int arrZs[] = {5, 3, 8, -2, 8, 10};
+    int searchForSum = std::stoi(enter_a_value());
+    bool zsResult = custom_sum(arrZs, sizeof(arrZs) / sizeof(*arrZs), searchForSum);
+    cout << zsResult << "\n";
+    return 0;
+
+    int arrUn[] = {1, 1, 1, 1, 12, 3, 4, 2, 2, 3, 4};
+#if 0
+    int resUn = findUnique(arrUn, sizeof(arrUn) / sizeof(*arrUn));
+    cout << resUn;
+    return 0;
+#endif
+
+    std::unordered_map<int, int> resUMP = getUMap(arrUn, sizeof(arrUn) / sizeof(*arrUn));
+    for (const auto& item : resUMP) {
+        cout << item.first << ":" << item.second << "\n";
+    }
+
+    cout << "result --> " << find(resUMP, 32) << "\n";
+
+    return 0;
+
+    int pConvertI;
+    std::string pConvertStringI;
+    cout << "Please enter a number to convert from decimal to binary : \n";
+    cin >> pConvertI;
+    cout << "result : " << DecToBinary(pConvertI, pConvertStringI) + "\n";
+    cout << "bitCount : " << pop(pConvertI) << "\n";
+    return 0;
+
+    cout << "executing..\n";
+    cout << "looking for (in infinity) ?\n";
+    int numberInf = -1;
+    cin >> numberInf;
+    int listXFFInf[] = {1, 2, 3, 4, 5, 6, 19, 30, 40};
+    auto resxxFFInf = FindInArray(listXFFInf, 0, 0, numberInf);
+    cout << "found index " << resxxFFInf << "\n";
+    return 0;
+
+    cout << "executing..\n";
+    cout << "looking for ?\n";
+    int number = -1;
+    cin >> number;
+    int listX[] = {2, 3, 3, 3, 5, 5, 4, 3};
+    sort(begin(listX), end(listX));
+    for (const auto& item : listX) {
+        cout << item << " ";
+    }
+    cout << "\n";
+    auto resxxL = BinarySearchRecFIMostLeft(listX, 0, (sizeof(listX) / sizeof(*listX)), number);
+    cout << "found index ( most left )  : " << resxxL << "\n";
+    auto resxxR = BinarySearchRecFIMostRight(listX, 0, (sizeof(listX) / sizeof(*listX)), number, (sizeof(listX) / sizeof(*listX)));
+    cout << "found index ( most right ) : " << resxxR << "\n";
+
+    auto resxxT = BinarySearchRecFITotal(listX, 0, (sizeof(listX) / sizeof(*listX)), number, (sizeof(listX) / sizeof(*listX)), 0);
+    cout << "found index ( total      ) : " << resxxT << "\n";
+
+    return 0;
+
+
+    unsigned x = 1;
+    x <<= 5;
+    cout << x << "\n";
+    return 0;
+
+
+    int subSumWithComb[] = {6, 4, -2, -2, 8};
+    int targetDetectedForSum = 0;
+    int targetForSum = 0;
+    CombinationForSum(subSumWithComb, sizeof(subSumWithComb) / sizeof(*subSumWithComb), targetDetectedForSum, "", 0, targetForSum, false);
+    cout << "targetForSum : " << targetForSum << ", result Arr (targetDetectedForSum) : " << targetDetectedForSum << "\n";
+    return 0;
+
+    string subSumWithCombStr = "123";
+    int targetDetectedForSumStr = 0;
+    int targetForSumStr = 2;
+    CombinationForSumStr(subSumWithCombStr, targetDetectedForSumStr, "", 0, targetForSumStr);
+    cout << "result Str:" << targetDetectedForSumStr << "\n";
+    return 0;
+
+
+    int subSum[] = {1, 2, 3}; // it doesn't work with findSubSetXJustForPositiveNumbers because 1's count is different in negative numbers..
+    int resSub = findSubSetXJustForPositiveNumbers(subSum, sizeof(subSum) / sizeof(*subSum), 2);
+    cout << "result :" << resSub << "\n";
+    return 0;
+
+    string combStringx;
+    cout << "please enter a text ... \n";
+    cin >> combStringx;
+    subStrRec(combStringx, "", 0);
+    return 0;
+
+
+    int arrSumGit[] = {2, 8, 3, 9, 6, 5, 4};
+    int arrSumPrefixAll[sizeof(arrSumGit) / sizeof(*arrSumGit)] = {};
+    prefixSumSmart(arrSumPrefixAll, sizeof(arrSumPrefixAll) / sizeof(*arrSumPrefixAll), arrSumGit);
+    int sumForGit = gitSumSmart(arrSumPrefixAll, sizeof(arrSumPrefixAll) / sizeof(*arrSumPrefixAll), 0, 2);
+    cout << "gitSum(0,2) : " << sumForGit << "\n";
+
+    sumForGit = gitSumSmart(arrSumPrefixAll, sizeof(arrSumPrefixAll) / sizeof(*arrSumPrefixAll), 1, 3);
+    cout << "gitSum(1,3) : " << sumForGit << "\n";
+
+    sumForGit = gitSumSmart(arrSumPrefixAll, sizeof(arrSumPrefixAll) / sizeof(*arrSumPrefixAll), 2, 6);
+    cout << "gitSum(2,6) : " << sumForGit << "\n";
+
+    return 0;
+    int arrSumArr[] = {1, 12, 3, 41, 5};
+    int sumForArr1 = maxSum(arrSumArr, sizeof(arrSumArr) / sizeof(*arrSumArr), 3);
+    cout << "max sum by arr : " << sumForArr1 << "\n";
+
+    std::vector<int> arrSum = {1, 12, 3, 41, 5};
+    int sumForArrV = maxSum(arrSum, arrSum.size(), 3);
+    cout << "max sum by vector: " << sumForArrV << "\n";
+
+    return 0;
+    cout << getString(193).empty() ? "true" : "false";
+    return 0;
+
+    int arrM[] = {1, 2, 3, 4, 5};
+    rotateRight(arrM, sizeof(arrM) / sizeof(*arrM), 2);
+    for (int i = 0; i < sizeof(arrM) / sizeof(*arrM); ++i) {
+        cout << arrM[i] << "\n";
+    }
+
+    return 0;
+
+
+    reverseArryRec(arrM, sizeof(arrM) / sizeof(*arrM), 0, (sizeof(arrM) / sizeof(*arrM)) - 1);
+    for (int i = 0; i < sizeof(arrM) / sizeof(*arrM); ++i) {
+        cout << arrM[i] << "\n";
+    }
+    return 0;
+
+    string combString;
+    cout << "please enter a text ... \n";
+    cin >> combString;
+    subStrRec(combString, "", 0);
+    return 0;
+
+    int numDigiSum;
+    cout << "please enter a number to sum all digits ... \n";
+    cin >> numDigiSum;
+    cout << sumRecCaller(numDigiSum) << "\n";
+    return 0;
+
+
+    string palCheck;
+    cout << "please enter a text to check whether is palindrome or not ... \n";
+    cin >> palCheck;
+    cout << (isPalindrome(palCheck, 0, palCheck.length() - 1) ? "true" : "false") << "\n";
+    return 0;
+
+    llu pTailNumber;
+    cout << "please enter a number to do calculation by tail rec ... \n";
+    cin >> pTailNumber;
+    cout << tailRecCaller(pTailNumber) << "\n";
+    //printrec(5);
+    //mirrorPrint(3);
+    return 0;
+
+    size_t totalCount = powerGeneration("eralp", 3);
+    cout << "Total Element Count : " << totalCount << "\n";
+    return 0;
+
+
+    cout << countSetBit(5) << "\n";
+    cout << countSetBit(4) << "\n";
+
+    return 0;
+
+
+    cout << (isBitSetAtIndex(5, 1) ? "true" : "false") << "\n";
+    cout << (isBitSetAtIndex(5, 2) ? "true" : "false") << "\n";
+    cout << (isBitSetAtIndex(5, 3) ? "true" : "false") << "\n";
+
+    return 0;
+
+
+    int pNumber;
+    cout << "please enter a number to check whether that is power of 2 or not ... \n";
+    cin >> pNumber;
+    cout << (powerofTwo(pNumber) ? "true" : "false") << "\n";
+    return 0;
+
+    int pConvert;
+    std::string pConvertString;
+    cout << "Please enter a number to convert from decimal to binary : \n";
+    cin >> pConvert;
+    cout << "result : " << DecToBinary(pConvert, pConvertString) + "\n";
+    return 0;
+    long long int num;
+    cout << "Please enter your number... \n";
+    cin >> num;
+    //cout << "Digit Count : " << CountDigit(num) << "\n";
+    cout << "Digit Count : " << CountDigitByLog(num) << "\n";
+
+    return 0;
+
+    cout << "executing..\n";
+    cout << "looking for ?\n";
+    int searchNumberX = -1;
+    cin >> number;
+    int listXFF[] = {1, 2, 3, 4, 5, 6, 19, 30, 40};
+    auto resxxFF = BinarySearchRec(listXFF, 0, (sizeof(listXFF) / sizeof(*listXFF)), searchNumberX);
+    cout << "found index ( from 1 ) : " << (resxxFF == -1 ? resxxFF : ++resxxFF) << "\n";
+    return 0;
+
+    //auto x{1, 4, 5};
+    initializer_list<int> x_{1, 4, 5, 4, 5, 5, 6, 444, 44};
+    for (auto pInt = x_.begin(); pInt != x_.end(); ++pInt) {
+        cout << *pInt << "\n";
+    }
+    return 0;
+
+    auto y{12};
+    string _a{10, 'A'};
+    string _b(10, 'B');
+    //cout << _a.length() << "\n";
+    //auto list = {1,2,3,4,5};
+    for (auto _aIt = _a.begin(); _aIt != _a.end(); ++_aIt) {
+        cout << *_aIt << "\n";
+    }
+    //cout << _b.length() << "\n";
+    return 0;
+}
+
+int main3() {
+    using namespace std;
+    multiset<int> _list = {1, 2, 3, 4, 5, 7, 8, 9, 9, 9};
+    FindAndDelete(_list, {1, 2, 9});
+    for (const auto& item : _list) {
+        cout << item << "\n";
+    }
+    return 0;
+}
+
+int main2() {
+
+    Test tte = static_cast<Test>(2);
+    std::cout << "tte : " << static_cast<int>(tte) << "\n";
+    return 0;
 
     int dg = 100;
     const int* fzz = &dg;
 
-    return 0 ;
+    return 0;
 
     char str[7] = "Ahmet\0";
 
