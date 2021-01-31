@@ -1978,15 +1978,19 @@ void rotate_left(char* text, int n, int d) {
     reverse_array(text, 0, n - 1); // 0,n-1
 }
 
+// O(n*n!)
+// Note that there are n! permutations and it requires O(n) time to
+// print a permutation.
 void permutation_list(std::string& a, int l, int r) {
+    std::cout << "l:" << l << ",r:" << r << "\n";
     if (l == r) {
         std::cout << a << "\n";
-        return;
-    }
-    for (int i = l; i < r; ++i) {
-        std::swap(a[l], a[i]);
-        permutation_list(a, l + 1, r);
-        std::swap(a[l], a[i]);
+    } else {
+        for (int i = l; i <= r; ++i) {
+            std::swap(a[l], a[i]);
+            permutation_list(a, l + 1, r);
+            std::swap(a[l], a[i]);
+        }
     }
 }
 
@@ -1994,8 +1998,8 @@ void permutation_list(std::string& a, int l, int r) {
 int main() {
     using namespace std;
     cout << std::boolalpha;
-    string text_perm =  enter_a_value("Please enter a text");
-    permutation_list(text_perm,0,text_perm.size()-1);
+    string text_perm = enter_a_value("Please enter a text");
+    permutation_list(text_perm, 0, text_perm.size() - 1);
     return 0;
 
     char arrCharPerm[] = {'a', 'b', 'c', 'd', 'e'};
