@@ -43,4 +43,20 @@ unordered_set
 -
 unordered_map
 -
+stack
+-
+math.h
+-
+string
+-
+map
+-
+regex
+-
+list
+-
+forward_list
+-
+deque
+-
 

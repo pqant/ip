@@ -2,14 +2,17 @@
 #include <unordered_map>
 #include <set>
 
+
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wwritable-strings"
 
-void TestOneArray() {
+[[maybe_unused]] void TestOneArray() {
+#if 0
     int students_score[5] = {15, 33, 44, 22, 66};
     for (int i = 0; i < sizeof(students_score) / sizeof(students_score[0]); ++i) {
         std::cout << students_score[i] << std::endl;
     }
+#endif
 }
 
 int* GenerateTestOneArray(const int& size) {
@@ -18,7 +21,7 @@ int* GenerateTestOneArray(const int& size) {
 }
 
 
-int* TestOneArrayAppend(const int& score, const int arrLength) {
+[[maybe_unused]] int* TestOneArrayAppend(const int& score, const int arrLength) {
     int* oldScores = GenerateTestOneArray(arrLength);
     int* newScores = new int[arrLength + 1];
     for (int i = 0; i < arrLength; ++i) {
@@ -39,7 +42,7 @@ public:
 
 #include "vector"
 
-void TakeUnlimitedValuesFromTheUser() {
+[[maybe_unused]] void TakeUnlimitedValuesFromTheUser() {
     std::vector<int> vec;
     r _r{};
     _r.x();
@@ -53,7 +56,7 @@ void TakeUnlimitedValuesFromTheUser() {
     std::copy(vec.begin(), vec.end(), std::ostream_iterator<int>(std::cout, " "));
 }
 
-int* TestOneArrayInsert(const int& value, int index, int arrLength) {
+[[maybe_unused]] int* TestOneArrayInsert(const int& value, int index, int arrLength) {
     if (index <= 0 || index > arrLength + 1) {
         return nullptr;
     }
@@ -73,7 +76,7 @@ int* TestOneArrayInsert(const int& value, int index, int arrLength) {
     return newScores;
 }
 
-int* TestOneArrayDelete(int index, int arrLength) {
+[[maybe_unused]] int* TestOneArrayDelete(int index, int arrLength) {
     if (index <= 0 || index > arrLength) {
         return nullptr;
     }
@@ -93,32 +96,32 @@ int* TestOneArrayDelete(int index, int arrLength) {
     return newScores;
 }
 
-std::vector<int> test1() {
+[[maybe_unused]] std::vector<int> test1() {
     std::vector<int> t;
     t.emplace_back(1);
     t.emplace_back(3);
     return t;
 }
 
-std::vector<int>& test2(std::vector<int>& t) {
+[[maybe_unused]] std::vector<int>& test2(std::vector<int>& t) {
     //never use a local value to send outside. it can cause dangling problem!
     t.emplace_back(4);
     t.emplace_back(5);
     return t;
 }
 
-void test3(std::vector<int>& t) {
+[[maybe_unused]] void test3(std::vector<int>& t) {
     t.emplace_back(6);
     t.emplace_back(7);
 }
 
-void test4(std::vector<int> t) {
+[[maybe_unused]] void test4(std::vector<int> t) {
     t.emplace_back(60);
     t.emplace_back(70);
 }
 
 
-void bubble_sort(int elements[], int arrLen) {
+[[maybe_unused]] void bubble_sort(int elements[], int arrLen) {
     for (int i = 0; i < arrLen; i++) {
         for (int j = 0; j < arrLen - 1 - i; j++) {
             if (elements[j] > elements[j + 1]) {
@@ -283,7 +286,7 @@ void rotateToRight(int list[], const int arrLen, int rotateCount) {
 
 int maxSubArraySum(const std::vector<int>& a) {
     int maxSoFar = 0, maxEndingHere = 0;
-    for (int i = 0; i < a.size(); i++) {
+    for (size_t i = 0; i < a.size(); i++) {
         if (a[i] > 0) {
             maxEndingHere = maxEndingHere + a[i];
         } else {
@@ -342,7 +345,7 @@ void reverse(T elements[], const int size) {
 std::string FindSumArrayTarget(int elements[], const size_t arrLength, const int target) {
     std::string result = "[]";
     if (arrLength <= 0) return result;
-    int startIndex = 0, end = 0, total = elements[startIndex];
+    size_t startIndex = 0, end = 0, total = elements[startIndex];
     while (startIndex < arrLength - 1) {
         if (startIndex > end) {
             end = startIndex;
@@ -426,8 +429,8 @@ int BinarySearchRecFIMostRight(int arr[], int low, int high, int search, int arr
 }
 
 int BinarySearchRecFITotal(int arr[], int low, int high, int search, int arrLen, int total = 0) {
-    int sum = (BinarySearchRecFIMostRight(arr, 0, arrLen, search, arrLen) -
-               BinarySearchRecFIMostLeft(arr, 0, arrLen, search));
+    int sum = (BinarySearchRecFIMostRight(arr, low, arrLen, search, arrLen) -
+               BinarySearchRecFIMostLeft(arr, low, arrLen, search));
     return (sum == 0 ? -1 : sum) + 1;
 }
 
@@ -545,17 +548,17 @@ unsigned long long int SlowFactCalcLinear(const unsigned int val) {
 
 #include <cstdio>
 
-int arr[100];
+int arrE[100];
 
 void enumerate(int element, int n) {
     if (element > n) { // Base case
         for (int i = 1; i <= n; i++)
-            std::cout << arr[i];
+            std::cout << arrE[i];
         std::cout << std::endl;
         return;
     }
     for (int i = 1; i <= 3; i++) {
-        arr[element] = i;
+        arrE[element] = i;
         enumerate(element + 1, n);
     }
 }
@@ -684,7 +687,7 @@ private:
 
 struct M {
 private:
-    int _mValue;
+    [[maybe_unused]] int _mValue;
 public:
     M() : _mValue(0) {}
 
@@ -1362,7 +1365,7 @@ public:
 
 template<typename T>
 void PrintX(T* arrAll, const size_t& len) {
-    for (int i = 0; i < len; ++i) {
+    for (size_t i = 0; i < len; ++i) {
         std::cout << arrAll[i] << std::endl;
     }
 }
@@ -1994,10 +1997,651 @@ void permutation_list(std::string& a, int l, int r) {
     }
 }
 
+#include <stack>
+
+void simple_stack_work() {
+    using namespace std;
+    std::stack<int> ss;
+    ss.push(1);
+    ss.push(2);
+    cout << "top element: " << ss.top() << "\n";
+    cout << "popping element\n";
+    ss.pop();
+    cout << "top element: " << ss.top() << "\n";
+    cout << "popping element\n";
+    cout << "top element: " << ss.top() << "\n";
+    cout << "size: " << ss.size() << "\n";
+
+}
+
+bool do_something(const int l, const int r) {
+    return (l ^ 1) < (r ^ 1);
+}
+
+struct custom_stack {
+    int cap;
+    int top;
+    int* arr;
+
+    custom_stack(int cap) : cap(cap), top(-1) {
+        arr = new int[cap];
+    }
+};
+
+void stock_span() {
+    int prices[] = {10, 5, 2, 7, 18, 15, 16, 17};
+    for (int i = 0; i < sizeof(prices) / sizeof(*prices); i++) {
+        int span = 1;
+        for (int j = i - 1; j >= 0; j--) {
+            if (prices[j] > prices[i])
+                break;
+            span++;
+            //cout << "i,j : ["<< i <<","<< j << "]" << "\n";
+        }
+        std::cout << span << "\n";
+    }
+}
+
+int char_to_num_x(const char& c) {
+    return 0;
+}
+
+#include <math.h>
+
+int str_to_int(const std::string& value) {
+    if (value.empty()) return 0;
+    int val = 0;
+    auto char_to_num = [](const char& c) {
+        if (c >= 48 && c <= 57) {
+            return c - 48;
+        }
+        return 0;
+    };
+    for (int i = value.size() - 1; i >= 0; --i) {
+        val += char_to_num(value[i]) * pow(10, value.size() - 1 - i);
+    }
+    return val;
+}
+
+void fast_io(const bool active) {
+    std::ios_base::sync_with_stdio(active);
+    std::cin.tie(NULL);
+    std::cout.tie(NULL);
+    // if you disable this setting then you must your flush your text with one of "\n"+manual flash or just "std::endl" manually.
+}
+
+bool is_power_of_2(const int& number) {
+    if (number == 0) return number;
+    return ((number & (number - 1)) == 0);
+}
+
+#include <string>
+
+bool is_rotated(const std::string& value, const std::string& matchWith) {
+    bool result = false;
+    if (value.size() != matchWith.size()) return result;
+    std::string temp = value + value;
+    if (temp.find(matchWith) != std::string::npos) {
+        result = true;
+    }
+    return result;
+}
+
+int count_distinct_by_unorderedset(int arrDisc[], int len) {
+    // BigO(1) (it's using hashtable!) --- UNORDERED
+    std::unordered_set<int> temp(arrDisc, arrDisc + len);
+    return temp.size();
+}
+
+int count_distinct_by_set(int arrDisc[], int len) {
+    // BigO(NlogN)  ( it's using balanced binary search tree ) ----- ORDERED
+    std::set<int> temp(arrDisc, arrDisc + len);
+    return temp.size();
+}
+
+void print_2D_array(int* arr2D, int r, int c) {
+    for (int i = 0; i < r; ++i) {
+        for (int j = 0; j < c; ++j) {
+            std::cout << *((arr2D + i * c) + j) << " ";
+        }
+        std::cout << "\n";
+    }
+}
+
+template<typename T>
+void delete_in_loop_from_vector(std::vector<T>& myV, decltype(myV[0])& itemToD) {
+    myV.template emplace_back(22);
+    for (auto it = myV.begin(); it != myV.end(); ++it) {
+        std::cout << *it << " ";
+        if (*it == itemToD) {
+            std::cout << "found..\n";
+            it = myV.erase(it);
+        }
+    }
+}
+
+#include <map>
+#include <regex>
+
+
+template<typename T, typename P>
+auto which(const T& t, const P& p) -> decltype((t > p) ? t : p) {
+    std::cout << ">>t :" << t << ", " << typeid(t).name() << "\n";
+    std::cout << ">>p :" << p << ", " << typeid(p).name() << "\n";
+    return (t > p) ? t : p; //return widens from small to large one..in this case it's always return as double!
+}
+
+template<typename T, int limit>
+void lamb_pub(const std::vector<T>& item) {
+    static T _index = 0;
+    for (auto it = item.begin(); it != item.end(); ++it) {
+        if (_index >= limit) return;
+        std::cout << *it << "\n";
+        _index++;
+    }
+};
+
+template<typename T>
+struct Pair {
+    T _a{};
+    T _b{};
+
+    Pair(T a, T b) : _a(a), _b(b) {
+
+    }
+
+    T getA() const;
+
+    void setA(T a);
+};
+
+template<typename T>
+T Pair<T>::getA() const {
+    return _a;
+}
+
+template<typename T>
+void Pair<T>::setA(T a) {
+    _a = a;
+}
+
+auto main_new() -> int {
+    return 0;
+}
+
+void sort_couples(int student_numbers[], int lenSNumbers, int student_notes[], int lenSNotes) {
+    std::vector<std::pair<int, int>> allItems;
+    for (int i = 0; i < lenSNumbers; ++i) {
+        allItems.emplace_back(std::make_pair(student_numbers[i], student_notes[i]));
+        //allItems.push_back({student_numbers[i],student_notes[i]});
+    }
+    sort(allItems.begin(), allItems.end(), std::greater<std::pair<int, int>>());
+    /*
+    sort(allItems.begin(), allItems.end(), [](const std::pair<int, int>& first, const std::pair<int, int>& second) {
+        return first.second > second.second;
+    });
+     */
+    for (const auto& item : allItems) {
+        std::cout << "student no : " << item.first << ", student note : " << item.second << "\n";
+    }
+}
+
+void reserve_index(int numbers[], int lenSNumbers) {
+    std::vector<std::pair<int, int>> allItems;
+    for (int i = 0; i < lenSNumbers; ++i) {
+        allItems.emplace_back(std::make_pair(numbers[i], i));
+    }
+    sort(allItems.begin(), allItems.end(), [](const std::pair<int, int>& first, const std::pair<int, int>& second) {
+        return first.first < second.first;
+    });
+    for (const auto& item : allItems) {
+        std::cout << "no : " << item.first << ", index : " << item.second << "\n";
+    }
+}
+
+#include <list>
+#include <forward_list>
+
+void josephus_problem(const int& size, const int& k) {
+    using namespace std;
+    if (size <= 0 || k <= 0)return;
+    list<int> victims;
+    for (int i = 0; i < size; ++i) {
+        victims.emplace_back(i);
+    }
+    auto tmpIt = victims.begin();
+    while (victims.size() != 1) {
+        int fwd{};
+        while (fwd < k - 1) {
+            tmpIt = std::next(tmpIt, 1);
+            fwd++;
+            if (tmpIt == victims.end()) {
+                tmpIt = victims.begin();
+            }
+        }
+        cout << *tmpIt << " will be delete!" << "\n";
+        tmpIt = victims.erase(tmpIt);
+        if (tmpIt == victims.end()) {
+            tmpIt = victims.begin();
+        }
+    }
+    cout << "survivor : " << victims.front() << "\n";
+}
+
+
+void find_max_in_every_k_items_wise(std::vector<int>& v, const int& k) {
+    using namespace std;
+    if (v.empty() || k <= 0) return;
+    bool done = false;
+    int index{};
+    //use a deq!
+}
+
+
+std::vector<int> find_max_in_every_k_item(const std::vector<int>& v, const int& k) {
+    using namespace std;
+    if (v.empty() || k <= 0) return std::vector<int>{};
+    vector<int> items(v.size() - k + 1); // n-k+1 items max!
+    bool done = false;
+    int index{};
+    for (auto it = v.begin(); it != v.end(); ++it) {
+        int temp = *it;
+        for (auto itx = it; itx != it + k; ++itx) {
+            temp = std::max(*itx, temp);
+            if (itx == v.end()) {
+                done = true;
+                break;
+            }
+        }
+        items[index++] = temp;
+        if (done) break;
+    }
+    return items;
+}
+
+void print_k_max(int arrForKMax[], const int lenArr, const int k) {
+    using namespace std;
+    deque<int> deq;
+    for (int i = 0; i < k; i++) {
+        while (!deq.empty() && arrForKMax[i] >= arrForKMax[deq.back()])
+            deq.pop_back();
+        deq.push_back(i);
+    }
+    for (int i = k; i < lenArr; i++) {
+        cout << arrForKMax[deq.front()];
+        while (!deq.empty() && deq.front() <= i - k)
+            deq.pop_front();
+        while (!deq.empty() && arrForKMax[i] >= arrForKMax[deq.back()])
+            deq.pop_back();
+        deq.push_back(i);
+    }
+    cout << arrForKMax[deq.front()] << " ";
+}
+
+void previous_gereater_element(int arrGL[], int len) {
+    if (len <= 0) return;
+    using namespace std;
+    stack<int> stack;
+    stack.push(arrGL[0]);
+    cout << -1 << " ";
+    for (int i = 1; i < len; ++i) {
+        while (!stack.empty() && stack.top() <= arrGL[i])
+            stack.pop();
+        cout << (stack.empty() ? -1 : stack.top()) << " ";
+        stack.push(arrGL[i]);
+    }
+    cout << "\n";
+}
+
+void print_next_greater(int elements[], int len) {
+    if (len <= 0) return;
+    using namespace std;
+    stack<int> stack;
+    vector<int> printV(len);
+    stack.push(elements[len - 1]);
+    printV.emplace_back(-1);
+    for (int i = len - 2; i >= 0; --i) {
+        while (!stack.empty() && stack.top() <= elements[i])
+            stack.pop();
+        printV.emplace_back(stack.empty() ? -1 : stack.top());
+        stack.push(elements[i]);
+    }
+    std::reverse(printV.begin(), printV.end());
+    for (const int& item:printV)
+        cout << item << " ";
+    cout << "DONE!\n";
+}
+
+#include <deque>
 
 int main() {
     using namespace std;
     cout << std::boolalpha;
+
+    int gnextg1[] = {5, 15, 10, 8, 6, 12, 9, 18};
+    print_next_greater(gnextg1, sizeof(gnextg1) / sizeof(*gnextg1));
+    return 0;
+
+    int gprevious1[] = {20, 30, 10, 5, 15};
+    previous_gereater_element(gprevious1, sizeof(gprevious1) / sizeof(*gprevious1));
+    return 0;
+
+    int _aq[] = {20, 40, 30, 10, 60};
+    print_k_max(_aq, 5, 3);
+    return 0;
+
+    deque<int> dq;
+
+    int _k = 3;
+    std::vector<int> xTempVec = {10, 8, 5, 12, 15, 7, 6};
+    find_max_in_every_k_items_wise(xTempVec, _k);
+    cout << "k : " << _k << "\n";
+    for (const auto& item : xTempVec) {
+        cout << item << " ";
+    }
+    cout << "\n";
+    return 0;
+
+    auto items_in = find_max_in_every_k_item({10, 8, 5, 12, 15, 7, 6}, _k);
+    cout << "k : " << _k << "\n";
+    for (const auto& item : items_in) {
+        cout << item << " ";
+    }
+    cout << "\n";
+    return 0;
+
+    josephus_problem(6, 2);
+    return 0;
+
+    forward_list<int> fListM;
+    fListM.assign({1, 2, 33, 4, 5});
+    fListM.sort([](const int& l, const int& r) { return l < r; });
+    forward_list<int> fListN;
+    fListN.assign({10, 20, 30});
+    fListM.merge(fListN);
+    cout << "fListM\n";
+    for (const auto& item : fListM) {
+        cout << item << " ";
+    }
+    cout << "\n";
+    cout << "fListM.max_size : " << fListM.max_size() << "\n";
+    cout << "fListN.max_size : " << fListN.max_size() << "\n";
+    cout << "fListN\n";
+    fListN = {1, 2, 2, 3, 4, 4, 1, 1, 1, 5};
+    fListN.unique();
+    for (const auto& item : fListN) {
+        cout << item << " ";
+    }
+
+    return 0;
+
+    list<int> myList = {10, 20, 30, 40, 20, 40};
+    auto itF = myList.begin();
+    itF = myList.erase(itF);
+    myList.remove(40);
+    myList.insert(itF, 2, 7);
+    myList.insert(itF, 1, 100);
+    int ff = 100;
+    auto* tt = &ff;
+    cout << *tt << "\n";
+
+    forward_list<int> fList;
+    fList.assign({1, 2, 3, 4, 5});
+    fList.assign(myList.begin(), myList.end());
+
+    for (const auto& item : fList) {
+        cout << item << "\n";
+    }
+
+    return 0;
+
+    int nums[] = {20, 40, 30, 10};
+    reserve_index(nums, sizeof(nums) / sizeof(*nums));
+
+    return 0;
+
+    int student_numbers[] = {1003, 4003, 4002, 4000};
+    int student_notes[] = {10, 100, 80, 40};
+    sort_couples(student_numbers, sizeof(student_numbers) / sizeof(*student_numbers), student_notes, sizeof(student_notes) / sizeof(*student_notes));
+
+    return 0;
+
+    cout << typeid(std::cout).name() << "\n";
+
+    return 0;
+
+    auto lam = []<typename T, int limit>(const std::vector<T>& item) {
+        static T _index = 0;
+        for (auto it = item.begin(); it != item.end(); ++it) {
+            if (_index >= limit) return;
+            std::cout << *it << "\n";
+            _index++;
+        }
+    };
+
+    //??std::set<int,string> dddd;
+    std::vector<int> __listV20 = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+
+    lamb_pub<int, 3>(__listV20);
+
+    return 0;
+
+
+    for (auto it = __listV20.begin(); it != __listV20.end(); ++it) {
+        if (*it == 2) {
+            std::advance(it, 2);
+            cout << "previous : " << *std::prev(it) << "\n";
+        }
+        cout << "item : " << *it << "\n";
+    }
+
+    __listV20.front() = 1000;
+    __listV20.back() = 2000;
+
+
+    return 0;
+
+    int _arx[] = {1, 2, 3, 4, 5, 6, 4};
+    sort(std::begin(_arx), std::end(_arx), greater<decltype(*_arx)>());
+    for (int i = 0; i < sizeof(_arx) / sizeof(*_arx); ++i) {
+        cout << _arx[i] << "\n";
+    }
+    return 0;
+
+    vector<int> vList09 = {3, 2, 2, 4, 1, 1, 3};
+
+    std::cout << *std::min_element(vList09.begin(), vList09.end()) << "\n";
+
+    return 0;
+
+    auto cnt = std::count_if(vList09.begin(), vList09.end(), [&](const int& val) {
+        return val % 2 == 0;
+    });
+    cout << "even number count : " << cnt << "\n";
+    return 0;
+
+
+    auto pT = which<int, double>(1, 1.1);
+    auto xT = which<int, double>(2, 1.1);
+    cout << "pT :" << pT << ", " << typeid(pT).name() << "\n";
+    cout << "xT :" << xT << ", " << typeid(xT).name() << "\n";
+
+
+    //cout <<"int :"<<int{}<<", "<<  typeid(int{}).name() << "\n";
+    //cout <<"double :"<<double{} <<", "<<  typeid(double{}).name() << "\n";
+
+
+    return 0;
+    auto lambdaSimpleGeneric = []<typename T>(T x = 10, T y = 20) -> T {
+        return x + y;
+    };
+
+
+    std::for_each(vList09.begin(), vList09.end(), [](decltype(vList09[0]) par) {
+        cout << "value : " << par << "\n";
+    });
+
+    return 0;
+
+    cout << lambdaSimpleGeneric(10, 20) << "\n";
+
+
+    vector<int> vList10 = {3, 2, 2, 4, 1, 1, 3};
+    int del = 4;
+    delete_in_loop_from_vector(vList10, del);
+    cout << "\n ...";
+    for (const auto& item : vList10) {
+        cout << item << " ";
+    }
+    return 0;
+
+    int elma[][4] = {{1,   2,   3,   4},
+                     {10,  20,  30,  40},
+                     {100, 200, 300, 400}};
+    print_2D_array(&elma[0][0], 3, 4);
+
+    return 0;
+    set<int> __s;
+    __s.insert(1);
+    __s.insert(2);
+    __s.insert(3);
+    __s.insert(4);
+    __s.insert(5);
+    int vall = *__s.lower_bound(2); // BigO(logN)... so use this !
+    cout << vall << "\n";
+    return 0;
+
+
+    int uArr[] = {1, 2, 9, 10, 13, 14, 15};
+    cout << "Lowerbound : " << *std::lower_bound(std::begin(uArr), std::end(uArr), 3) << "\n"; // BigO(N)
+    cout << "Upperbound : " << *std::upper_bound(std::begin(uArr), std::end(uArr), 3) << "\n";
+
+    return 0;
+
+    cout << "count distinct ( wisely ) : " << count_distinct_by_unorderedset(uArr, sizeof(uArr) / sizeof(*uArr)) << "\n";
+
+    vector<int> vList2 = {3, 2, 2, 4, 1, 1, 3};
+    int ans = 0;
+    for (const auto& item : vList2) {
+        ans = ans ^ item;
+    }
+
+    std::unordered_set<int> tUS(vList2.begin(), vList2.end());
+    [&tUS]() {
+        for (const auto& item : tUS) {
+            cout << "item  :" << item << "\n";
+        }
+    }();
+    return 0;
+
+    cout << ans << "\n";
+
+    return 0;
+    string regText = "eralp I344 okul G43!!...43";
+    regex regExp("[A-Z][0-9][0-9]");
+
+    std::smatch matched;
+
+    while (regex_search(regText, matched, regExp)) {
+        cout << "item :" << matched.str() << "\n";
+        regText = matched.suffix();
+    }
+
+    return 0;
+
+    std::cout << is_rotated("eralp", "alper") << "\n";
+    return 0;
+
+
+    std::map<int, int> __map = {{1,  23},
+                                {13, 433}};
+    for (const auto& item : __map) {
+        cout << "key : " << item.first << " , value : " << item.second << "\n";
+    }
+    return 0;
+
+    map<int, int>::iterator _it = __map.begin();
+    cout << typeid(_it).name() << "\n";
+
+    return 0;
+
+    auto _do = 133.43;
+    auto* dp = new auto(_do);
+    cout << typeid(dp).name() << "\n";
+    return 0;
+
+
+#if 0
+    fast_io(false);
+    int __n;
+    cin >>__n;
+    cout << __n << "\n";
+#endif
+    for (int i = 0; i < 10; ++i) {
+        cout << i << "  : " << is_power_of_2(i) << "\n";
+    }
+    return 0;
+
+    vector<int> vList{1, 2, 3, 4};
+    for (int i = 0; vList[i]; ++i) {
+        vList[i] = 1;
+    }
+    for (auto& item : vList) {
+        item += 100;
+    }
+    for_each(vList.begin(), vList.end(), [](int& c) {
+        c += 300;
+    });
+
+    for (const auto& item : vList) {
+        cout << item << "\n";
+    }
+    return 0;
+
+    int __a, __b;
+    tie(__a, __b) = std::make_tuple(1, 4);
+
+    cout << __a << "\n" << __b;
+
+    return 0;
+
+    int xea[5] = {-1};
+    int sizeX = sizeof(xea) / sizeof(*xea);
+    while (sizeX) {
+        xea[--sizeX] = -1;
+    }
+    for (const auto& item : xea) {
+        cout << item << "\n";
+    }
+    return 0;
+
+    string ttt = "343653";
+    cout << str_to_int(ttt) << "\n";
+    return 0;
+
+    vector<int> aTeam = {1, 2, 4, 2, 1, 3, 4, 3, 53};
+    std::sort(begin(aTeam), end(aTeam), [](const int& l, const int& r) {
+        return l < r;
+    });
+
+    for (const auto& item : aTeam) {
+        cout << item << "\n";
+    }
+    return 0;
+
+    int* aff, ffff; /// be careful!
+
+    stock_span();
+    return 0;
+
+    cout << "3<4 ?" << do_something(3, 4) << "\n";
+    cout << "5<4 ?" << do_something(5, 4) << "\n";
+    return 0;
+
+
+    simple_stack_work();
+    return 0;
+
     string text_perm = enter_a_value("Please enter a text");
     permutation_list(text_perm, 0, text_perm.size() - 1);
     return 0;
