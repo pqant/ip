@@ -721,7 +721,7 @@ public:
     //copy assignment
     Person& operator=(const Person& other);
     ////////////////////////////////////////////////////////////////// merge for copy + move assigment   Person& operator=(Person other);
-    ////////////////////////////////////////////////////////////////// for swap -> void swap(Person& other);
+    ////////////////////////////////////////////////////////////////// for swap -> void swap_z(Person& other);
 
     //move assigment
     Person& operator=(Person&& other) noexcept;
@@ -811,16 +811,16 @@ Person& Person::operator=(const Person& other) {
     return *this;
 }
 
-//swap
+//swap_z
 //Person& Person::operator=(Person other) {
-//    std::cout << "copy & swap " << std::endl;
-//    swap(other);
+//    std::cout << "copy & swap_z " << std::endl;
+//    swap_z(other);
 //    return *this;
 //}
 /***************************************** */
-//void Person::swap(Person& other) {
-//    std::swap(_id, other._id);
-//    std::swap(_p, other._p);
+//void Person::swap_z(Person& other) {
+//    std::swap_z(_id, other._id);
+//    std::swap_z(_p, other._p);
 //}
 /***************************************** */
 
@@ -1140,7 +1140,7 @@ public:
 
 
 template<typename T>
-void swap(T& l, T& r) {
+void swap_z(T& l, T& r) {
     T temp = std::move(l);
     l = std::move(r);
     //l = (T&&)r;
@@ -2313,10 +2313,214 @@ void print_next_greater(int elements[], int len) {
 }
 
 #include <deque>
+#include <queue>
+
+void write_to_n(int baseDigits[], int len, int n) {
+    if (n <= 0) return;
+    using namespace std;
+    queue<string> q;
+    for (int i = 0; i < len; ++i) {
+        for (int j = 0; j < len; ++j) {
+            if (baseDigits[i] < baseDigits[j]) {
+                int temp = baseDigits[i];
+                baseDigits[i] = baseDigits[j];
+                baseDigits[j] = temp;
+            }
+        }
+    }
+    for (int i = 0; i < len; ++i) {
+        q.push(to_string(baseDigits[i]));
+    }
+    for (int i = 0; i < n; ++i) {
+        string item = q.front();
+        cout << item << "\n";
+        q.pop();
+        for (int i = 0; i < len; ++i) {
+            if (item == "0") continue;
+            q.push(item + to_string(baseDigits[i]));
+        }
+    }
+}
+
+struct person {
+    int id = -1;
+
+    /*
+    person() : id{-1} {
+
+    }
+    */
+
+    person(int id) : id{id} {
+    }
+
+    bool operator()(const person& lhs, const person& rhs) const {
+        return lhs.id < rhs.id;
+    }
+
+};
+
+template<typename T>
+void print_queue(T q) { // NB: pass by value so the print uses a copy
+    while (!q.empty()) {
+        std::cout << q.top() << ' ';
+        q.pop();
+    }
+    std::cout << '\n';
+}
+
+void simple_pq_2() {
+    std::priority_queue<int> q;
+
+    const auto data = {1, 8, 5, 6, 3, 4, 0, 9, 7, 2};
+
+    for (int n : data)
+        q.push(n);
+
+    print_queue(q);
+
+    std::priority_queue<int, std::vector<int>, std::greater<int>>
+            q2(data.begin(), data.end());
+
+    print_queue(q2);
+
+    // Using lambda to compare elements.
+    auto cmp = [](int left, int right) { return (left ^ 1) < (right ^ 1); };
+    std::priority_queue<int, std::vector<int>, decltype(cmp)> q3(cmp);
+
+    for (int n : data)
+        q3.push(n);
+
+    print_queue(q3);
+}
+
+
+void simple_pq(int items[], int len) {
+    using namespace std;
+
+    auto person_cmp = [](const person& l, const person& r) { return l.id < r.id; };
+    priority_queue<person, vector<person>, decltype(person_cmp)> pq5;
+
+    pq5.push(person{1});
+    pq5.push(person{2});
+    pq5.push(person{3});
+    while (!pq5.empty()) {
+        cout << pq5.top().id << "\n";
+        pq5.pop();
+    }
+    return;
+
+    int a = 10;
+    int b = a ^1;
+    int j = 10;
+    while (j--) {
+        int c = b ^1;
+        b = c;
+        cout << b << "\n";
+    }
+
+    return;
+
+
+    priority_queue<int, vector<int>, greater<int >> pq3(items, items + len); // by descending (default!!!)
+    while (!pq3.empty()) {
+        cout << pq3.top() << " ";
+        pq3.pop();
+    }
+    return;
+
+
+    priority_queue<int, vector<int>, greater<int >> pq2(items, items + len); // by ascending
+    while (!pq2.empty()) {
+        cout << pq2.top() << " ";
+        pq2.pop();
+    }
+    return;
+
+
+    priority_queue<int> pq;
+    for (int i = 0; i < len; ++i) {
+        pq.emplace(items[i]);
+    }
+
+    while (!pq.empty()) {
+        cout << pq.top() << " ";
+        pq.pop();
+    }
+    return;
+
+    int lenPq = pq.size();
+    for (int i = 0; i < lenPq; ++i) {
+        cout << pq.top() << " ";
+        pq.pop();
+    }
+}
+
+#include <set>
+
+void simple_set(int arrElements[], int len) {
+    using namespace std;
+    auto print_set = [](const auto& set) {
+        for (const auto& item : set) {
+            cout << item << "\n";
+        }
+    };
+    if (len <= 0) {
+
+    } else {
+        auto comp = [](const auto& l, const auto& r) { return l < r; };
+        set<int, decltype(comp)> set;
+        //less<T> -> ascending
+        //greater<T> -> descending
+        set.insert(3);
+        set.insert(13);
+        set.insert(13);
+        set.insert(-3);
+        set.insert(43);
+        set.insert(33);
+        //bool(*)(int, int)
+        print_set(set);
+
+        //auto lexical_compare = [](int a, int b) { return to_string(a) < to_string(b); };
+        //set<int, decltype(lexical_compare)> s;
+    }
+}
 
 int main() {
     using namespace std;
     cout << std::boolalpha;
+
+    int arr_set[] = {10, 1, 2, 3, 4, 4};
+
+    simple_set(arr_set, sizeof(arr_set) / sizeof(*arr_set));
+    return 0;
+
+    for (int i = 0; i < 6; ++i) {
+        for (int j = 0; j < 6; ++j) {
+            if (arr_set[i] > arr_set[j]) {
+                int temp = arr_set[i];
+                arr_set[i] = arr_set[j];
+                arr_set[j] = temp;
+            }
+        }
+    }
+    for (const auto& arrSet : arr_set) {
+        cout << arrSet << "\n";
+    }
+
+    return 0;
+
+
+    simple_pq_2();
+    return 0;
+
+    int numpq[] = {133, 199, 43, 2};
+    simple_pq(numpq, sizeof(numpq) / sizeof(*numpq));
+    return 0;
+
+    int digits[] = {0, 1, 3, 2, 4, 5, 6, 7, 8, 9};
+    write_to_n(digits, sizeof(digits) / sizeof(*digits), 120);
+    return 0;
 
     int gnextg1[] = {5, 15, 10, 8, 6, 12, 9, 18};
     print_next_greater(gnextg1, sizeof(gnextg1) / sizeof(*gnextg1));
@@ -3344,7 +3548,7 @@ int main2() {
 
     Person _p10x("era", 1);
     Person _p20x("mam", 2);
-    //_p10x = _p20x; // non swap & copy ( = op)
+    //_p10x = _p20x; // non swap_z & copy ( = op)
     _p10x = std::move(_p20x);
 
 
@@ -3381,7 +3585,7 @@ int main2() {
         Person _p11("fatih", 2);
         std::cout << "before swaping.." << std::endl;
         printMeLong(false, _p10, _p11);
-        swap(_p10, _p11);
+        swap_z(_p10, _p11);
         std::cout << "after swaping.." << std::endl;
         printMeLong(false, _p10, _p11);
         // ok but full of cost!
