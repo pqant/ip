@@ -2399,7 +2399,7 @@ void simple_pq(int items[], int len) {
     using namespace std;
 
     auto person_cmp = [](const person& l, const person& r) { return l.id < r.id; };
-    priority_queue<person, vector<person>, decltype(person_cmp)> pq5;
+    priority_queue<person, vector < person>, decltype(person_cmp) > pq5;
 
     pq5.push(person{1});
     pq5.push(person{2});
@@ -2422,7 +2422,7 @@ void simple_pq(int items[], int len) {
     return;
 
 
-    priority_queue<int, vector<int>, greater<int >> pq3(items, items + len); // by descending (default!!!)
+    priority_queue<int, vector < int>, greater < int >> pq3(items, items + len); // by descending (default!!!)
     while (!pq3.empty()) {
         cout << pq3.top() << " ";
         pq3.pop();
@@ -2430,7 +2430,7 @@ void simple_pq(int items[], int len) {
     return;
 
 
-    priority_queue<int, vector<int>, greater<int >> pq2(items, items + len); // by ascending
+    priority_queue<int, vector < int>, greater < int >> pq2(items, items + len); // by ascending
     while (!pq2.empty()) {
         cout << pq2.top() << " ";
         pq2.pop();
@@ -2464,6 +2464,11 @@ void simple_set(int arrElements[], int len) {
         for (const auto& item : set) {
             cout << item << "\n";
         }
+        auto it = set.begin();
+        while (it != set.end()) {
+            cout << "value : " << *it << "\n";
+            it++;
+        }
     };
     if (len <= 0) {
 
@@ -2486,9 +2491,113 @@ void simple_set(int arrElements[], int len) {
     }
 }
 
+#define sizeMe(a) (sizeof((a)) / sizeof((*a)))
+
+template<typename T>
+T doSomething(const T& a, const T& b) {
+    return a + b;
+}
+
 int main() {
     using namespace std;
     cout << std::boolalpha;
+
+
+    int (* tempCaller)(const int&, const int&) = &doSomething;
+
+    cout << tempCaller(1, 2) << "\n";
+    return 0;
+
+
+    int aX[] = {1, 2, 3, 4, 5};
+    cout << "sizeMe(aX) : " << sizeMe(aX) << "\n";
+    for (int i = -1; i <= 3; ++i) {
+        cout << aX[i + 1] << " ";
+    }
+    return 0;
+
+    cout << sizeMe(aX) << "\n";
+    return 0;
+
+    int xP = 10;
+    size_t xY = sizeof(xP++);
+
+    cout << "xP = " << xP << "\n";
+    cout << "xY = " << xY << "\n";
+
+    return 0;
+
+    int a[10] = {0};
+    printf("sizeof (int*) = %zu\n", sizeof(int*));
+    printf("sizeof (double*) = %zu\n", sizeof(double*));
+    printf("sizeof a      = %zu\n", sizeof a);
+    printf("sizeof &a[0]  = %zu\n", sizeof &a[0]);
+    printf("sizeof a[0]  = %zu\n", sizeof a[0]);
+
+    return 0;
+
+    auto printArr = []<typename T>(const char* desc, vector<T> vec) {
+        if (vec.size() == 0) return;
+        cout << desc << "\n";
+        for (int i = 0; i < vec.size(); ++i) {
+            cout << vec[i] << " ";
+        }
+        cout << "\n";
+    };
+
+    vector<int> listSample = {1, 2, 3, 4, 5, 6, 6, 7, 8};
+    vector<int> listSample1 = listSample;
+    vector<int> listSample3 = listSample;
+    cout << "cap : " << listSample.capacity() << "\n";
+    listSample.emplace_back(33);
+    cout << "cap : " << listSample.capacity() << "\n";
+    printArr(">.first", listSample);
+
+    listSample.erase(listSample.begin() + 5, listSample.begin() + 7);
+
+    printArr(">.after erasing. ( deleting 6 6 )", listSample);
+
+
+    printArr(">>. listSample1", listSample1);
+    std::remove(listSample1.begin(), listSample1.end(), 6);
+    printArr(">>. listSample1 (after deletion with std::remove)", listSample1);
+
+    printArr(">>>. listSample3", listSample3);
+    listSample3.erase(std::remove(listSample3.begin(), listSample3.end(), 6), listSample3.end());
+    printArr(">>>. listSample3 (after deletion with erase + std::remove )", listSample3);
+
+
+    return 0;
+
+
+
+
+
+
+    //cout << *(listSample+5) << "\n";  // in case array
+    cout << *(listSample.begin() + 5) << "\n";
+    auto setComp = [](const int& a, const int& b) { return a > b; };
+    set<int, decltype(setComp)> mySet;
+    mySet.insert(3);
+    mySet.insert(33);
+    mySet.insert(23);
+    mySet.insert(-3);
+    cout << "set..\n";
+    cout << "top : " << *mySet.begin() << "\n\n";
+    cout << "back : " << *mySet.rbegin() << "\n\n";
+
+    for (const auto& item : mySet) {
+        cout << item << " ";
+    }
+    cout << "\n";
+    //cout <<"set : " << *(mySet.begin()+3) << "\n"; NO!!! ERROR!! There is no iteration declaration for +,-.. operators..
+    //std::erase(listSample+5,listSample+6);
+
+
+    return 0;
+    //cout << "INT_MAX : " << INT_MAX << ", INT_MIN" << INT_MIN << "\n";
+    // ?? cout << "sizeof lambda (unevaluated lambda function ) : " << sizeof(decltype([](const int a, const int b) { return a / b; }));
+    //return 0;
 
     int arr_set[] = {10, 1, 2, 3, 4, 4};
 
