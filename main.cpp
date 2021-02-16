@@ -2498,9 +2498,298 @@ T doSomething(const T& a, const T& b) {
     return a + b;
 }
 
+void multimap_sample() {
+    using namespace std;
+    auto comp = [](const int& l, const int& r) { return l > r; };
+    std::multimap<int, const char*, decltype(comp)> myMap;
+    myMap.insert({100, "eralp"});
+    myMap.insert({200, "erat"});
+    myMap.insert({300, "fatih"});
+    myMap.insert({400, "feyza"});
+    myMap.insert({500, "zeynep"});
+
+    auto it = myMap.find(400);
+    if (it != myMap.end()) {
+        cout << "found!\n";
+        cout << (*it).second << "\n";
+    } else {
+        cout << "not found!\n";
+    }
+
+    //map<int,int> mp;
+    //mp[50] = 333;
+    for (const auto& item : myMap) {
+        cout << "key : " << item.first << ", value : " << item.second << "\n";
+    }
+}
+
+int bitwise_sum(int a, int b) {
+    int carry = 1;
+    while (carry != 0) {
+        carry = a & b;
+        a = a ^ b;
+        b = carry << 1;
+    }
+    return a;
+}
+
+
+void multiset_sample() {
+    using namespace std;
+    auto comp = [](const int& a, const int& b) { return a < b; };
+    std::multiset<int, decltype(comp)> myMultiSet;
+    myMultiSet.insert(10);
+    myMultiSet.insert(40);
+    myMultiSet.insert(20);
+    myMultiSet.insert(20);
+    //no need to sort.. it's already sorted naturally!
+    //10 20 20 40
+    auto it1 = myMultiSet.lower_bound(20);
+    auto it2 = myMultiSet.lower_bound(20);
+    cout << (*it1 + 1) << " , " << (*it1 + 2) << "\n";
+    myMultiSet.erase(40);
+    auto itER = myMultiSet.equal_range(20);
+    cout << *(itER.first) << " , " << *(itER.second) << "\n";
+
+}
+
+template<typename SequenceContainer>
+SequenceContainer range(size_t from, size_t to) {
+    SequenceContainer sc;
+    for (int i = from; i < to; ++i) {
+        sc.insert(sc.end(), i);
+    }
+    return sc;
+}
+
+
+template<typename AssociativeContainer>
+AssociativeContainer rangeAC(size_t from, size_t to) {
+    AssociativeContainer sc;
+    for (int i = from; i < to; ++i) {
+        sc.insert(sc.end(), {i, i});
+    }
+    return sc;
+}
+
+void trap_map(const std::map<const char*, int>& items, const char* key) {
+    //items["ee"] = 100; ERROR. it's CONST
+    //if (auto x = (items["ee"];x == 4) {} ERROR.. it'S const..! it'll try to add new element "ee" as key.!!!!
+    if (auto res = items.find(key);res != items.end()) {
+        std::cout << "key found!The value associated with the key is " << (*res).second << "\n";
+        return;
+    }
+    std::cout << "key [" << key << "] not found!";
+}
+
+int bitwise_multiplay(int a, int b) {
+    if (b == 0) return 1;
+    if (b <= 0) return -1;
+    int aTemp = a;
+    for (int i = 1; i < b; ++i) {
+        int carry = 1;
+        int bTemp = a;
+        while (carry != 0) {
+            carry = aTemp & bTemp;
+            aTemp = aTemp ^ bTemp;
+            bTemp = carry << 1;
+        }
+    }
+    return aTemp;
+}
+
+template<typename T, typename S, size_t size>
+S sum_arr(T(& items)[size]) {
+    S sum{};
+    for (int i = 0; i < size; ++i) {
+        sum += items[i];
+    }
+    return sum;
+}
+
+#include <array>
+#include <random>
+
+// g++ -std=c++2a -Wall -Wextra -w main.cpp -o3 -o ipp && g++ -std=c++2a -S main.cpp && ls -allh && ./ipp
+// g++ -std=c++2a -Wall -Wextra -w main.cpp -o3 -o ipp && echo "compiled" && g++ -std=c++2a -S -w main.cpp && echo "assembly code generated" && ls -allh && echo "running..." && ./ipp
 int main() {
+
     using namespace std;
     cout << std::boolalpha;
+
+    int itemss[] = {1, 2, 3, 4, 5};
+    int(& iii)[5] = itemss;
+    auto s_ = sum_arr<int, double>(itemss);
+    cout << "sum : " << s_ << ", type : " << typeid(s_).name() << "\n";
+    return 0;
+
+    vector<int> elementsShuffle = {1, 2, 3, 5, 53, 2, 2, 34};
+
+    while (1) {
+        shuffle(elementsShuffle.begin(), elementsShuffle.end(), default_random_engine());
+        cout << "New .. \n";
+        for (const auto& item : elementsShuffle) {
+            cout << item << " ";
+        }
+    }
+
+    return 0;
+
+    cout << bitwise_multiplay(3, 4) << "\n";
+    cout << bitwise_multiplay(11, 10) << "\n";
+    cout << bitwise_multiplay(7, 4) << "\n";
+    cout << bitwise_multiplay(3, 33) << "\n";
+    cout << bitwise_multiplay(6, 12) << "\n";
+    cout << bitwise_multiplay(12, 13) << "\n";
+
+    return 0;
+
+    std::map<const char*, int> xMapIn = {{"AA", 22}, std::make_pair("BB", 33)};
+    trap_map(xMapIn, "BB");
+    trap_map(xMapIn, "CC");
+    return 0;
+
+    queue<int> q;
+    q.push(12);
+    q.push(22);
+    q.push(32);
+    while (!q.empty()) {
+        cout << q.front() << "\n";
+        q.pop();
+    }
+    return 0;
+
+    std::array<int, 5> itemsForMe = {1, 2, 3, 4, 5};
+
+    auto showme = [](const std::array<int, 5>& items) {
+        for (const auto& item : items) {
+            cout << item << "\n";
+        }
+    };
+
+    showme(itemsForMe);
+
+    return 0;
+
+
+    vector<int> numberOfMe = {1, 2, 3, 4, 5, 6};
+
+    int* p = &numberOfMe[0];
+    cout << *p << "\n";
+
+
+    int i;
+    cout << i << "\n";
+    for (; i < 10; ++i) {
+        // BE CAREFULL!!!
+        cout << i << "\n";
+    }
+    return 0;
+
+
+    auto pM = []<typename T>(const char* message, const vector<T>& elements) {
+        cout << message << "\n";
+        for (const auto& item : elements) {
+            cout << item << " ";
+        }
+        cout << "\n";
+    };
+
+
+    vector<int> elementsToD = {3, 1, 2, 3, 4, 3, 1, 1, 4, 4, 3, 1, 1, 1, 10, 12};
+    vector<int> elementsToD_2 = elementsToD;
+
+    pM("before deletion", elementsToD);
+    for (auto it = elementsToD.begin(); it != elementsToD.end();) {
+        // O(n*m) m : deletion count.. n : element count.. each deletion cost n moves so m deletion(s) means O(m*n) cost.
+        if (*it == 1) {
+            it = elementsToD.erase(it);
+        } else {
+            it++;
+        }
+    }
+    pM("after deletion", elementsToD);
+
+    return 0;
+
+
+    auto complV = [](const int& l, const int& r) { return (l % 10) < (r % 10); };
+    vector<int> myVecIn = {11, 21, 31, 42, 32, 41, 5, 4, 3, 3};
+    sort(myVecIn.begin(), myVecIn.end(), complV);
+    for (const auto& item : myVecIn) {
+        cout << item << "\n";
+    }
+    return 0;
+
+    std::vector<int> myVRanges = range<std::vector<int>>(0, 5);
+    for (const auto& item : myVRanges) {
+        cout << item << " ";
+    }
+
+    std::set<int> mySRanges = range<std::set<int>>(0, 5);
+    for (const auto& item : mySRanges) {
+        cout << item << " ";
+    }
+
+    auto comp = [](const int& a, const int& b) { return a > b; };
+    std::map<int, int, decltype(comp)> myMRanges = rangeAC<std::map<int, int, decltype(comp)>>(0, 5);
+    for (const auto& item : myMRanges) {
+        cout << "key : " << item.first << ", value : " << item.second << "\n";
+    }
+
+
+    return 0;
+
+    int aNum = 100;
+    int bNum = 4005;
+    cout << "Bitwise sum : " << bitwise_sum(aNum, bNum) << "\n";
+    return 0;
+
+
+    multimap_sample();
+    return 0;
+
+    multiset_sample();
+    return 0;
+
+    int arrC[] = {3, 4, 5, 5, 6, 7, 8, 8, 10, 11, 30};
+    std::sort(arrC, arrC + sizeof(arrC) / sizeof(*arrC));
+    int _uB = 0;
+    while (1) {
+        // 30 -> INT_MAX + 1
+        // 31 -> INT_MAX + 1
+        // -1 -> 1
+        cout << "UB value ?\n";
+        cin >> _uB;
+        cout << *std::upper_bound(arrC, arrC + sizeof(arrC) / sizeof(*arrC), _uB) << "\n";
+    }
+
+    int _lB = 0;
+    while (1) {
+        // 30 -> 30
+        // 31 -> INT_MAX + 1
+        // -1 -> 3
+        cout << "LB value ?\n";
+        cin >> _lB;
+        cout << *std::lower_bound(arrC, arrC + sizeof(arrC) / sizeof(*arrC), _lB) << "\n";
+    }
+
+
+    auto xLamb2 = []<typename T, typename S>(const T& a, const S& b) -> decltype(a / b) { return a / b; };
+
+    auto xCaller = xLamb2;
+    cout << xCaller(1, 3.0) << "\n";
+
+    return 0;
+
+
+    auto xLam = []<typename T, typename V>(const T& a, const V& b) -> decltype(a > b ? a : b) { return a > b ? a : b; };
+    auto xRes1 = xLam(3.2, 4);
+    cout << "first  :" << sizeof(xRes1) << "\n";
+    auto xRes2 = xLam(32, 4);
+    cout << "second :" << sizeof(xRes2) << "\n";
+
+    return 0;
 
 
     int (* tempCaller)(const int&, const int&) = &doSomething;
