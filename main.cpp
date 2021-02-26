@@ -2,6 +2,8 @@
 #include <unordered_map>
 #include <set>
 
+// g++ -std=c++2a -Wall -Wextra -w main.cpp -o3 -o ipp && g++ -std=c++2a -S main.cpp && ls -allh && ./ipp
+// g++ -std=c++2a -Wall -Wextra -w main.cpp -o3 -o ipp && echo "compiled" && g++ -std=c++2a -S -w main.cpp && echo "assembly code generated" && ls -allh && echo "running..." && ./ipp
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wwritable-strings"
@@ -705,8 +707,9 @@ class xx {
 
     }
 };
-// ******************************************************************************************** //
 
+// ******************************************************************************************** //
+/////////ERALPX
 class Person {
 private:
     int _id{0};
@@ -2533,6 +2536,19 @@ int bitwise_sum(int a, int b) {
     return a;
 }
 
+void xor_swap(int* a, int* b) {
+    if (a == b) {
+        std::cout << "same..\n";
+        int temp = *a;
+        *a = *b;
+        *b = temp;
+        return;
+    }
+    std::cout << "diff..\n";
+    *a ^= *b;
+    *b ^= *a;
+    *a ^= *b;
+}
 
 void multiset_sample() {
     using namespace std;
@@ -2610,12 +2626,406 @@ S sum_arr(T(& items)[size]) {
 #include <array>
 #include <random>
 
-// g++ -std=c++2a -Wall -Wextra -w main.cpp -o3 -o ipp && g++ -std=c++2a -S main.cpp && ls -allh && ./ipp
-// g++ -std=c++2a -Wall -Wextra -w main.cpp -o3 -o ipp && echo "compiled" && g++ -std=c++2a -S -w main.cpp && echo "assembly code generated" && ls -allh && echo "running..." && ./ipp
+void printReal() {
+    std::cout << "\n";
+}
+
+void printAll() {
+    std::cout << "\n------------ RECURSIVE CALL HAS BEEN FINISHED -------------" << "\n";
+}
+
+void printAllMoreEfficient() {
+    std::cout << "\n------------ RECURSIVE CALL HAS BEEN FINISHED -------------" << "\n";
+}
+
+template<typename T, typename... params>
+void printAll(const T& first, const params& ... args) {
+    using namespace std;
+    cout << first;
+    if (sizeof...(args) != 0) {
+        cout << ",";
+    }
+    printAll(args...);
+}
+
+template<typename T, typename... params>
+void printAllMoreEfficient(T&& first, params&& ... args) {
+    using namespace std;
+    cout << first;
+    if (sizeof...(args) != 0) {
+        cout << ",";
+    }
+    printAllMoreEfficient(std::forward<params>(args)...);
+}
+
+#include <functional>
+#include <queue>
+#include <vector>
+#include <iostream>
+
+template<typename T>
+void print_queue_N(T q) { // NB: pass by value so the print uses a copy
+    while (!q.empty()) {
+        std::cout << q.top() << ' ';
+        q.pop();
+    }
+    std::cout << '\n';
+}
+
+int testd2() {
+    int n = 3;
+    int i = 0;
+
+    switch (n % 2) {
+        case -1:
+            do {
+                ++i;
+                case 1:
+                    ++i;
+            } while (--n > 0);
+    }
+
+    std::cout << i;
+}
+
+
+void testd() {
+
+    std::priority_queue<int> q;
+
+    const auto data = {1, 8, 5, 6, 3, 4, 0, 9, 7, 2};
+
+    for (int n : data)
+        q.push(n);
+
+    print_queue_N(q);
+
+    std::priority_queue<int, std::vector<int>, std::greater<int>>
+            q2(data.begin(), data.end());
+
+    print_queue_N(q2);
+
+    // Using lambda to compare elements.
+    auto cmp = [](int left, int right) { return (left ^ 1) < (right ^ 1); };
+    std::priority_queue<int, std::vector<int>, decltype(cmp)> q3(cmp);
+
+    for (int n : data)
+        q3.push(n);
+
+    print_queue_N(q3);
+}
+
+void simple_freq_check(int arrMe[], int len) {
+    if (len <= 0) return;
+    using namespace std;
+
+    unordered_map<int, int> myMapList;
+    for (int i = 0; i < len; ++i) {
+        myMapList[arrMe[i]]++;
+    }
+    auto sortDesc = [](const pair<int, int>& lhs, const pair<int, int>& rhs) { return lhs.second > rhs.second; };
+    vector <pair<int, int>> myVList(myMapList.begin(), myMapList.end());
+    sort(myVList.begin(), myVList.end(), sortDesc);
+
+    auto print = [&]() {
+        string value = "[";
+        for (const auto& vItem : myVList) {
+            for (int i = 0; i < vItem.second; ++i) {
+                value += std::to_string(vItem.first) + ",";
+            }
+        }
+        value = value.substr(0, value.length() - 1) + "]\n";
+        cout << value;
+    };
+    int i = 0;
+    for (const auto& item : myVList) {
+        for (int j = 0; j < item.second; ++j) {
+            arrMe[i++] = item.first;
+        }
+    }
+}
+
+void heap_check(int items[], int len) {
+    if (len <= 0) return;
+    using namespace std;
+    vector<int> myV(items, items + len);
+    make_heap(myV.begin(), myV.end(), greater<int>()); // ascending 0...N
+    //sort_heap(myV.begin(), myV.end(), greater<int>());
+    for (const auto& item : myV) {
+        cout << item << " ";
+    }
+    cout << "\n";
+}
+
+struct HolmesIV {
+    bool is_sentient;
+    int sense_of_humor_rating;
+};
+
+void make_sentient(HolmesIV* mike) {
+    if (mike != nullptr)
+        mike->is_sentient = true;
+}
+
+void make_sentient(HolmesIV& mike) {
+    mike.is_sentient = true;
+}
+
+using ull = unsigned long long int;
+
+
+template<typename Container, typename Predicate>
+
+int count_if(const Container& container, Predicate predicate) {
+    int sum{};
+    for (auto&& item:container) {
+        if (predicate(item, {3, 5})) sum += 1;
+    }
+    return sum;
+}
+
+void acme_1() {
+    using namespace std;
+    /*
+        for (const auto& item : mynumbers) {
+            cout << item << "\n";
+        }
+        //equvailent definition is below!!
+     */
+    vector<int> mynumbers = std::vector<int, std::allocator<int> >{
+            std::initializer_list<int>{1, 2, 3, 4, 5}, std::allocator<int>()};
+
+    std::vector<int, std::allocator<int> >& __range1 = mynumbers;
+    auto __begin1 = __range1.begin();
+    auto __end1 = __range1.end();
+    for (; __begin1 != __end1; __begin1.operator++()) {
+        const int& item = __begin1.operator*();
+        std::operator<<(std::cout.operator<<(item), "\n");
+    }
+}
+
+std::pair<int, int> acme_get1() {
+    using namespace std;
+    pair<int, int> myPair = make_pair(100, 200);
+    return myPair;
+}
+
+void acme_arr(int arrx[], int len) {
+    using namespace std;
+    for (int i = 0; i < len; ++i) {
+        cout << arrx[i] << " ";
+    }
+    cout << "\n";
+}
+
+
 int main() {
 
     using namespace std;
     cout << std::boolalpha;
+
+    int numss[] = {1, 2, 3, 4};
+    acme_arr(numss,sizeof(numss)/sizeof(*numss)); // array decay converstion ( exact match )
+    acme_arr(&numss[0],sizeof(numss)/sizeof(*numss)); // array decay converstion ( exact match )
+    return 0;
+
+    int _val1x = 0;
+    std::tie(_val1x, std::ignore) = acme_get1();
+    cout << "val 1x : " << _val1x << "\n";
+    return 0;
+
+    const auto &[val1, val2] = acme_get1();
+    cout << "val 1 : " << val1 << ", val2 : " << val2 << "\n";
+    return 0;
+
+
+    acme_1();
+    return 0;
+
+    vector<int> myVXA = {1, 2, 3, 4, 3, 45, 3, 5, 3, 3, 4, 3, 4, 4};
+    cout << "count_if : " << count_if(myVXA,
+                                      [](const int& value, const pair<int, int>& range) {
+                                          return (value % range.first == 0 && value % range.second == 0);
+                                      }) << "\n";
+    return 0;
+
+    struct {
+        void operator()(const int& value) const {
+            cout << value << " ";
+        }
+    } myFuncStruct;
+
+    int myArrForTemp[] = {1, 2, 4, 53, 3, 4, 5, 4, 3, 34, 5};
+    for_each(myArrForTemp, myArrForTemp + (sizeof(myArrForTemp) / sizeof(*myArrForTemp)), myFuncStruct);
+    return 0;
+
+    auto myNumber = 1002033L;
+    auto myNumberInt = 1002033;
+    auto myNumberLongLong = 1002033LL;
+    auto myNumberUnsigned = 2304033U;
+    auto myNumberUnsignedL = 2304033UL;
+    auto myNumberUnsignedLL = 2304033ULL;
+
+    ull myNum = 4949943;
+
+
+    auto xax = "era";
+    const char xaxR[] = "era";
+    char mam[] = "era";
+    mam[0] = 'X';
+    const char e = 'e';
+    cout << mam << "\n";
+    cout << typeid(mam).name() << "\n";
+    return 0;
+
+    vector<int> numbersToFind = {1, 2, 3, 4, 5, 6, 7, 8};
+    cout << "even number(s) count : " <<
+         count_if(numbersToFind.begin(), numbersToFind.end(), [](const int& number) -> bool {
+             return number % 2 == 0;
+         }) << "\n";
+    return 0;
+
+    int arrForHeap[] = {15, 6, 7, 12, 30};
+    heap_check(arrForHeap, sizeof(arrForHeap) / sizeof(*arrForHeap));
+    return 0;
+
+
+    int _myList[] = {10, 20, 30, 20, 1, 20, 1, 20, 20, 1, 40, 30, 1};
+    simple_freq_check(_myList, sizeof(_myList) / sizeof(*_myList));
+    for (int i = 0; i < sizeof(_myList) / sizeof(*_myList); ++i) {
+        cout << _myList[i] << " ";
+    }
+    return 0;
+
+    testd2();
+    return 0;
+
+
+    int xa = 10033;
+    int xb = 48954;
+    xor_swap(&xa, &xa);
+    cout << "a : " << xa << ", b:" << xb << "\n";
+    return 0;
+
+    auto compxz = [](const int& l, const int& r) { return l > r; };
+    multimap<int, int, decltype(compxz)> myItems;
+    myItems.insert({10, 100});
+    myItems.insert({10, 40});
+    myItems.insert({10, 60});
+    myItems.insert({10, 70});
+    myItems.insert({20, 100});
+    myItems.insert({30, 40});
+    myItems.insert({1000, 60});
+    myItems.insert({900, 70});
+
+    for (const auto& item : myItems) {
+        cout << item.first << "\n";
+    }
+
+    vector<int> _ee = {1, 2, 3, 4, 5};
+
+    return 0;
+
+    int elements2[]{1, 2, 3, 4};
+    for (auto&& item : elements2) {
+        cout << item << "\n";
+    }
+    cout << "\nsecond part... \n";
+    for (auto&& item : elements2) {
+        cout << item << "\n";
+    }
+
+    return 0;
+
+
+    auto compx = [](const int& a, const int& b) { return a < b; };
+    map<int, int, decltype(compx)> myMapX;
+    myMapX[5] = 10;
+    myMapX[35] = 20;
+    myMapX[25] = 30;
+    myMapX[15] = 40;
+    cout << "min element [key,value] : [" << myMapX.begin()->first << "," << myMapX.begin()->second << "], max element [key,value] : [" << (--myMapX.end())->first << ","
+         << (--myMapX.end())->second << "]\n";
+
+    return 0;
+
+    char* meyve1 = "ananas";
+    //meyve1[0] = 'X'; -> undefined behaviour!
+    char meyve2[] = {'a', 'n', 'a', 'n', 'a', 's', '\0'}; // please don't forget to put last char at the end of the array!
+    meyve2[0] = 'X';
+    cout << *meyve1 << "," << meyve2 << "\n";
+    return 0;
+    /*
+    std::vector<int> v{1,2,1,1,3,3,3,4,5,4};
+    auto print = [&] (int id) {
+        std::cout << "@" << id << ": ";
+        for (int i : v)
+            std::cout << i << ' ';
+        std::cout << '\n';
+    };
+    print(1);
+
+    // remove consecutive (adjacent) duplicates
+    auto last = std::unique(v.begin(), v.end());
+    // v now holds {1 2 1 3 4 5 4 x x x}, where 'x' is indeterminate
+    v.erase(last, v.end());
+    print(2);
+
+    // sort followed by unique, to remove all duplicates
+    std::sort(v.begin(), v.end()); // {1 1 2 3 4 4 5}
+    print(3);
+
+    last = std::unique(v.begin(), v.end());
+    // v now holds {1 2 3 4 5 x x}, where 'x' is indeterminate
+    v.erase(last, v.end());
+    print(4);
+    */
+    vector<int> numsa2 = {9, 87, 45, 1, 8, 70, 122, 60, 90};
+
+    cout << "min_element : " << *min_element(numsa2.begin(), numsa2.end()) << "\n";
+    cout << "max_element : " << *max_element(numsa2.begin(), numsa2.end()) << "\n";
+    std::pair<vector<int>::iterator, vector<int>::iterator> mm = minmax_element(numsa2.begin(), numsa2.end());
+    cout << "minmax_element [min] : " << *(mm.first) << ",minmax_element [max] : " << *(mm.second) << "\n";
+
+    return 0;
+    rotate(numsa2.begin(), numsa2.begin() + 3, numsa2.end());  // 3 4 5 6 7 8 9 0 1 2
+    for_each(numsa2.begin(), numsa2.end(), [](const int& item) { cout << item << " "; });
+    return 0;
+
+
+    vector<int> numsa = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+    rotate(numsa.begin(), numsa.begin() + 3, numsa.end());  // 3 4 5 6 7 8 9 0 1 2
+    rotate(numsa.rbegin(), numsa.rbegin() + 3, numsa.rend()); // 7 8 9 0 1 2 3 4 5 6
+
+    for_each(numsa.begin(), numsa.end(), [](const int& item) { cout << item << " "; });
+    return 0;
+
+
+    vector<int> numbers4me = {1, 2, 5, 4, 3, 4, 4, 3, 23, 5, 6, 4, 3, 3};
+    //sort(numbers4me.begin(),numbers4me.end(),less<int>());
+    //auto last = std::unique(numbers4me.begin(),numbers4me.end());
+    //1 2 5 4 3 4 3 23 5 6 4 3 1
+    auto lastMin = std::unique(numbers4me.begin(), numbers4me.end(), less<int>());
+
+    //for_each(numbers4me.begin(),last,[](const int& element){ cout << element << " "; });
+    for_each(numbers4me.begin(), lastMin, [](const int& element) { cout << element << " "; });
+
+    return 0;
+
+
+    struct tt {
+        std::string _name;
+    } _tt{"eralp"};
+
+    //printAll(1,"11",22.2,-33.33);
+    printAllMoreEfficient(1, "11", 22.2, -33.33, string{"era"});
+
+    return 0;
+
+    auto xE = &("eralp");
+    cout << *xE << "\n";
+    return 0;
+
 
     int itemss[] = {1, 2, 3, 4, 5};
     int(& iii)[5] = itemss;
@@ -2721,12 +3131,14 @@ int main() {
     }
     return 0;
 
-    std::vector<int> myVRanges = range<std::vector<int>>(0, 5);
+    std::vector<int> myVRanges = range < std::vector<int>>
+    (0, 5);
     for (const auto& item : myVRanges) {
         cout << item << " ";
     }
 
-    std::set<int> mySRanges = range<std::set<int>>(0, 5);
+    std::set<int> mySRanges = range < std::set<int>>
+    (0, 5);
     for (const auto& item : mySRanges) {
         cout << item << " ";
     }
