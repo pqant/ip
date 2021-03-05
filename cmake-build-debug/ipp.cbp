@@ -80,6 +80,9 @@
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="/Users/eralp/ClionProjects/ipp/bits-stdc++.h">
+			<Option target="ipp"/>
+		</Unit>
 		<Unit filename="/Users/eralp/ClionProjects/ipp/main.cpp">
 			<Option target="ipp"/>
 		</Unit>

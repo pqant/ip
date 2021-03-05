@@ -1,6 +1,4 @@
-#include <iostream>
-#include <unordered_map>
-#include <set>
+#include "bits-stdc++.h"
 
 // g++ -std=c++2a -Wall -Wextra -w main.cpp -o3 -o ipp && g++ -std=c++2a -S main.cpp && ls -allh && ./ipp
 // g++ -std=c++2a -Wall -Wextra -w main.cpp -o3 -o ipp && echo "compiled" && g++ -std=c++2a -S -w main.cpp && echo "assembly code generated" && ls -allh && echo "running..." && ./ipp
@@ -40,9 +38,6 @@ public:
         std::cout << "x called" << std::endl;
     }
 };
-
-
-#include "vector"
 
 [[maybe_unused]] void TakeUnlimitedValuesFromTheUser() {
     std::vector<int> vec;
@@ -477,8 +472,6 @@ int FindClosestFinder(int elements[], size_t arrLength, const int target) {
     return min;
 }
 
-#include <math.h>
-
 void Sort(int elements[], size_t arrLength) {
     for (int i = 0; i < arrLength - 1; ++i) {
         for (int j = 0; j < arrLength - i - 1; ++j) {
@@ -520,7 +513,6 @@ int tailFact(int t) {
     return ::values[t];
 }
 */
-#include <chrono>
 
 unsigned long long FactTR(unsigned int a, unsigned long long val) {
     if (a == 0) return val;
@@ -547,8 +539,6 @@ unsigned long long int SlowFactCalcLinear(const unsigned int val) {
     std::cout << "\nTotal Execution Time (SlowFactCalcLinear) : " << duration_cast<std::chrono::microseconds>(end - start).count() << " ms, Result " << mapCalc[val] << std::endl;
     return mapCalc[val];
 }
-
-#include <cstdio>
 
 int arrE[100];
 
@@ -577,8 +567,6 @@ void Permutation(int* elements, size_t arrLength) {
         std::cout << elements[0] << elements[1] << elements[2] << std::endl;
     } while (std::next_permutation(elements, elements + arrLength));
 }
-
-#include <list>
 
 void deleteAndInsert() {
     std::list<int> iList{2, 5, 4, 3, 7, 8, 1, 6, 12, 21, 87, 10};
@@ -697,8 +685,6 @@ public:
 
     }
 };
-
-#include <cstring>
 
 class xx {
     xx(const int& x) = delete;
@@ -1015,7 +1001,6 @@ int generateError(const int&& numerator, int&& denominator) {
     return numerator / denominator;
 }
 
-#include <stdexcept>
 
 class MF {
 private:
@@ -1319,8 +1304,6 @@ unsigned int SumForMe(int* numbers, size_t lenForNumbers) noexcept(false) {
     return total;
 }
 
-#include <exception>
-
 class MyException : public std::exception {
     std::string _value;
 public:
@@ -1373,8 +1356,6 @@ void PrintX(T* arrAll, const size_t& len) {
     }
 }
 
-#include "assert.h"
-
 template<typename T>
 T* copyme(T* s, T* d, size_t len) {
     if (len <= 0) return nullptr;
@@ -1412,8 +1393,6 @@ public:
     }
 };
 
-#include <initializer_list>
-
 template<typename T>
 size_t FindAndDelete(std::multiset<T>& items, const std::initializer_list<T>& deleteItems) {
     size_t cnt = 0;
@@ -1432,8 +1411,6 @@ int CountDigit(const long long int& number) {
     if (number == 0) return 0;
     return 1 + CountDigit(number / 10);
 }
-
-#include <math.h>
 
 typedef long long int mynum;
 
@@ -1562,8 +1539,6 @@ bool isPalindrome(const std::string& val, int l, int r) {
     if (val[l] != val[r]) return false;
     return isPalindrome(val, ++l, --r);
 }
-
-#include <stdlib.h>
 
 int sumRec(int n, int sum) {
     if (n < 10) return sum + n;
@@ -1707,8 +1682,6 @@ int findSubSetXJustForPositiveNumbers(int arrForNums[], int arrLen, int target =
     return totalTargetCount;
 }
 
-#include <sstream>
-
 std::vector<std::string> split(const std::string& s, char delimiter) {
     std::vector<std::string> tokens;
     std::string token;
@@ -1800,8 +1773,6 @@ int pop(unsigned x) {
     return x & 0x0000003F;
 }
 
-#include <unordered_set>
-
 int findUnique(int arrUn[], int arrLen) {
     std::unordered_set<int> allItems = {};
     for (int i = 0; i < arrLen; ++i) {
@@ -1811,8 +1782,6 @@ int findUnique(int arrUn[], int arrLen) {
     }
     return allItems.size();
 }
-
-#include <unordered_map>
 
 std::unordered_map<int, int> getUMap(int arrUn[], int arrLen) {
     std::unordered_map<int, int> allItems = {};
@@ -2000,8 +1969,6 @@ void permutation_list(std::string& a, int l, int r) {
     }
 }
 
-#include <stack>
-
 void simple_stack_work() {
     using namespace std;
     std::stack<int> ss;
@@ -2049,8 +2016,6 @@ int char_to_num_x(const char& c) {
     return 0;
 }
 
-#include <math.h>
-
 int str_to_int(const std::string& value) {
     if (value.empty()) return 0;
     int val = 0;
@@ -2077,8 +2042,6 @@ bool is_power_of_2(const int& number) {
     if (number == 0) return number;
     return ((number & (number - 1)) == 0);
 }
-
-#include <string>
 
 bool is_rotated(const std::string& value, const std::string& matchWith) {
     bool result = false;
@@ -2122,10 +2085,6 @@ void delete_in_loop_from_vector(std::vector<T>& myV, decltype(myV[0])& itemToD) 
         }
     }
 }
-
-#include <map>
-#include <regex>
-
 
 template<typename T, typename P>
 auto which(const T& t, const P& p) -> decltype((t > p) ? t : p) {
@@ -2201,9 +2160,6 @@ void reserve_index(int numbers[], int lenSNumbers) {
         std::cout << "no : " << item.first << ", index : " << item.second << "\n";
     }
 }
-
-#include <list>
-#include <forward_list>
 
 void josephus_problem(const int& size, const int& k) {
     using namespace std;
@@ -2315,9 +2271,6 @@ void print_next_greater(int elements[], int len) {
     cout << "DONE!\n";
 }
 
-#include <deque>
-#include <queue>
-
 void write_to_n(int baseDigits[], int len, int n) {
     if (n <= 0) return;
     using namespace std;
@@ -2402,7 +2355,7 @@ void simple_pq(int items[], int len) {
     using namespace std;
 
     auto person_cmp = [](const person& l, const person& r) { return l.id < r.id; };
-    priority_queue<person, vector < person>, decltype(person_cmp) > pq5;
+    priority_queue<person, vector<person>, decltype(person_cmp)> pq5;
 
     pq5.push(person{1});
     pq5.push(person{2});
@@ -2425,7 +2378,7 @@ void simple_pq(int items[], int len) {
     return;
 
 
-    priority_queue<int, vector < int>, greater < int >> pq3(items, items + len); // by descending (default!!!)
+    priority_queue<int, vector<int>, greater<int >> pq3(items, items + len); // by descending (default!!!)
     while (!pq3.empty()) {
         cout << pq3.top() << " ";
         pq3.pop();
@@ -2433,7 +2386,7 @@ void simple_pq(int items[], int len) {
     return;
 
 
-    priority_queue<int, vector < int>, greater < int >> pq2(items, items + len); // by ascending
+    priority_queue<int, vector<int>, greater<int >> pq2(items, items + len); // by ascending
     while (!pq2.empty()) {
         cout << pq2.top() << " ";
         pq2.pop();
@@ -2458,8 +2411,6 @@ void simple_pq(int items[], int len) {
         pq.pop();
     }
 }
-
-#include <set>
 
 void simple_set(int arrElements[], int len) {
     using namespace std;
@@ -2536,19 +2487,6 @@ int bitwise_sum(int a, int b) {
     return a;
 }
 
-void xor_swap(int* a, int* b) {
-    if (a == b) {
-        std::cout << "same..\n";
-        int temp = *a;
-        *a = *b;
-        *b = temp;
-        return;
-    }
-    std::cout << "diff..\n";
-    *a ^= *b;
-    *b ^= *a;
-    *a ^= *b;
-}
 
 void multiset_sample() {
     using namespace std;
@@ -2623,9 +2561,6 @@ S sum_arr(T(& items)[size]) {
     return sum;
 }
 
-#include <array>
-#include <random>
-
 void printReal() {
     std::cout << "\n";
 }
@@ -2657,11 +2592,6 @@ void printAllMoreEfficient(T&& first, params&& ... args) {
     }
     printAllMoreEfficient(std::forward<params>(args)...);
 }
-
-#include <functional>
-#include <queue>
-#include <vector>
-#include <iostream>
 
 template<typename T>
 void print_queue_N(T q) { // NB: pass by value so the print uses a copy
@@ -2724,7 +2654,7 @@ void simple_freq_check(int arrMe[], int len) {
         myMapList[arrMe[i]]++;
     }
     auto sortDesc = [](const pair<int, int>& lhs, const pair<int, int>& rhs) { return lhs.second > rhs.second; };
-    vector <pair<int, int>> myVList(myMapList.begin(), myMapList.end());
+    vector<pair<int, int>> myVList(myMapList.begin(), myMapList.end());
     sort(myVList.begin(), myVList.end(), sortDesc);
 
     auto print = [&]() {
@@ -2810,12 +2740,292 @@ std::pair<int, int> acme_get1() {
     return myPair;
 }
 
-void acme_arr(int arrx[], int len) {
+void acme_arr_v1(int arrx[], int len) {
     using namespace std;
     for (int i = 0; i < len; ++i) {
         cout << arrx[i] << " ";
     }
     cout << "\n";
+}
+
+void acme_arr_v2(int* arrx, int len) {
+    using namespace std;
+    for (int i = 0; i < len; ++i) {
+        cout << arrx[i] << " ";
+    }
+    cout << "\n";
+}
+
+void print_ascii() {
+    for (int i = 32; i < 127; ++i) {
+        std::cout << putchar(i) << "\t" << ((i % 16 == 0) ? "\n" : "");
+    }
+}
+
+enum class gender : short {
+    male,
+    female
+};
+
+struct acme_t1 {
+    std::function<void()> getMe() {
+        return [=]() {
+            std::cout << _s << "\n"; // dangling!!
+        };
+    }
+
+    std::string _s;
+};
+
+class SP {
+    int* ptr = nullptr;
+public:
+    SP(int* p) : ptr(p) {
+    }
+
+    ~SP() {
+        if (ptr != nullptr) {
+            delete ptr;
+            std::cout << "ptr is not null!";
+        }
+        std::cout << "ptr destructed!";
+    }
+
+    int& operator&() {
+        std::cout << "& operator\n";
+        return *ptr;
+    }
+
+    int* operator*() {
+        std::cout << "* operator\n";
+        return ptr;
+    }
+
+};
+
+struct PointMeS {
+    void print_me() {
+        std::cout << "val : " << val_ << "\n";
+    }
+
+private:
+    int val_;
+};
+
+class PointMeC {
+    int val_;
+public:
+    static int valStatic_;
+
+    void print_me() {
+        std::cout << "val : " << val_ << ", valStatic : " << valStatic_ << "\n";
+    }
+
+    //PointMeC() = delete;
+    PointMeC() = default;
+
+    PointMeC(const int& val) : val_(val) {}
+};
+
+class A {
+public:
+    int x_;
+
+    A(int x) : x_(x) {
+        std::cout << "A ctor" << "\n";
+    }
+
+    A() : x_{0} {
+
+    }
+};
+
+class B : virtual public A {
+public:
+    B(int x) : A(x) {
+        std::cout << "B ctor" << "\n";
+    }
+
+    B() {}
+};
+
+class C : virtual public A {
+public:
+    C(int x) : A(x) {
+        std::cout << "C ctor" << "\n";
+    }
+
+    C() {}
+
+};
+
+class E : public B, public C {
+public :
+    E(int x_) : C(x_), B(x_), A(x_) {
+        std::cout << "E ctor" << "\n";
+    }
+};
+
+class F : public B, public C {
+public :
+    F() {
+        std::cout << "F ctor" << "\n";
+    }
+};
+
+
+class D {
+public:
+    D() = default;
+
+    void doSomething(A a, B b) {
+
+    }
+};
+
+int PointMeC::valStatic_ = 400; // we have to do this!!!!!!!
+
+void xww() {
+    int a = 10, b = 20, c = 30;
+    std::cout << "c>b " << (c > b);
+    std::cout << "b>a " << (b > a);
+    if (c > b > a)
+        std::cout << "Y";
+    else
+        std::cout << "N";
+}
+
+int xnor(int* a, int* b) {
+    int x = *a ^*b;
+    x = (~x);
+    return x;
+}
+
+void xor_swap(int* a, int* b) {
+    if (a == b) {
+        std::cout << "same..\n";
+        int temp = *a;
+        *a = *b;
+        *b = temp;
+        return;
+    }
+    std::cout << "diff..\n";
+    std::cout << "-->>> *a:" << *a << "\n";
+    *a ^= *b;
+    std::cout << "-->>> *a:" << *a << "\n";
+    *b ^= *a;
+    std::cout << "-->>> *a:" << *a << "\n";
+    *a ^= *b;
+    std::cout << "-->>> *a:" << *a << "\n";
+}
+
+void copy_me(int* dest, const int* src) {
+    int item;
+    while ((item = *dest++ = *src++) != 0) {
+        std::cout << item << " is copying...\n";
+    }
+}
+
+
+void copy_str_me(char* dest, const char* src) {
+    char item;
+    while ((item = *dest++ = *src++) != '\0') {
+        std::cout << item << " is copying...\n";
+    }
+}
+
+void print_me_2(int* numbers, int len) {
+    for (int i = 0; i < len; ++i) {
+        std::cout << numbers[i] << "\n";
+    }
+}
+
+using llu = long long unsigned;
+
+int calc_digits(llu number) {
+    int total = 0;
+    do {
+        number /= 10;
+        total++;
+    } while (number);
+    return total;
+}
+
+bool palindrome_check(const char* str) {
+    if (strlen(str) == 0)
+        return false;
+    for (int i = 0; i < strlen(str) / 2; ++i) {
+        if (str[i] != str[strlen(str) - i - 1])
+            return false;
+    }
+    return true;
+}
+
+std::string dec_to_bin(int number, int maxLen = 8) {
+    std::string result = "";
+    while (number) {
+        result += std::to_string(number & 1);
+        number >>= 1;
+    }
+    for (int i = result.length(); i < maxLen; ++i) {
+        result.push_back('0');
+    }
+    reverse(result.begin(), result.end());
+    return result;
+}
+
+int variadic_sum(int count, ...) {
+    int sum = 0;
+    std::va_list args;
+    va_start(args, count);
+    for (int i = 0; i < count; ++i) {
+        sum += va_arg(args, int);
+    }
+    va_end(args);
+    return sum;
+}
+
+template<typename T>
+T adder(const T& first) {
+    return first;
+}
+
+template<typename T, typename ... Args>
+T adder(const T& first, Args... args) {
+    return first + adder(args...);
+}
+
+/*
+adder(1,8,4)
+-> adder<int,int,int>(1,8,4)
+-> 1 + adder<int,int>(8,4)
+-> 1 + 8 + adder<int>(4)
+-> 1 + 8 + 4 + adder<>()
+*/
+
+
+
+template<typename T>
+T sum(const T& first) {
+    return first;
+}
+
+template<typename T>
+T sum(T&& first) {
+    return first;
+}
+
+
+template<typename T, typename... Args>
+T sum1(const T first, Args... arg) {
+    std::cout << "old one\n";
+    return first + sum(arg...);
+}
+
+template<typename T, typename... Args>
+T sum(T&& first, Args&& ... arg) {
+    std::cout << "fwd one\n";
+    return first + sum(std::forward<Args>(arg)...);
 }
 
 
@@ -2824,9 +3034,308 @@ int main() {
     using namespace std;
     cout << std::boolalpha;
 
+    char ezO[] = "eralp";
+    char ez[] = {'e', 'r', 'a', 'l', 'p', '\0'};
+
+    char fx,gx; int _index = 0;
+    while ((gx = *(ez+_index),fx = ez[_index++]) != '\0') {
+        cout << "gx : " << gx << "\n";
+        cout << "fx : " << fx << "\n";
+    }
+    return 0;
+    ez[0] = 'M';
+    string f = "eralp";
+    f[0] = 'G';
+
+    cout << "e : " << ez << ", f : " << f << "\n";
+
+    return 0;
+
+    cout << sum(1, 2, 3, 4, 5) << "\n";
+    return 0;
+
+    auto lbSum = [](const int& lhs, const int& rhs) -> int {
+        return lhs + rhs;
+    };
+    auto lbMul = [](const int& lhs, const int& rhs) -> int {
+        return lhs * rhs;
+    };
+
+    vector<int (*)(const int&, const int&)> operations = vector<int (*)(const int&, const int&)>();
+    operations.push_back(lbSum);
+    operations.push_back(lbMul);
+
+    for (const auto& item : operations) {
+        cout << item(4, 45) << "\n";
+    }
+    return 0;
+
+    string (* dectobinPtr)(int, int) = dec_to_bin;
+    string (& dectobinRef)(int, int) = dec_to_bin;
+
+    cout << dectobinPtr(32, 8) << "\n";
+    cout << dectobinPtr(13, 8) << "\n";
+    cout << dectobinRef(1, 8) << "\n";
+
+    return 0;
+
+    cout << palindrome_check("ey edip adanada pide ye") << "\n";
+    cout << palindrome_check("ey edip") << "\n";
+    return 0;
+
+    cout << calc_digits(2232232323) << "\n";
+
+    return 0;
+
+
+    string tempStringA = "today is awesome!";
+    cout << tempStringA.substr(4, 5) << "\n";
+    cout << tempStringA.substr(6) << "\n";
+    if (tempStringA.find("awe") != string::npos) {
+        cout << "awe was found!\n";
+    } else {
+        cout << "awe wasn't found!\n";
+    }
+    return 0;
+
+
+    string tempString = "eralp";
+    tempString.push_back('a');
+    tempString.push_back('v');
+    tempString.push_back('c');
+    cout << tempString << "\n";
+    cout << tempString.front() << "\n";
+    cout << tempString.back() << "\n";
+    cout << "ends_with vc ?" << tempString.ends_with("vc") << "\n";
+    tempString.pop_back();
+    cout << tempString << "\n";
+    return 0;
+
+    print_me_2((int[]) {1, 2, 3, 4, 5}, 5); // compounds literal!!
+    return 0;
+
+    string _aStr = "eralp";
+    cout << *_aStr.begin() << "\n";
+    cout << *(_aStr.end() - 1) << "\n";
+
+    return 0;
+
+
+    char x_str_src[] = {'a', 'b', 'c', 'd', 'r'};
+    char x_str_target[sizeof(x_str_src) / sizeof(*x_str_src)] = {};
+    copy_str_me(x_str_target, x_str_src);
+    for (const auto& item : x_str_target) {
+        cout << item << "\n";
+    }
+    return 0;
+
+
+    int xsrc[] = {1, 2, 3, 445, 5, 6, 53};
+    int xtarget[sizeof(xsrc) / sizeof(*xsrc)] = {0};
+    copy_me(xtarget, xsrc);
+    for (const auto& item : xtarget) {
+        cout << item << "\n";
+    }
+    return 0;
+
+    char strj[7] = "Geeks";
+
+
+    int multiDArr[3][2][4] = {{{1,  2,  3,  4},  {5,  6,  7,  8}},
+                              {{9,  10, 11, 12}, {13, 14, 15, 16}},
+                              {{17, 18, 19, 20}, {21, 22, 23, 24}}};
+    for (const auto& arr : multiDArr) {
+        cout << "{";
+        for (const auto& item : arr) {
+            cout << "{";
+            for (const auto& last : item) {
+                cout << last << ",";
+            }
+            cout << "},";
+        }
+        cout << "}";
+    }
+    return 0;
+
+    int xarr[] = {1, 2, 3, 4};
+
+    cout << *xarr << "\n";
+    cout << *(xarr + 1) << "\n";
+    cout << xarr << "\n";
+    for (const auto& item : xarr) {
+        cout << &item << "," << item << "\n";
+    }
+    return 0;
+
+    int nx;
+    cout << "please input array lenght : \n";
+    cin >> nx;
+    int nxArr[nx]; // ???????
+    for (const auto& item : nxArr) {
+        cout << "item : " << item << "\n";
+    }
+    return 0;
+
+    int xxaa[3] = {[0]=33, [2]=55};
+    for (const auto& item : xxaa) {
+        cout << "item : " << item << "\n";
+    }
+    return 0;
+
+    int ix = 0;
+    t:
+    while (ix++ < 100) {
+        cout << "ix : " << ix << "\n";
+        if (ix % 20 == 0) {
+            goto t;
+        }
+        if (ix % 10 == 0) {
+            goto m;
+        }
+    }
+    m:
+    std::cout << "done!\n";
+    return 0;
+
+    string eeV;
+    std::getline(std::cin, eeV);
+    cout << "Entered value : " << eeV << "\n";
+
+    int xaa = 100;
+    int xaaTemp{-(--xaa)};
+    cout << xaaTemp << "\n";
+    return 0;
+
+    char px = (char) (65);
+    cout << px << "\n";
+    return 0;
+
+    int _ad = 10;
+    int _bd = 20;
+    cout << xnor(&_ad, &_bd) << "\n";
+
+    return 0;
+
+    char myCharArr[] = "elements";
+    char myCharAr2[] = {'e', 'l', 'e', 'm', 'e', 'n', 't', 's', '\0'}; // cstring.. ! please don't forget to add a '\0' at the
+    // end of the char array!
+    cout << myCharArr << "\n";
+    cout << myCharAr2 << "\n";
+    return 0;
+
+    xww();
+    return 0;
+
+    E ee{11};
+    cout << "ee.x_ : " << ee.x_ << "\n";
+
+    F fff{};
+    cout << "fff.x_ : " << fff.x_ << "\n";
+
+    return 0;
+
+    /*
+    D dd{};
+    dd.doSomething(A{}, B{});
+    return 0;
+    */
+
+    int __pVal;
+    PointMeC _p1;
+    PointMeC::valStatic_ = 3000;
+    _p1.valStatic_ = 200;
+    _p1.print_me();
+    cout << PointMeC::valStatic_ << "\n";
+    return 0;
+
+    PointMeC _p2{3};
+    _p2.print_me();
+    return 0;
+
+    SP sp(new int());
+    **sp = 100;
+    int& axxx = &sp;
+    axxx = 300;
+    cout << axxx << "\n";
+    cout << **sp << "\n";
+
+    return 0;
+
+    std::atomic_int index = -1;
+
+    //char str[4] = "eralp"; // ERROR! initializing string for char array is too long! ( In C , it's ok!)
+    //char str[6] = "eralp"; // OK !!!
+
+    int ival = 10;
+    //int&& irefref = ival; // error. you can't bind lvalue to rvalue....!
+    int&& irefref = ival + 10; // OK. you can bind a prvalue to T&&
+    int& myRef = irefref;
+    cout << irefref << ", " << myRef << "\n";
+    return 0;
+
+    int _ax = 10;
+    int _bx = 20;
+    _ax = _bx++ + _ax++;
+    cout << "_ax : " << _ax << ", _bx : " << _bx << "\n";
+    return 0;
+
+    acme_t1 acmeT1{"eralp"};
+    acmeT1.getMe(); // undefined behavior
+    return 0;
+
+    string _t1 = "a";
+    string _t2 = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+    auto _t3 = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"; // char[49] -> 8 byte
+    constexpr const int valOfString1 = sizeof(_t1);
+    constexpr const int valOfString2 = sizeof(_t2);
+    constexpr const int valOfString3 = sizeof(_t3);
+    cout << valOfString1 << "\n";
+    cout << valOfString2 << "\n";
+    cout << valOfString3 << "\n";
+    return 0;
+
+    bool myBool = {true};
+    int tempX = {3};
+
+    auto myGender = gender::male;
+    auto herGender = gender::female;
+
+    switch (myGender) {
+        case gender::male: {
+            cout << "male.." << "\n";
+        }
+            break;
+        case gender::female: {
+            cout << "female.." << "\n";
+        }
+            break;
+        default: {
+            cout << "unknown!\n";
+        }
+    }
+    return 0;
+
+    print_ascii();
+    return 0;
+
+    char myChars1[] = {'e', 'r', 'a', '\0'};
+    char myChars2[] = "eralp"; // attention!! there is [] in the definition!!!
+    cout << strlen(myChars1) << ", " << strlen(myChars2) << "\n";
+    return 0;
+
+
+    int elmaa[] = {1, 3, 4, 3, 32};
+    auto xxSize = std::size(elmaa);
+    cout << xxSize << "\n";
+    return 0;
+
+    void (* myAcmeCaller_v1)(int[], int) = acme_arr_v1;  // exact match conversion !! pointer to function conversion!!!!! [function designator]
+    void (* myAcmeCaller_v2)(int*, int) = &acme_arr_v2; // c++.. the definition at previous line and this are same exactly!
+
+
     int numss[] = {1, 2, 3, 4};
-    acme_arr(numss,sizeof(numss)/sizeof(*numss)); // array decay converstion ( exact match )
-    acme_arr(&numss[0],sizeof(numss)/sizeof(*numss)); // array decay converstion ( exact match )
+    myAcmeCaller_v1(numss, sizeof(numss) / sizeof(*numss)); // array decay converstion ( exact match )
+    myAcmeCaller_v2(&numss[0], sizeof(numss) / sizeof(*numss)); // array decay converstion ( exact match )
     return 0;
 
     int _val1x = 0;
@@ -4500,7 +5009,7 @@ int main2() {
 
 
     num* num2 = new(std::nothrow)
-    num(100);
+            num(100);
     if (num2 == nullptr) {
         std::cerr << "Allocation error : " << std::endl;
         return 1;
