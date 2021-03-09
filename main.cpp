@@ -3028,17 +3028,386 @@ T sum(T&& first, Args&& ... arg) {
     return first + sum(std::forward<Args>(arg)...);
 }
 
+void increase_ptr(void* data, int ptrSize) {
+    using namespace std;
+    if (ptrSize == sizeof(char)) {
+        char* rData = static_cast<char*>(data);
+        (*rData)++;
+        cout << "Increased Char Data : " << *rData << "\n";
+    } else if (ptrSize == sizeof(int)) {
+        int* rData = static_cast<int*>(data);
+        (*rData)++;
+        cout << "Increased Int Data : " << *rData << "\n";
+    } else {
+        std::cout << "unknow pointer type!!! \n";
+    }
+}
+
+constexpr const int getSizePtr(void* ptr) {
+    return sizeof(ptr);
+}
+
+struct NODE_B {
+    struct NODE_B* left;
+    struct NODE_B* right;
+    double data;
+};
+
+struct NODE_C {
+    bool is_leaf;
+    union {
+        struct {
+            NODE_C* left;
+            NODE_C* right;
+        } internal;
+        double data;
+    };
+};
+
+int find_diff(const std::string& first, const std::string& second) {
+    int result = 0;
+    for (int i = 0; i < first.length(); ++i) {
+        result ^= first[i] ^ second[i];
+    }
+    return result ^ second.back();
+}
+
+template<typename T>
+T sum_me(const T&& num) {
+    return num;
+}
+
+template<typename T, typename... Args>
+T sum_me(const T&& first, Args&& ... args) {
+    return first + sum_me(std::forward<Args>(args)...);
+}
+
+typedef struct Testx {
+    int x, y;
+} Testx;
+
+
+char* p_chr;
+
+class String {
+public:
+    char* s;
+    int size;
+
+    String(const char* c) {
+        s = new char[strlen(c) + 1];
+        p_chr = s;
+        strcpy(s, c);
+    }
+
+    ~String() {
+        std::cout << "before : " << p_chr << "\n";
+        s = new char[4];
+        strcpy(s, "era\0");
+        delete[] s;
+        std::cout << "after : " << p_chr << "\n";
+        std::cout << "destroyed!" << "\n";
+    }
+};
+
+void ptr_test() {
+    char* p_chr;
+}
+
+void ptr_test_func() {
+    String str("Helllo");
+}
+
+class Array {
+private:
+    int n_;
+    int* ref_;
+    const char* name_;
+public:
+    Array(const int& n, const char* name) : n_(n), name_(name) {
+        ref_ = new int[n_];
+        for (int i = 0; i < n; ++i) {
+            *(ref_ + i) = i;
+        }
+    }
+
+    Array(const Array& other) : n_(other.n_), name_(other.name_) {
+        std::cout << "copy constructor!\n";
+        if (other.n_ > 0) {
+            ref_ = new int[n_];
+            for (int i = 0; i < n_; ++i) {
+                ref_[i] = other.getRef(i);
+            }
+            return;
+        }
+        throw std::logic_error("n cant be lower than 0!");
+    }
+
+    Array& operator=(const Array& other) {
+        std::cout << "copy assignment!\n";
+        if (other.n_ > 0) {
+            Array myArr(other.n_, other.name_);
+            myArr.ref_ = new int[n_];
+            for (int i = 0; i < n_; ++i) {
+                ref_[i] = other.getRef(i);
+            }
+            return myArr;
+        }
+        throw std::logic_error("n cant be lower than 0!");
+    }
+
+    void printMe() {
+        std::cout << "Name : " << name_ << "\n";
+        for (int i = 0; i < n_; ++i) {
+            std::cout << ref_[i] << " ";
+        }
+        std::cout << "\n";
+    }
+
+    Array& setRef(const int& index, const int& value) {
+        ref_[index] = value;
+        return *this;
+    }
+
+    int getRef(const int& index) const {
+        return ref_[index];
+    }
+
+    Array& setName(const char* name) {
+        name_ = name;
+        return *this;
+    }
+
+    ~Array() {
+        std::cout << name_ << " will be destroyed!" << "\n";
+        delete[] ref_;
+    }
+};
+
+
+class Elma {
+private:
+    int n_;
+public:
+    Elma(const int& n) : n_(n) {}
+
+    friend void printElma(const Elma&);
+};
+
+void printElma(const Elma& elma) {
+    std::cout << elma.n_ << "\n";
+}
+
+template<typename T, char typeInfo>
+class Math {
+private:
+    int a_, b_;
+public:
+    Math(const int& a, const int& b) : a_(a), b_(b) {}
+
+    Math() {}
+
+    T operation() {
+        if (typeInfo == '+')
+            return a_ + b_;
+        if (typeInfo == '-')
+            return a_ - b_;
+        if (typeInfo == '*')
+            return a_ * b_;
+        if (typeInfo == '/')
+            return a_ / b_;
+    }
+
+    T add(const int& a, const int& b) {
+        a_ = a;
+        b_ = b;
+        return operation();
+    }
+
+    operator std::string() const {
+        return "{" + std::to_string(a_) + "," + std::to_string(b_) + "}";
+    }
+
+};
+
+class Bx {
+public:
+    virtual void dosomething() {
+        std::cout << "Bx.do" << "\n";
+    }
+};
+
+class Dx : public Bx {
+public:
+    void dosomething() override {
+        std::cout << "Dx.do" << "\n";
+    }
+};
+
+class Px {
+public:
+    Px(int x) {
+        std::cout << "Px.Px(int) called\n";
+    }
+
+    Px() {
+        std::cout << "Px.Px() called\n";
+    }
+};
+
+class Hx : virtual public Px {
+public:
+    Hx(int x) : Px(x) {
+        std::cout << "Hx.Hx(int) called\n";
+    }
+};
+
+class Nx : virtual public Px {
+public:
+    Nx(int x) : Px(x) {
+        std::cout << "Nx.Nx(int) called\n";
+    }
+};
+
+class Tx : public Hx, public Nx {
+public:
+    Tx(int x) : Hx(x), Nx(x),Px(x) {
+        std::cout << "Tx.Tx(int) called \n";
+    }
+};
+
+/* without virtual*/
+/*
+    Px.Px(int) called
+    Hx.Hx(int) called
+    Px.Px(int) called
+    Nx.Nx(int) called
+    Tx.Tx(int) called
+*/
+
+/* with virtual*/
+/*
+    Px.Px() called <<<<<<<<<<<<<<<<<<<<<<<!!!!!
+    Hx.Hx(int) called
+    Nx.Nx(int) called
+    Tx.Tx(int) called
+*/
+
+
+/* with explicit ctor call*/
+/*
+    Px.Px(int) called <<<<<<<<<<<<<<<<<<<<<<<!!!!!
+    Hx.Hx(int) called
+    Nx.Nx(int) called
+    Tx.Tx(int) called
+*/
+
 
 int main() {
 
     using namespace std;
     cout << std::boolalpha;
 
+    Tx tx(44);
+
+    return 0;
+
+
+    Bx bx_ = Dx();
+    bx_.dosomething();
+
+    return 0;
+
+
+    Math<int, '*'> op(3, 4);
+    cout << "to str: " << static_cast<string>(op) << "\n";
+    return 0;
+    cout << op.operation() << "\n";
+    cout << Math<int, '-'>().add(3, 4) << "\n";
+    return 0;
+
+
+    Elma elmaci(100);
+    printElma(elmaci);
+    return 0;
+
+    Array arr1(10, "arr1");
+    arr1.printMe();
+    Array arr2 = arr1;
+    arr2.setName("arr2").setRef(4, 300);
+    //arr2.setRef(4, 3000);
+    arr2.printMe();
+    cout << "********************************************** \n";
+    arr1 = arr2;
+    arr1.printMe();
+
+
+    return 0;
+
+    ptr_test_func();
+    cout << p_chr << "\n";
+    return 0;
+
+    Testx* ptr_T = new Testx{23, 53};
+    //int *ptr_i = static_cast<int*>(ptr_T); //main.cpp:3096:18: error: static_cast from 'Testx *' to 'int *' is not allowed
+    //cout << "*ptr_i" << *ptr_i << "\n";
+
+    int* ptr_i = reinterpret_cast<int*>(ptr_T); // dangerous!! it'S for OOP!
+    cout << "*ptr_i : " << *ptr_i << "\n";
+    return 0;
+
+
+    cout << sum_me(1, 2, 5, 6) << "\n";
+    return 0;
+
+    string firstPar = "plaer";
+    string secondPar = "erazlp";
+
+    cout << static_cast<char>(find_diff(firstPar, secondPar)) << "\n";
+    return 0;
+
+    cout << sizeof(double) << "\n";
+    cout << sizeof(struct NODE_B) << "\n";
+    cout << sizeof(struct NODE_C) << "\n";
+
+    return 0;
+
+
+    int dd = 1000;
+    int* ddd = &dd;
+    int resultPtrSize = getSizePtr(static_cast<void*>(ddd));
+
+
+    int* ptrMMe;
+    int arrMe[10];
+    int* ptrMMe2 = arrMe + 5;
+    cout << arrMe[5] << "\n";
+    cout << *ptrMMe2 << "\n";
+    return 0;
+
+    char cVal = 65;
+    char* ptrCMe = &cVal;
+    increase_ptr(ptrCMe, 1);
+    return 0;
+
+    int pVal = 100;
+    int* ptrMe = &pVal;
+    increase_ptr(ptrMe, 4);
+    return 0;
+
+    char ac = 'A';
+    char* c1 = &ac;
+    char** e1 = &c1;
+
+    cout << "e1 -> " << **e1 << "\n";
+    return 0;
+
     char ezO[] = "eralp";
     char ez[] = {'e', 'r', 'a', 'l', 'p', '\0'};
 
-    char fx,gx; int _index = 0;
-    while ((gx = *(ez+_index),fx = ez[_index++]) != '\0') {
+    char fx, gx;
+    int _index = 0;
+    while ((gx = *(ez + _index), fx = ez[_index++]) != '\0') {
         cout << "gx : " << gx << "\n";
         cout << "fx : " << fx << "\n";
     }
