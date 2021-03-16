@@ -1795,7 +1795,7 @@ using ll = long long;
 using llu = long long unsigned;
 
 template<typename K, typename V>
-V find(std::unordered_map<K, V> allItems, K search) {
+V find(std::unordered_map<K, V>& allItems, K search) {
     using namespace std;
     auto item = allItems.find(search);
     if (item != allItems.end()) {
@@ -2159,32 +2159,6 @@ void reserve_index(int numbers[], int lenSNumbers) {
     for (const auto& item : allItems) {
         std::cout << "no : " << item.first << ", index : " << item.second << "\n";
     }
-}
-
-void josephus_problem(const int& size, const int& k) {
-    using namespace std;
-    if (size <= 0 || k <= 0)return;
-    list<int> victims;
-    for (int i = 0; i < size; ++i) {
-        victims.emplace_back(i);
-    }
-    auto tmpIt = victims.begin();
-    while (victims.size() != 1) {
-        int fwd{};
-        while (fwd < k - 1) {
-            tmpIt = std::next(tmpIt, 1);
-            fwd++;
-            if (tmpIt == victims.end()) {
-                tmpIt = victims.begin();
-            }
-        }
-        cout << *tmpIt << " will be delete!" << "\n";
-        tmpIt = victims.erase(tmpIt);
-        if (tmpIt == victims.end()) {
-            tmpIt = victims.begin();
-        }
-    }
-    cout << "survivor : " << victims.front() << "\n";
 }
 
 
@@ -3065,6 +3039,10 @@ struct NODE_C {
 };
 
 int find_diff(const std::string& first, const std::string& second) {
+    using namespace std;
+    if (first.size() >= second.size() || (first.size() == 0 && second.size() == 0))
+        return -1;
+
     int result = 0;
     for (int i = 0; i < first.length(); ++i) {
         result ^= first[i] ^ second[i];
@@ -3271,7 +3249,7 @@ public:
 
 class Tx : public Hx, public Nx {
 public:
-    Tx(int x) : Hx(x), Nx(x),Px(x) {
+    Tx(int x) : Hx(x), Nx(x), Px(x) {
         std::cout << "Tx.Tx(int) called \n";
     }
 };
@@ -3300,13 +3278,1386 @@ public:
     Hx.Hx(int) called
     Nx.Nx(int) called
     Tx.Tx(int) called
+
+    In general, it is not allowed to call the grandparent's constructor directly,
+    it has to be called through a parent class. It is allowed only when
+    the virtual keyword is used.
 */
 
+class BM {
+public :
+    int n;
+};
+
+class DM : BM {
+    // equivalent to private BM
+};
+
+struct SM : BM {
+    // equivalent to public BM
+};
+
+template<typename T, size_t size>
+void PrintMe(T(& items)[size]) {
+    std::sort(std::begin(items), std::end(items), [](const T& lhs, const T& rhs) noexcept {
+        return lhs > rhs;
+    });
+    for (const auto& item : items) {
+        std::cout << item << "\n";
+    }
+}
+
+/*
+ * Input: a[] = {2, 1, 5, 4, 8, 3, 6, 7};
+       b[] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'}
+Output: B A F D C G H E
+Explanation:
+ * */
+
+void doSort() {
+    using namespace std;
+    int a[] = {2, 1, 5, 4, 8, 3, 6, 7};
+    int b[] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'};
+
+    size_t aLen = sizeof(a) / sizeof(*a);
+    pair<int, char> elements[aLen];
+    for (int i = 0; i < aLen; ++i) {
+        elements[i] = make_pair(a[i], b[i]);
+    }
+
+    std::sort(elements, elements + aLen, [](const pair<int, int>& lhs, const pair<int, int>& rhs) {
+        return lhs.first < rhs.first;
+    });
+
+    for (const auto& item : elements) {
+        cout << "(" << item.first << "," << item.second << ")\n";
+    }
+}
+
+void erase_fwd() {
+    using namespace std;
+    //std::forward_list myFwd({1, 2, 3, 4, 5});
+    std::forward_list myFwd = {1, 2, 3, 4, 5};
+    int lookingForDelete = 4;
+    for (auto it = myFwd.begin(); it != myFwd.end(); ++it) {
+        if (*it == lookingForDelete) {
+            //myFwd.erase_after(it,myFwd.end());
+            myFwd.remove_if([&](const int& item) {
+                return item == lookingForDelete;
+            });
+            cout << lookingForDelete << " deleted!\n";
+            break;
+        }
+    }
+    for (const auto& fwd : myFwd) {
+        cout << fwd << "\n";
+    }
+    for (auto it = myFwd.cbegin(); it != myFwd.cend(); ++it) {
+        cout << (*it) << "\n";
+    }
+}
+
+void list_op() {
+    using namespace std;
+    list myList = {10, 20, 30};
+    auto it = myList.begin();
+    it++;
+    it = myList.insert(it, 15);
+    myList.insert(it, 2, 7);
+    for (const auto& item : myList) {
+        cout << item << "\n";
+    }
+    myList.remove_if([](const int& toDelete) { return toDelete == 7; });
+    cout << "\nAfter Deletion : \n";
+    for (const auto& item : myList) {
+        cout << item << "\n";
+    }
+    cout << "\n";
+    cout << myList.front() << " " << myList.back() << ",size : " << myList.size() << "\n";
+
+}
+
+void deq_sort() {
+    using namespace std;
+    int elements[] = {1, 4, 3, 42, 3, 2, -4, 3 - 4, 3, 20};
+    deque<int> deq;
+    for (const auto& item : elements) {
+
+    }
+}
+
+void print_k_max_new(int* elements, int len, int k = 3) {
+    if (k > len) return;
+    using namespace std;
+    deque<int> deq;
+    for (int i = 0; i < k; ++i) {
+        while (!deq.empty() && elements[i] >= elements[deq.back()]) {
+            deq.pop_back();
+        }
+        deq.push_back(i);
+    }
+    for (int i = k; i < len; ++i) {
+        cout << elements[deq.front()] << " ";
+        while (!deq.empty() && deq.front() <= i - k)
+            deq.pop_front();
+        while (!deq.empty() && elements[i] >= elements[deq.back()]) {
+            deq.pop_back();
+        }
+        deq.push_back(i);
+    }
+    cout << elements[deq.front()] << " ";
+}
+
+void deq_play() {
+    using namespace std;
+    deque<int> ele;
+    ele.push_back(10);
+    ele.push_back(20);
+    ele.push_back(30);
+    ele.push_back(40);
+    ele.erase(++ele.begin(), ele.end());
+    for (const auto& item : ele) {
+        cout << item << "\n";
+    }
+}
+
+void josephus_problem(const int& size, const int& k) {
+    using namespace std;
+    if (size <= 0 || k <= 0)return;
+    list<int> victims;
+    for (int i = 0; i < size; ++i) {
+        victims.emplace_back(i);
+    }
+    auto tmpIt = victims.begin();
+    while (victims.size() != 1) {
+        int fwd{};
+        while (fwd < k - 1) {
+            tmpIt = std::next(tmpIt, 1);
+            fwd++;
+            if (tmpIt == victims.end()) {
+                tmpIt = victims.begin();
+            }
+        }
+        cout << *tmpIt << " will be delete!" << "\n";
+        tmpIt = victims.erase(tmpIt);
+        if (tmpIt == victims.end()) {
+            tmpIt = victims.begin();
+        }
+    }
+    cout << "survivor : " << victims.front() << "\n";
+}
+
+void josephus_2(std::vector<int> people, int k = 2) {
+    if (people.size() == 0 || k >= people.size() || k <= 0)
+        return;
+    using namespace std;
+    auto start = people.begin();
+    while (people.size() != 1) {
+        int j = 0;
+        while (j < k - 1) {
+            start = std::next(start, 1);
+            if (start == people.end()) {
+                start = people.begin();
+            }
+            ++j;
+        }
+        cout << *start << " will be die!\n";
+        start = people.erase(start);
+        if (start == people.end()) {
+            start = people.begin();
+        }
+    }
+    cout << "survivor :" << people[0] << "\n";
+}
+
+void next_greater(int* elements, int len) {
+    if (len <= 0) return;
+    using namespace std;
+    stack<int> stack;
+    vector<pair<int, string>> printV(len);
+    stack.push(elements[len - 1]);
+    printV.emplace_back(make_pair(elements[len - 1], "-1"));
+    for (int i = len - 2; i >= 0; i--) {
+        while (!stack.empty() && stack.top() <= elements[i])
+            stack.pop();
+        stack.push(elements[i]);
+        printV.emplace_back(make_pair(elements[i], stack.empty() ? "-1" : to_string(stack.top())));
+    }
+    for (auto it = --printV.cend(); it != printV.cbegin()--; --it) {
+        if ((*it).second.size() != 0)
+            cout << "[" << (*it).first << ":" << (*it).second << "]" << "\n";
+    }
+}
+
+bool check_paranthesis(const std::string& text) {
+    bool result = false;
+    using namespace std;
+    stack<char> stack;
+    bool (* closingMatch)(const char&, const char&) = [](const char& lhs, const char& rhs) -> bool {
+        return ((lhs == '(' && rhs == ')') ||
+                (lhs == '{' && rhs == '}') ||
+                (lhs == '[' && rhs == ']'));
+    };
+    bool (* charIsOk)(const char&) = [](const char& value) {
+        return (value == '(' || value == ')' ||
+                value == '{' || value == '}' ||
+                value == '[' || value == ']');
+    };
+    for (const auto& item : text) {
+        if (!charIsOk(item)) continue;
+        if (item == '{' || item == '[' || item == '(') {
+            stack.push(item);
+        } else {
+            if (stack.empty())
+                return false;
+            if (closingMatch(stack.top(), item)) {
+                stack.pop();
+            } else {
+                return false;
+            }
+        }
+    }
+    result = stack.size() == 0;
+    return result;
+}
+
+void productArray(int arr[], int n) {
+    using namespace std;
+    // Base case
+    if (n == 1) {
+        cout << 0;
+        return;
+    }
+    int i, temp = 1;
+    int* prod = new int[n];
+    memset(prod, 1, n);
+
+    /* In this loop, temp variable contains product of
+    elements on left side excluding arr[i] */
+    for (i = 0; i < n; i++) {
+        prod[i] = temp;
+        temp *= arr[i];
+        cout << "prod[" << i << "]:" << prod[i] << "\n";
+    }
+
+    /* Initialize temp to 1
+    for product on right side */
+    temp = 1;
+    cout << "----------------------------------------------------- \n";
+    /* In this loop, temp variable contains product of
+    elements on right side excluding arr[i] */
+    for (i = n - 1; i >= 0; i--) {
+        prod[i] *= temp;
+        temp *= arr[i];
+        cout << "prod[" << i << "]:" << prod[i] << "\n";
+    }
+
+    for (i = 0; i < n; i++)
+        cout << prod[i] << " ";
+}
+
+void print_all_numbers(int* elements, int len, int n) {
+    using namespace std;
+    queue<string> queue;
+    for (int i = 0; i < len; ++i) {
+        queue.push(to_string(elements[i]));
+    }
+    for (int i = 0; i < n; ++i) {
+        string curr = queue.front();
+        if (!curr.starts_with('0'))
+            cout << curr << " ";
+        queue.pop();
+        for (int j = 0; j < len; ++j) {
+            queue.push(curr + to_string(elements[j]));
+        }
+    }
+}
+
+// using min heap! O (K [build 1..] + (n-k)*log k [build 2..] ) + O(klogk)  -------------- >> if we use max heap instead of min heap then we'll get  MAX HEAP -> O(N[build 1..] + klogN[build 2..])
+void print_k_largest(int* elements, int len, int k) {
+    using namespace std;
+    priority_queue<int, vector<int>, greater<int>> pq(elements, elements + k);
+    for (int i = k; i < len; ++i) {
+        if (elements[i] > pq.top()) {
+            pq.pop();
+            pq.push(elements[i]);
+        }
+    }
+    while (!pq.empty()) {
+        cout << pq.top() << " ";
+        pq.pop();
+    }
+}
+
+//O(N [construction..]) + O(logN [result..])
+int max_purchase(int* elements, int len, int sum = 0) {
+    if (sum <= 0 || len <= 0) return 0;
+    int result = 0;
+    using namespace std;
+    priority_queue<int, vector<int>, greater<int>> pq(elements, elements + len); // min heap !!
+    while (!pq.empty() && sum > 0 && sum - pq.top() >= 0) {
+        sum -= pq.top();
+        pq.pop();
+        result++;
+    }
+    return result;
+}
+
+void print_most_k_freq_items(int* elements, int len, int k) {
+    if (k <= 0 || len <= 0) return;
+    using namespace std;
+    unordered_map<int, int> mapF;
+    for (int i = 0; i < len; ++i) {
+        mapF[elements[i]]++;
+    }
+
+    auto sortAllPairsbySecondValue = [](const pair<int, int>& lhs, const pair<int, int>& rhs) {
+        // we want to descending sorting so that's why we changed signs to opposite ones! Biggest is the first and so others so on..
+        if (lhs.second == rhs.second)
+            return lhs.first > rhs.first;
+        return lhs.second < rhs.second;
+    };
+    priority_queue<pair<int, int>, vector<pair<int, int>>, decltype(sortAllPairsbySecondValue)> pq(mapF.begin(), mapF.end());
+    while (!pq.empty() && k-- > 0) {
+        cout << "[" << pq.top().first << "," << pq.top().second << "]\n";
+        pq.pop();
+    }
+}
+
+void custom_pair_sort() {
+    using namespace std;
+    auto sorterx = [](const pair<int, int>& lhs, const pair<int, int>& rhs) {
+        if (lhs.second == rhs.second)
+            return lhs.first < rhs.first;
+        return lhs.second > rhs.second;
+    };
+    vector<pair<int, int>> elementsVs = {
+            make_pair(9, 2),
+            make_pair(1, 2),
+            make_pair(4, 4),
+            make_pair(3, 2),
+            make_pair(5, 2),
+            make_pair(3, 5)
+    };
+    auto pv = [&](const char* exp, int limit = 0) {
+        limit = (limit == 0) ? elementsVs.size() : limit;
+        std::cout << exp << "\n";
+        int kx = 0;
+        while (kx != elementsVs.size() && limit-- != 0) {
+            auto item = elementsVs[kx++];
+            cout << "[" << item.first << "," << item.second << "]\n";
+        }
+    };
+    pv("before");
+    sort(elementsVs.begin(), elementsVs.end(), sorterx);
+    pv("after", 4);
+}
+
+void lower_bound_check() {
+    using namespace std;
+    map<int, int> mp; // default sorted ascending by key!
+    mp.insert({2, 30});
+    mp.insert({1, 10});
+    mp.insert({5, 50});
+    mp.insert({4, 40});
+    for (auto it = mp.begin(); it != mp.end(); ++it) {
+        cout << (*it).first << " " << (*it).second << "\n";
+    }
+    auto it = mp.lower_bound(2);
+    cout << "2 : " << (*it).first << " " << (*it).second << "\n";
+    it = mp.lower_bound(3);
+    cout << "3 : " << (*it).first << " " << (*it).second << "\n";
+    cout << "************************************* !!!!! *************************************\n";
+    it = mp.lower_bound(6); // no such (6) element is found! it's out of boundries! it shows -------------------->>>>> mp.end()
+    cout << "6 : " << (*it).first << " " << (*it).second << "\n";
+    cout << "6(not found!! just showing last+1->(end()) item at the end of the map!) : " << (*it--).first << " " << (*it--).second << "\n";  //<<<< just show the mp.end() !!!
+
+    for (int i = 51; i < 60; ++i) {
+        mp.insert({i, i * i});
+    }
+    mp.erase(std::prev(mp.end(), 3), mp.end());
+    cout << "after erasing! \n";
+    for (auto it = mp.begin(); it != mp.end(); ++it) {
+        cout << (*it).first << " " << (*it).second << "\n";
+    }
+}
+
+void mmp_check() {
+    using namespace std;
+    multimap<int, int> mmp;
+    mmp.insert({2, 30});
+    mmp.insert({1, 40});
+    mmp.insert({3, 60});
+    mmp.insert({1, 20});
+    mmp.insert({1, 20});
+    mmp.insert({5, 50});
+
+    cout << "all items .. \n";
+    for (const auto& item : mmp) {
+        cout << "[" << item.first << "," << item.second << "]\n";
+    }
+    cout << "end\n";
+    cout << "sorting again (assisting by a vector)..\n";
+    vector<pair<int, int>> vec(mmp.cbegin(), mmp.cend());
+    sort(vec.begin(), vec.end(), [](const pair<int, int>& lhs, const pair<int, int>& rhs) {
+        if (lhs.second == rhs.second)
+            return lhs.first > lhs.second;
+        return lhs.second > rhs.second;
+    });
+    cout << "all items (after sorting) .. \n";
+    for (const auto& item : vec) {
+        cout << "[" << item.first << "," << item.second << "]\n";
+    }
+    cout << "end\n";
+
+    auto items = mmp.equal_range(1);
+    for (auto it = items.first; it != items.second; ++it) {
+        cout << it->first << " , " << it->second << "\n";
+    }
+}
+
+void simple_map_sorting() {
+    using namespace std;
+    auto comp = [](const int& a, const int& b) {
+        return bitset<32>(a).count() < bitset<32>(b).count();
+    };
+    map<int, int, decltype(comp)> m{{{13, 1}, {15, 1}, {17, 1}}, comp};
+    for (auto const& p : m) {
+        cout << p.first << " (" << bitset<32>(p.first).count() << " bits)\n";
+    }
+}
+
+int cntBits(int value) {
+    int num_bits = 0;
+    for (size_t i = 0; i < 32; ++i, value >>= 1) {
+        if ((value & 1) == 1) ++num_bits;
+    }
+    return num_bits;
+}
+
+void map_desc(int* elements, int len) {
+    if (len <= 0) return;
+    using namespace std;
+    // sorter doesn't work!! we have to wrap map as a new class and work with it or we should transfer all data to vector and then sort it easily!
+    auto sorter = [](const pair<int, int>& lhs, const pair<int, int>& rhs) {
+        if (lhs.second == rhs.second)
+            return lhs.first < rhs.first;
+        return lhs.second > rhs.second;
+    };
+    auto sorterSimple = [](const int& lhs, const int& rhs) {
+        return lhs < rhs;
+    };
+    map<int, int, decltype(sorterSimple)> mp;
+
+    for (int i = 0; i < len; ++i) {
+        mp[elements[i]]++;
+    }
+    for (const auto& item : mp) {
+        cout << "[" << item.first << "," << item.second << "]\n";
+    }
+    cout << "************************************************* \n";
+    cout << "the items expensive than 7..\n";
+    for (auto it = mp.upper_bound(7); it != mp.end(); ++it) {
+        cout << "[" << (*it).first << ", " << (*it).second << "]\n";
+    }
+    cout << "the items expensive than 5 and up..\n";
+    for (auto it = mp.lower_bound(5); it != mp.end(); ++it) {
+        cout << "[" << (*it).first << ", " << (*it).second << "]\n";
+    }
+    auto items = find_if(mp.begin(), mp.end(), [](const pair<int, int>& item) {
+        return item.first >= 6;
+    });
+    cout << "the items expensive than 6 and up..\n";
+    if (items != mp.end()) {
+        cout << "exist!\n";
+    } else {
+        cout << "doesn't exist!\n";
+    }
+}
+
+void get_greater_element_count(int* elements, int len) {
+    if (len <= 0) return;
+    using namespace std;
+    map<int, int> mp;
+    for (int i = 0; i < len; ++i) {
+        mp[elements[i]]++;
+    }
+    vector<int> tempElements(len);
+    for (int i = 0; i < len; ++i) {
+        auto items = mp.upper_bound(elements[i]);
+        int result = 0;
+        while (items != mp.end()) {
+            result += items->second;
+            items++;
+        }
+        tempElements[i] = result;
+    }
+    for (int i = 0; i < len; ++i) {
+        elements[i] = tempElements[i];
+    }
+}
+
+void distinct_by_unordered_set(int* elements, int len) {
+    if (len == 0) return;
+    using namespace std;
+    unordered_set<int> uset;
+    for (int i = 0; i < len; ++i) {
+        uset.insert(elements[i]);
+    }
+    cout << "total element count : " << uset.size() << "\n"; // keys are unique!
+    cout << "--------------------------------------\n";
+    for (const auto& item : uset) {
+        cout << item << "\n";
+    }
+    cout << "cleaning...\n";
+    uset.erase(uset.cbegin(), uset.cend());
+    cout << "total element count : " << uset.size() << "\n"; // keys are unique!
+}
+
+bool pair_sum(int* elements, int len, int sum) {
+    using namespace std;
+    // are elements unique ?? if it's not important in this case.
+    // are elements ordered ?? Please consider this!! but not in this case!
+    // 5,9,8,13,2,4  sum : 7
+    if (len <= 0) return false;
+    unordered_set<int> uset; // O(N)
+    for (int i = 0; i < len; ++i) {
+        int diff = sum - elements[i];
+        if (uset.find(diff) != uset.end()) {
+            return true;
+        }
+        uset.insert(elements[i]);
+    }
+    return false;
+}
+
+std::vector<int> union_sorted_2_array(int* arr1, int len1, int* arr2, int len2) {
+    //duplication not allowed!
+    using namespace std;
+    vector<int> result(len1 + len2);
+    if (len1 + len2 == 0) return result;
+    set<int> set; // keys are sorted!
+    for (int i = 0; i < len1; ++i) {
+        set.insert(arr1[i]);
+    }
+    for (int i = 0; i < len2; ++i) {
+        set.insert(arr2[i]);
+    }
+    int index = 0;
+    for (auto it = set.begin(); it != set.end(); ++it) {
+        result[index++] = *it;
+    }
+    result.resize(index);
+    return result;
+}
+
+//Find the Union of two unsorted arrays. Assume that the arrays are unique and any single array does not contain repeated items.
+std::vector<int> union_unordered_2_array(int* arr1, int len1, int* arr2, int len2) {
+    //O(m+n)
+    using namespace std;
+    vector<int> vec(arr1, arr1 + len1);
+    if (len1 + len2 == 0) return vec;
+    unordered_set<int> set(arr1, arr1 + len1);
+    for (int i = 0; i < len2; ++i) {
+        if (set.find(arr2[i]) == set.end()) {
+            set.insert(arr2[i]);
+            vec.emplace_back(arr2[i]);
+        }
+    }
+    return vec;
+}
+
+//Problem: Find the Intersection of two unsorted arrays. Assume that the arrays are unique and any single array does not contain repeated items.
+//Input: arr1[] = {7, 2, 9, 15, 10}, arr2[] = {5, 10, 7, 3, 2, 20, 9} , Output: {7, 10, 2, 9} s
+
+std::vector<int> intersection_2_unsorted_array(int* arr1, int len1, int* arr2, int len2) {
+    //O(m+n)
+    using namespace std;
+    vector<int> vec;
+    unordered_set<int> uset(arr2, arr2 + len2); // arrays unique!
+    for (int i = 0; i < len1; ++i) {
+        if (uset.find(arr1[i]) != uset.end()) {
+            vec.emplace_back(arr1[i]);
+        }
+    }
+    return vec;
+}
+
+void intersection_2_unsorted_array_caller() {
+    using namespace std;
+    //auto unionResult = intersection_2_unsorted_array((int[]) {7, 2, 9, 15, 10}, 5, (int[]) {5, 10, 7, 3, 2, 20, 9}, 7);
+    auto unionResult = intersection_2_unsorted_array((int[]) {7, 1, 5, 2, 3, 6}, 6, (int[]) {3, 8, 6, 20, 7}, 5);
+
+    string info;
+    for (const auto& item : unionResult) {
+        info += to_string(item) + ",";
+    }
+    if (info.size() != 0)
+        info.pop_back();
+    cout << info << "\n";
+}
+
+void union_unordered_2_array_caller() {
+    using namespace std;
+    auto unionResult = union_unordered_2_array((int[]) {2, 7, 13, 10}, 4, (int[]) {10, 9, 4, 5, 7, 20}, 6);
+    //auto unionResult = union_unordered_2_array((int[]) {7, 1, 5, 2, 3, 6}, 6, (int[]) {3, 8, 6, 20, 7}, 5);
+    string info;
+    for (const auto& item : unionResult) {
+        info += to_string(item) + ",";
+    }
+    if (info.size() != 0)
+        info.pop_back();
+    cout << info << "\n";
+}
+
+int find_longest_subsequent(int* elements, int len) {
+    if (len <= 0) return -1;
+    using namespace std;
+    int result = 1;
+    set<int> set;
+    unordered_set<int> uset(elements, elements + len);
+    for (int i = 0; i < len; ++i) {
+        if (uset.find(elements[i] - 1) != uset.end()) {
+            set.insert(elements[i] - 1);
+            int curr = 0;
+            while (uset.find(elements[i] + curr) != uset.end()) {
+                set.insert(elements[i] + curr);
+                curr++;
+            }
+            result = max(++curr, result);
+        }
+    }
+    string str = "";
+    for_each(set.cbegin(), set.cend(), [&str](const int& item) { str += to_string(item) + ","; });
+    if (str.size() != 0)
+        str.pop_back();
+    cout << str << "\n";
+    return result;
+}
+
+std::string election_winner(std::string* votes, int len) {
+    if (len <= 0) return std::string{};
+    std::string result;
+    using namespace std;
+    unordered_map<string, int> umap;
+    for (int i = 0; i < len; ++i) {
+        umap[votes[i]]++;
+    }
+    vector<pair<string, int>> vec(umap.cbegin(), umap.cend());
+    sort(vec.begin(), vec.end(), [](const pair<string, int>& lhs, const pair<string, int>& rhs) {
+        if (lhs.second == rhs.second)
+            return lhs.first < rhs.first;
+        return lhs.second > rhs.second;
+    });
+    return vec[0].first;
+};
+
+bool sub_array_with_zero_sum(int* elements, int len) {
+    if (len <= 0) return false;
+    using namespace std;
+    int pre_sum = 0;
+    unordered_set<int> uset;
+    for (int i = 0; i < len; ++i) {
+        pre_sum += elements[i];
+        if (uset.find(pre_sum) != uset.end()) {
+            return true;
+        }
+        if (pre_sum == 0)
+            return true;
+        uset.insert(pre_sum);
+    }
+    return false;
+}
+
+void count_distinct_element_in_every_window_BAD(int* elements, int len, int k = 4) {
+    if (len <= 0) return;
+    using namespace std;
+    vector<int> vec(elements, elements + len);
+    for (auto it = vec.begin(); it != vec.end(); ++it) {
+        if (it + k > vec.end())
+            break;
+        unordered_set<int> uset;
+        for_each_n(it, k, [&uset](const int& k) {
+            uset.insert(k);
+        });
+        cout << uset.size() << " ";
+    }
+    cout << "\n";
+}
+
+//O(N)
+void count_distinct_element_in_every_window(int* elements, int len, int k = 4) {
+    if (len <= 0) return;
+    using namespace std;
+    unordered_map<int, int> umap;
+    for (int i = 0; i < k; ++i) {
+        umap[elements[i]]++;
+    }
+    cout << umap.size() << ",";
+    for (int i = k; i < len; ++i) {
+        umap[elements[i - k]]--;
+        if (umap[elements[i - k]] == 0)
+            umap.erase(elements[i - k]);
+        umap[elements[i]]++;
+        cout << umap.size() << ",";
+    }
+    cout << "\n";
+}
+
+void find_test(int* elements, int len) {
+    if (len <= 0) return;
+    using namespace std;
+    auto result = std::find(elements, elements + len, 4);
+    cout << *result << "\n";
+    vector<int> vec(elements, elements + len);
+    vec.assign(4, 55);
+    for (int i = 10; i < 40; ++i) {
+        vec.emplace_back(i);
+    }
+    vec.emplace_back(199);
+    for (const auto& item : vec) {
+        cout << item << "\n";
+    }
+    sort(vec.begin(), vec.end());
+    vector<int>::const_iterator itL = lower_bound(vec.cbegin(), vec.cend(), 3);
+    cout << " it's value (lower_bound)  : " << *itL << "\n";
+    vector<int>::const_iterator itU = upper_bound(vec.cbegin(), vec.cend(), 300);
+    cout << " it's value (upper_bound)  : " << *itU << "\n";
+
+}
+
+int fint_by_equal_range(int* elements, int len, int search) {
+    int value = 0;
+    using namespace std;
+    sort(elements, elements + len);
+    auto it = equal_range(elements, elements + len, search);
+    for (auto i = it.first; i < it.second; ++i) {
+        value++;
+    }
+    return value;
+}
+
+int _tt, _aa;
+
+void perm(std::string& a, int l, int r) {
+    using namespace std;
+    _aa++;
+    if (l == r) {
+        cout << a << "\n";
+        _tt++;
+    } else {
+        for (int i = l; i < r; ++i) {
+            swap(a[l], a[i]);
+            perm(a, l + 1, r);
+            swap(a[l], a[i]);
+        }
+    }
+}
+
+void power_gen(std::string& myStr, int subCLength = 1) {
+    if (myStr.size() == 0) return;
+    if (myStr.size() < subCLength) return;
+    using namespace std;
+    cout << "BEFORE > " << myStr << "\n";
+    sort(myStr.begin(), myStr.end(), [](const char& lhs, const char& rhs) { return lhs < rhs; });
+    cout << "AFTER  > " << myStr << "\n";
+    size_t total = 1 << myStr.size();
+    int subTotal = 0;
+    for (decltype(total) i = 0; i < total; ++i) {
+        int sub = 0;
+        string temp{};
+        for (int j = 0; j < myStr.size(); ++j) {
+            if ((i & (1 << j)) != 0) {
+                //cout << myStr[j];
+                temp += myStr[j];
+                sub++;
+            }
+        }
+        if (sub == subCLength) {
+            cout << temp << "\n";
+            subTotal++;
+        }
+    }
+    cout << "string length : " << myStr.size() << " - total : " << total << " - sub total : " << subTotal << " / sub cluster length : " << subCLength << "\n";
+}
+
+void power_gen(const std::string&& myStr, int subCLength = 1) {
+    power_gen(const_cast<std::string&>(myStr), subCLength);
+}
+
+void rev(std::string& item, int l, int r) {
+    while (l < r) {
+        std::swap(item[l++], item[r--]);
+    }
+}
+
+void reversme_left(std::string& myText, int d) {
+    if (d <= 0 || myText.size() == 0) return;
+    rev(myText, 0, d - 1);
+    rev(myText, d, myText.size() - 1);
+    rev(myText, 0, myText.size() - 1);
+    //0->d-1
+    //d->n-1
+    //0->n-1
+}
+
+void reversme_right(std::string& myText, int d) {
+    if (d <= 0 || myText.size() == 0) return;
+    rev(myText, 0, myText.size() - 1);
+    rev(myText, 0, d - 1);
+    rev(myText, d, myText.size() - 1);
+    //0->d-1
+    //d->n-1
+    //0->n-1
+}
+
+void acc_me() {
+    using namespace std;
+    int tempSum = 0;
+    int elementsToSum[] = {1, 2, 3, 4, 5};
+    int resultToSum =
+            accumulate(elementsToSum,
+                       elementsToSum + sizeof(elementsToSum) / sizeof(*elementsToSum),
+                       0,
+                       minus<int>());
+
+    cout << resultToSum << "\n";
+}
+
+void ptr_sample() {
+    int a = 100;
+    int* b = &a;
+    int** c = &b;
+    int*** d = &c;
+    ***d = 2000;
+    std::cout << "a : " << a << "\n";
+}
+
+void partial_sort() {
+    int elements[] = {43, 40, 42, 1, 2, 3, 4, 5, 55, 5, 5, 5, 5};
+    using namespace std;
+    sort(elements, elements + 3, [](const decltype(*elements)& lhs, const decltype(*elements)& rhs) { return lhs < rhs; });
+    for (const auto& item : elements) {
+        cout << item << " ";
+    }
+}
+
+void vec_sort_reverse() {
+    using namespace std;
+    int elements[] = {43, 40, 42, 1, 2, 3, 4, 5, 55, 59, 533, 501, 5};
+    using namespace std;
+    vector<int> vec(elements, elements + sizeof(elements) / sizeof(*elements));
+    sort(vec.rbegin(), vec.rend() - 5, less<int>());
+    for (const auto& item : vec) {
+        cout << item << " ";
+    }
+}
+
+//O(N*logN)
+int min_diff(int* elements, int n, int m) {
+    if (m > n) return -1;
+    if (n <= 0) return -1;
+    using namespace std;
+    sort(elements, elements + n);
+    int res = elements[m - 1] - elements[0];
+    for (int i = 1; i + m - 1 < n; ++i) { // 0 1 2 [3]....N -> [] it's the starting point!
+        res = min(res, elements[i + m - 1] - elements[i]);
+    }
+    return res;
+}
+
+void freq_order(int* elements, int len) {
+    if (len <= 0) return;
+    using namespace std;
+    unordered_map<int, int> umap;
+    for (int i = 0; i < len; ++i) {
+        umap[elements[i]]++;
+    }
+    vector<pair<int, int>> vec(umap.begin(), umap.end());
+    sort(vec.begin(), vec.end(), [](const pair<int, int>& lhs, const pair<int, int>& rhs) {
+        if (lhs.second == rhs.second)
+            return lhs.first < rhs.first;
+        return lhs.second > rhs.second;
+    });
+    for (const auto& item : vec) {
+        for (int i = 0; i < item.second; ++i) {
+            cout << item.first << " ";
+        }
+    }
+}
+
+void perm_gen(std::string&& a, int l, int r) {
+    if (l == r) {
+        std::cout << a << "\n";
+    } else {
+        for (int i = l; i < r; ++i) {
+            std::swap(a[l], a[i]);
+            perm_gen(std::move(a), l + 1, r);
+            std::swap(a[l], a[i]);
+        }
+    }
+}
+
+void perm_gen_next(std::string&& a) {
+    if (a.size() == 0) return;
+    next_permutation(a.begin(), a.end());
+    std::cout << a << "\n";
+}
+
+int lambda_rec(const std::string& val) {
+    using namespace std;
+    const function<int(int)> getFact = [&getFact](int number) {
+        if (number == 0)
+            return 1;
+        return number * getFact(--number);
+    };
+    return getFact(val.size());
+}
+
+void perm_gen_next_cust(std::string&& a) {
+    if (a.size() == 0) return;
+    using namespace std;
+    auto org = a;
+    vector<string> allPerms;
+    const function<void(string&, int, int)> perm_gen_new =
+            [&perm_gen_new, &allPerms](string& a, int l, int r) {
+                if (l == r) {
+                    allPerms.emplace_back(a);
+                } else {
+                    for (int i = l; i < r; ++i) {
+                        std::swap(a[l], a[i]);
+                        perm_gen_new(a, l + 1, r);
+                        std::swap(a[l], a[i]);
+                    }
+                }
+            };
+    perm_gen_new(a, 0, a.size());
+    sort(allPerms.begin(), allPerms.end());
+    for (auto it = allPerms.begin(); it != allPerms.end(); ++it) {
+        if ((*it).length() != a.size()) continue;
+        if (stoi(*it) > stoi(org)) {
+            std::cout << *it << "\n";
+            return;
+        }
+    }
+}
+
+int nextPerm(std::string&& value) {
+    if (value.size() == 0) return -1;
+    using namespace std;
+    for (int i = value.size() - 1; i > 0; --i) {
+        if (value[i - 1] < value[i]) {
+            for (int j = value.size() - 1; j >= i; --j) {
+                if (value[j] > value[i - 1]) {
+                    swap(value[i - 1], value[j]);
+                    reverse(value.begin() + i, value.end());
+                    return stoi(value);
+                }
+            }
+        }
+    }
+    return stoi(value);
+}
+
+void number_pos() {
+    using namespace std;
+    int ele[] = {1, 2, 3, 4, 5, 3, 4, 3, 51, 41, 21, 3, 5, 12};
+    int threshold = 6;
+    auto itFF = find_if(rbegin(ele), rend(ele), [&threshold](const int& val) {
+        return val < threshold;
+    });
+
+    if (itFF == rend(ele)) {
+        //it's last item.. you can't go further!
+        cout << *itFF << "\n";
+    } else {
+        cout << "before : " << *(itFF - 1) << "\n";
+        cout << "curr   : " << *itFF << "\n";
+        cout << "after  : " << *(itFF + 1) << "\n";
+    }
+}
+
+void heap_op(int* elements, int len) {
+    if (len <= 0) return;
+    using namespace std;
+    cout << "before ... \n";
+    auto p = [&]() {
+        for (int i = 0; i < len; ++i) {
+            cout << elements[i] << " ";
+        }
+        cout << "\n";
+    };
+    p();
+    make_heap(elements, elements + len);
+    /*
+     left : 2n+1  ( 1. element index : 3 )
+     */
+    cout << "after ... \n";
+    p();
+}
+
+int meeting_max_guest(int* arrive, int* departure, int len) {
+    if (len <= 0) return -1;
+    using namespace std;
+    int result = 1, curr = 1, i = 1, j = 0;
+    sort(arrive, arrive + len);
+    sort(departure, departure + len);
+    while (i < len && j < len) {
+        if (arrive[i] <= departure[j]) {
+            curr++;
+            i++;
+        } else {
+            curr--;
+            j++;
+        }
+        result = max(result, curr);
+    }
+    return result;
+}
+
+void heap_op_2(int* elements, int len) {
+    if (len <= 0) return;
+    using namespace std;
+    vector<int> vec(elements, elements + len);
+    auto p = [&](const std::string&& separator) {
+        cout << "\n" << separator << "\n";
+        for (const auto& item:vec) {
+            cout << item << " ";
+        }
+        cout << "\n";
+    };
+    p("normal -------------------------------------------");
+
+    make_heap(vec.begin(), vec.end(), greater<int>());  // default heap MAX .. so to reverse it we've to use greater!
+    p("heapfied -----------------------------------------");
+
+    sort_heap(vec.begin(), vec.end(), less<int>());  // works normal! A->Z
+    p("sorted -------------------------------------------");
+
+    pop_heap(vec.begin(), vec.end(), greater<int>());
+    p("popheap-------------------------------------------");
+
+    make_heap(vec.begin(), vec.end(), greater<int>());  // default heap MAX .. so to reverse it we've to use greater!
+    p("heapfied(r)---------------------------------------");
+
+    vec.emplace_back(6);
+    push_heap(vec.begin(), vec.end(), greater<int>());
+    p("pushheap------------------------------------------");
+
+    make_heap(vec.begin(), vec.end(), greater<int>());  // default heap MAX .. so to reverse it we've to use greater!
+    p("heapfied(r)---------------------------------------");
+
+    sort_heap(vec.begin(), vec.end(), less<int>());  // works normal! A->Z
+    p("sorted -------------------------------------------");
+}
+
+void sort_2_array_in_place(int* arr1, int len1, int* arr2, int len2) {
+    if (len1 <= 0) return;
+    using namespace std;
+
+    auto p1 = [&]() {
+        cout << "----------------------------------------------------\n";
+        for (int i = 0; i < len1; ++i) {
+            cout << arr1[i] << " ";
+        }
+        cout << endl;
+    };
+    auto p2 = [&]() {
+        for (int i = 0; i < len2; ++i) {
+            cout << arr2[i] << " ";
+        }
+        cout << endl;
+    };
+    sort(arr1, arr1 + len1);
+    make_heap(arr2, arr2 + len2, greater<int>());
+
+    for (int i = 0; i < len1; ++i) {
+        if (arr2[0] < arr1[i]) {
+            int temp = arr1[i];
+            arr1[i] = arr2[0];
+            pop_heap(arr2, arr2 + len2);
+            arr2[len2 - 1] = temp;
+            make_heap(arr2, arr2 + len2, greater<int>());
+        }
+    }
+    p1();
+    p2();
+}
+
+void almost_sorted_array(int* elements, int len, int k = 2) {
+    if (k <= 0 || len <= 0 || len <= k) return;
+    using namespace std;
+    int ai = 0;
+    priority_queue<int, vector<int>, greater<int>> pq(elements, elements + k + 1);
+    for (int i = k + 1; i < len; ++i) {
+        int minItem = pq.top();
+        elements[ai++] = minItem;
+        pq.pop();
+        pq.push(elements[i]);
+    }
+
+    while (!pq.empty()) {
+        int minItem = pq.top();
+        elements[ai++] = minItem;
+        pq.pop();
+    }
+    for (int i = 0; i < len; ++i) {
+        cout << elements[i] << " ";
+    }
+    cout << "\n";
+}
 
 int main() {
 
     using namespace std;
     cout << std::boolalpha;
+
+    almost_sorted_array((int[]) {9, 8, 7, 18, 19, 17}, 6, 2);
+    return 0;
+
+    sort_2_array_in_place((int[]) {3, 20, 40}, 3, (int[]) {2, 10, 12}, 3);
+    sort_2_array_in_place((int[]) {30, 40}, 2, (int[]) {2, 8, 9, 10}, 4);
+    sort_2_array_in_place((int[]) {3, 8}, 2, (int[]) {4, 5, 6}, 3);
+    sort_2_array_in_place((int[]) {3, 4}, 2, (int[]) {5, 6, 8}, 3);
+
+    return 0;
+
+    heap_op_2((int[]) {3, 1, 4, 1, 5, 9}, 6);
+    return 0;
+
+    int arrMeeting[] = {900, 600, 700};
+    int depMeeting[] = {1000, 800, 730};
+    cout << "Meeting Max Guest Count : " << meeting_max_guest(arrMeeting, depMeeting, sizeof(arrMeeting) / sizeof(*arrMeeting));
+
+    return 0;
+    heap_op((int[]) {3, 2, 6, 10, 5, 8}, 6);
+    return 0;
+
+    number_pos();
+    return 0;
+
+    cout << nextPerm("2154423") << "\n";
+    perm_gen_next("2154423");
+    perm_gen_next_cust("2154423");
+    return 0;
+
+    perm_gen("12543", 0, 5);
+    return 0;
+
+    freq_order((int[]) {2, 3, 2, 4, 5, 12, 2, 3, 3, 3, 12}, 11);
+    return 0;
+
+    cout << "min diff : " << min_diff((int[]) {7, 3, 2, 4, 9, 12, 56}, 7, 3);
+    return 0;
+
+    vec_sort_reverse();
+    return 0;
+
+    partial_sort();
+    return 0;
+
+    ptr_sample();
+    return 0;
+
+    acc_me();
+    return 0;
+
+    int sumx = 0;
+    int sumx2 = 0;
+    int nums2[] = {1, 3, 42, 4, 3, 3, 2};
+    int lenSum2 = sizeof(nums2) / sizeof(*nums2);
+    vector<int> vecS(nums2, nums2 + lenSum2);
+    sumx = std::accumulate(vecS.begin(), vecS.end(), decltype(vecS)::value_type(0));
+    sumx2 = std::accumulate(nums2, nums2 + lenSum2, -1);
+    cout << sumx2 << "\n";
+    return 0;
+
+
+    string ro1 = "eralp erat";
+    string ro2 = "eralp erat";
+    string ro3 = "eralp erat";
+    string ro4 = "eralp erat";
+
+    rotate(ro1.begin(), ro1.begin() + 3, ro1.end()); // left
+    rotate(ro3.rbegin(), ro3.rbegin() + 3, ro3.rend()); // left
+    reversme_left(ro2, 3);
+    reversme_right(ro4, 3);
+    cout << ro1 << "\n";
+    cout << ro2 << "\n";
+    cout << ro3 << "\n";
+    cout << ro4 << "\n";
+    return 0;
+
+    string black = "my string";
+    fill(black.begin(), black.end(), 'z');
+    cout << black;
+    return 0;
+
+
+    int numsS[] = {1, 43, 4, 3, 4, 3, 34, 3, 43, 22, 3};
+    cout << *max_element(numsS, numsS + (sizeof(numsS) / sizeof(*numsS)));
+    return 0;
+
+    power_gen("cdba", 1);
+    power_gen("cdba", 2);
+    power_gen("cdba", 3);
+    power_gen("cdba", 4);
+    return 0;
+
+    _tt = 0;
+    _aa = 0;
+    string str_top = "eralpex";
+    perm(str_top, 0, str_top.size());
+    cout << _tt << "," << _aa << "\n";
+    return 0;
+
+    cout << fint_by_equal_range((int[]) {3, 4, 3, 4, 3, 2, 4, 2, 2, 3, 4, 4, 4, 23, 2, 3}, 16, 4) << "\n";
+    cout << fint_by_equal_range((int[]) {3, 4, 3, 4, 3, 2, 4, 2, 2, 3, 4, 4, 4, 23, 2, 3}, 16, 3) << "\n";
+    cout << fint_by_equal_range((int[]) {3, 4, 3, 4, 3, 2, 4, 2, 2, 3, 4, 4, 4, 23, 2, 3}, 16, 22) << "\n";
+    cout << fint_by_equal_range((int[]) {3, 4, 3, 4, 3, 2, 4, 2, 2, 3, 4, 4, 4, 23, 2, 3}, 16, 23) << "\n";
+    return 0;
+
+    find_test((int[]) {1, 2, 3, 4, 5, 6}, 3);
+    return 0;
+
+    count_distinct_element_in_every_window((int[]) {10, 20, 20, 10, 30, 40, 10}, 7);
+    count_distinct_element_in_every_window((int[]) {10, 10, 10, 10}, 4, 3);
+    count_distinct_element_in_every_window((int[]) {10, 20, 30, 40}, 4, 3);
+
+    return 0;
+    cout << sub_array_with_zero_sum((int[]) {1, 4, 13, -3, -10, 5}, 6) << "\n";
+    cout << sub_array_with_zero_sum((int[]) {-1, -2, 4, -1, -10, 5}, 6) << "\n";
+    cout << sub_array_with_zero_sum((int[]) {1, 43, 13, -33, -10, 5}, 6) << "\n";
+
+    return 0;
+    cout << election_winner((string[]) {}, 0);
+    cout << election_winner((string[]) {"Akbar", "Babur", "Birbal", "Ram", "Ram", "Birbal"}, 6);
+    return 0;
+
+    cout << find_longest_subsequent((int[]) {1, 9, 3, 4, 2, 20}, 6) << "\n";
+    cout << find_longest_subsequent((int[]) {8, 20, 7, 30}, 4) << "\n";
+    cout << find_longest_subsequent((int[]) {20, 30, 40}, 3) << "\n";
+    cout << find_longest_subsequent((int[]) {3, 8, 4, 5, 7}, 5) << "\n";
+
+    return 0;
+
+    intersection_2_unsorted_array_caller();
+    return 0;
+
+    union_unordered_2_array_caller();
+    return 0;
+
+    //cout << pair_sum((int[]) {5, 9, 8, 13, 2, 4}, 6, 24) << "\n";
+    cout << pair_sum((int[]) {1, 2, 3, 9}, 4, 8) << "\n";
+    cout << pair_sum((int[]) {1, 2, 4, 4}, 4, 8) << "\n";
+
+    return 0;
+
+    int elementsUSet[] = {10, 5, 8, 20, 10, 30, 8};
+    distinct_by_unordered_set(elementsUSet, sizeof(elementsUSet) / sizeof(*elementsUSet));
+    return 0;
+
+    int elementsGr[] = {10, 5, 8, 20, 30, 8};
+    get_greater_element_count(elementsGr, sizeof(elementsGr) / sizeof(*elementsGr));
+    for (const auto& item : elementsGr) {
+        cout << item << " ";
+    }
+    cout << "\n";
+    return 0;
+
+    map_desc((int[]) {1, 1, 1, 1, 2, 3, 3, 3, 4, 3, 3, 3, 3, 4, 4, 4, 4, 5, 6, 7, 8, 8, 8, 8, 7, 6, 5, 3, 3, 3}, 30);
+
+    return 0;
+    mmp_check();
+    return 0;
+    lower_bound_check();
+    return 0;
+
+    std::set<int> cSet = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+    cSet.erase(cSet.cbegin(), cSet.cend());
+
+    print_most_k_freq_items((int[]) {1, 2, 323, 4, 3, 2, 3, 2, 2, 2, 5, 5, 5, 3, 2}, 15, 4);
+    return 0;
+
+    cout << "max purchsable item count : " << max_purchase((int[]) {1, 12, 5, 111, 200}, 5, 10) << "\n";
+
+    return 0;
+    print_k_largest((int[]) {1, 23, 12, 9, 30, 2, 50}, 7, 3);
+    return 0;
+
+    print_all_numbers((int[]) {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}, 10, 110);
+    return 0;
+    print_all_numbers((int[]) {5, 6}, 2, 10);
+
+    return 0;
+    productArray((int[]) {1, 2, 3, 4, 5}, 5);
+
+    return 0;
+
+    cout << "1. : " << check_paranthesis("([])") << "\n";
+    cout << "2. : " << check_paranthesis("((())") << "\n";
+    cout << "3. : " << check_paranthesis("[(d{}f)]") << "\n";
+    cout << "4. : " << check_paranthesis("[({)]}") << "\n";
+
+    return 0;
+
+    int nextGArr[] = {1, 2, 4, 8, 6, 10};
+    next_greater(nextGArr, sizeof(nextGArr) / sizeof(*nextGArr));
+
+    return 0;
+
+    vector<int> peopleToDie = {0, 1, 2, 3, 4};
+    josephus_2(peopleToDie, 2);
+    cout << "-------------------------------------------\n";
+    josephus_problem(5, 2);
+    return 0;
+
+
+    int myElements[] = {9, 2, 3, 4, 5, 6};
+    print_k_max_new(myElements, sizeof(myElements) / sizeof(*myElements), 3);
+    return 0;
+
+    list_op();
+    return 0;
+
+    erase_fwd();
+    return 0;
+
+    doSort();
+    return 0;
+
+    pair<string, const char*> myPair = make_pair("eralp", "erat");
+    cout << myPair.first << "\n";
+    cout << myPair.second << "\n";
+
+    pair<string, const char*> myPair2 = myPair;
+
+    cout << myPair2.first << "\n";
+    cout << myPair2.second << "\n";
+
+    pair<string, const char*> myPair3(myPair2);
+
+    cout << myPair3.first << "\n";
+    cout << myPair3.second << "\n";
+
+
+    return 0;
+
+    int itemList[] = {1, 3, 4, 3, 3, 44, 23};
+    PrintMe(itemList);
+
+    return 0;
+
+    DM dm;
+    SM sm;
+
+    //cout << dm.n << "\n"; // ERROR
+    //The above code generates compilation error because of the access statement dm.n.
+    // Since we didn't specify the access-modifier for the Base class,
+    // n became private in Derived Class.
+    cout << sm.n << "\n"; //
+
+    return 0;
 
     Tx tx(44);
 
